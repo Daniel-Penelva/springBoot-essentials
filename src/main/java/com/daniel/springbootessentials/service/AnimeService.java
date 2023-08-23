@@ -1,6 +1,8 @@
 package com.daniel.springbootessentials.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,12 @@ public class AnimeService {
 
     /* Responsável pela regra de negócio */
 
-    private List<Anime> animes = List.of(new Anime(1L, "DBZ"), new Anime(2L, "Naruto"),
-            new Anime(3L, "Cavalheiros dos Zodíacos"));
+    private static List<Anime> animes;
+
+    static {
+        animes = new ArrayList<>(List.of(new Anime(1L, "DBZ"), new Anime(2L, "Naruto"),
+                new Anime(3L, "Cavalheiros dos Zodíacos")));
+    }
 
     // Buscar todos os animes
     public List<Anime> listAll() {
@@ -26,6 +32,13 @@ public class AnimeService {
         return animes.stream()
                 .filter(anime -> anime.getId().equals(id))
                 .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+    }
+
+    // Salvar anime
+    public Anime save(Anime anime){
+        anime.setId(ThreadLocalRandom.current().nextLong(3, 100));
+        animes.add(anime);
+        return anime;
     }
 
 }

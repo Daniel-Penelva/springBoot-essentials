@@ -74,3 +74,30 @@ server:
 ```
 
 Lembre-se de que essa configuração afeta a maneira como as respostas de erro são geradas e retornadas pela sua aplicação Spring Boot.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+A anotação @RequestBody é uma anotação fornecida pelo Spring Framework em aplicações Spring MVC e Spring WebFlux. Ela é usada para indicar que um 
+parâmetro de método em um controlador deve ser vinculado ao corpo (body) da solicitação HTTP recebida. Essa anotação é frequentemente usada ao 
+criar endpoints de API que recebem dados em formato JSON ou outros formatos no corpo da solicitação.
+
+Quando você adiciona a anotação @RequestBody a um parâmetro de método, o Spring Framework assume que os dados no corpo da solicitação HTTP devem 
+ser convertidos automaticamente para o tipo do parâmetro, geralmente um objeto Java.
+
+A anotação @RequestBody é frequentemente usada em conjunto com outros métodos do Spring Framework, como @PostMapping, @PutMapping e outros, para 
+criar endpoints de API que aceitam dados no corpo da solicitação. Isso é especialmente útil em cenários de criação, atualização ou envio de 
+informações em APIs RESTful.
+
+Lembre-se de que o Spring Framework usa a biblioteca Jackson para realizar a desserialização automática de JSON para objetos Java. Portanto, é 
+importante ter as dependências do Jackson configuradas em seu projeto para que a anotação @RequestBody funcione corretamente.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Entendendo o código implementação no AnimeService: 
+
+```
+anime.setId(ThreadLocalRandom.current().nextLong(3, 100));
+```
+
+Estou definindo um ID para o objeto Anime passado como parâmetro. O método nextLong(3, 100) da classe ThreadLocalRandom gera um número aleatório 
+do tipo long entre 3 (inclusive) e 100 (exclusivo). Esse número aleatório é usado como ID do objeto Anime.
