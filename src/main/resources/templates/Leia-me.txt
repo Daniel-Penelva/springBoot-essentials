@@ -123,3 +123,45 @@ não há necessidade de enviar um corpo de resposta.
 
 Em termos simples, o HttpStatus.NO_CONTENT é usado para indicar que a solicitação foi bem-sucedida e não há conteúdo adicional a ser 
 enviado no corpo da resposta. Isso economiza largura de banda e melhora a eficiência da comunicação entre o cliente e o servidor.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Vou explicar cada parte do seu arquivo `docker-compose.yml`:
+
+1. `version: '3.1'`: Isso define a versão da especificação do Docker Compose que você está usando. No seu caso, está usando a versão 3.1. Cada 
+    versão traz diferentes recursos e sintaxe.
+
+2. `services`: Essa seção define os serviços (ou contêineres) que você deseja executar.
+
+   - `db`: Este é o nome do serviço. Você o nomeou como "db", que é um nome comum para um serviço de banco de dados.
+   
+      - `image: mysql`: Especifica a imagem do Docker que você deseja usar para esse serviço. Neste caso, está usando a imagem oficial do MySQL 
+         disponível no Docker Hub.
+      
+      - `container_name: mysql`: Isso define o nome do contêiner que será criado. Neste caso, está definindo o nome como "mysql".
+      
+      - `environment`: Define variáveis ​​de ambiente para o contêiner MySQL. No caso, está definindo a senha do root do MySQL como "root".
+      
+      - `ports`: Especifica a mapeamento de portas entre o host e o contêiner. Aqui, você está mapeando a porta 3306 do host para a porta 3306 
+         do contêiner MySQL. Isso permite que você acesse o MySQL no contêiner por meio da porta 3306 no seu computador local.
+      
+      - `volumes`: Define os volumes que serão montados no contêiner. Está criando um volume chamado "devdojo_data" e montando-o na pasta 
+        `/var/lib/mysql` dentro do contêiner MySQL. Isso é útil para armazenar os dados do banco de dados de forma persistente, mesmo que o 
+        contêiner seja destruído.
+   
+3. `volumes`: Esta seção define os volumes que serão usados ​​pelos serviços.
+
+   - `devdojo_data`: Este é o nome do volume. Está definindo um volume chamado "devdojo_data", que será usado para armazenar os dados do MySQL.
+
+Dessa forma, o Docker Compose irá criar um contêiner MySQL usando a imagem oficial do MySQL, definindo a senha do root como "root", mapeando a 
+porta 3306 do host para a porta 3306 do contêiner e criando um volume chamado "devdojo_data" para armazenar os dados do MySQL de forma 
+persistente. O nome do contêiner será "mysql". Isso é útil para o desenvolvimento de aplicativos que usam o MySQL, pois permite que você tenha 
+um banco de dados isolado e persistente em um contêiner.
+
+--------------- // ---------------
+IMPORTANTE!!!
+
+ -> Para parar a execução do container do docker - Comando: CTRL + C 
+ -> Lista os conatiners que estão sendo executados no momento no docker - Comando: docker ps
+ -> Para listar todos os containers já criados - Comando: docker ps -a
+ -> Para executar o container - Comando: docker-compose down
