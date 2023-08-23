@@ -1,0 +1,34 @@
+public Anime findById(Long id ) {
+		return   animes.stream()
+				.filter(anime -> anime.getId().equals(id))
+				.findFirst().orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+}
+
+
+Este script é um método em Java que recebe um ID como parâmetro e busca por um objeto Anime em uma lista de animes usando programação funcional 
+com Stream.
+
+Vamos analisar o código por partes:
+
+   public Anime findById(Long id): Esta é a declaração do método público chamado findById que retorna um objeto do tipo Anime. Ele aceita um 
+   parâmetro id do tipo Long.
+
+   return animes.stream(): Aqui, é criado um fluxo (stream) a partir da lista de animes chamada animes. Um fluxo é uma sequência de elementos 
+   que pode ser processada de maneira sequencial ou paralela.
+
+   .filter(anime -> anime.getId().equals(id)): O método filter é usado para filtrar elementos do fluxo com base em uma condição. Neste caso, 
+   está filtrando os animes cujo ID seja igual ao ID passado como parâmetro.
+
+   .findFirst(): O método findFirst retorna o primeiro elemento do fluxo que satisfaça a condição definida no filtro. Neste caso, retorna o 
+   primeiro anime com o ID correspondente.
+
+   .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found")): O método orElseThrow é usado para retornar o valor 
+   presente no fluxo, caso exista. Se o fluxo estiver vazio (nenhum anime corresponde ao ID), uma exceção é lançada. No caso, uma 
+   ResponseStatusException com um status HTTP BAD_REQUEST (código 400) é lançada, indicando que o anime não foi encontrado.
+
+Portanto, esse método busca por um anime na lista de animes pelo ID usando programação funcional com Stream. Se o anime for encontrado, ele é 
+retornado. Caso contrário, uma exceção é lançada indicando que o anime não foi encontrado.
+
+É importante notar que o código pressupõe a existência de uma lista de animes chamada animes que contém os objetos Anime a serem pesquisados. 
+Além disso, a classe Anime deve ter um método getId() para acessar o ID do anime. A exceção ResponseStatusException é lançada com base no 
+framework Spring Web para lidar com respostas HTTP em APIs.
