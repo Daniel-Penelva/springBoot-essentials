@@ -32,3 +32,45 @@ retornado. Caso contrário, uma exceção é lançada indicando que o anime não
 É importante notar que o código pressupõe a existência de uma lista de animes chamada animes que contém os objetos Anime a serem pesquisados. 
 Além disso, a classe Anime deve ter um método getId() para acessar o ID do anime. A exceção ResponseStatusException é lançada com base no 
 framework Spring Web para lidar com respostas HTTP em APIs.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+A propriedade `server.error.include-stacktrace` é uma configuração que pode ser usada em aplicações Spring Boot para controlar se as informações 
+de rastreamento de pilha (stack trace) são incluídas nas respostas de erro HTTP retornadas pela aplicação em caso de exceções.
+
+Os valores possíveis para a propriedade `server.error.include-stacktrace` são:
+
+1. `on-param` (valor padrão):
+   - Isso significa que o rastreamento de pilha é incluído na resposta somente se um parâmetro de consulta chamado `trace` estiver presente na 
+     solicitação HTTP. Isso permite que você escolha se deseja ou não incluir o rastreamento de pilha nas respostas de erro, controlando-o 
+     através da presença ou ausência do parâmetro de consulta.
+
+2. `always`:
+   - Isso faz com que o rastreamento de pilha seja sempre incluído nas respostas de erro, independentemente da presença de um parâmetro de 
+     consulta específico. Isso pode ser útil para depuração e diagnóstico de problemas.
+
+3. `never`:
+   - Isso faz com que o rastreamento de pilha nunca seja incluído nas respostas de erro, independentemente da presença de um parâmetro de 
+     consulta. Essa opção pode ser usada para ocultar informações sensíveis ou internas da aplicação nos erros retornados aos usuários.
+
+Essa propriedade é útil para controlar o nível de detalhes das mensagens de erro retornadas pelas APIs e pode ser configurada no arquivo 
+`application.properties` ou `application.yml` da sua aplicação Spring Boot. Ela pode ajudar a equilibrar a necessidade de informações detalhadas 
+para depuração com a segurança e a privacidade das informações do aplicativo.
+
+Exemplo de configuração no `application.properties`:
+
+```properties
+# Incluir rastreamento de pilha somente quando o parâmetro de consulta "trace" estiver presente
+server.error.include-stacktrace=on-param
+```
+
+Exemplo de configuração no `application.yml`:
+
+```yaml
+# Incluir rastreamento de pilha somente quando o parâmetro de consulta "trace" estiver presente
+server:
+  error:
+    include-stacktrace: on-param
+```
+
+Lembre-se de que essa configuração afeta a maneira como as respostas de erro são geradas e retornadas pela sua aplicação Spring Boot.
