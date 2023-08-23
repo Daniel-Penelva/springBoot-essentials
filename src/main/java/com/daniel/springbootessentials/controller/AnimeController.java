@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,5 +57,13 @@ public class AnimeController {
          * OBS. HttpStatus.NO_CONTENT - indica que uma solicitação foi processada com
          * sucesso, mas não há conteúdo para retornar na resposta.
          */
+    }
+
+    // Alterar anime - http://localhost:8080/animes/
+    @PutMapping
+    @ResponseBody
+    public ResponseEntity<Void> replace(@RequestBody Anime anime) {
+        animeService.replace(anime);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
