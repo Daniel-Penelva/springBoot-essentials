@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,5 +43,18 @@ public class AnimeController {
     @ResponseBody
     public ResponseEntity<Anime> save(@RequestBody Anime anime) {
         return new ResponseEntity<>(animeService.save(anime), HttpStatus.CREATED);
+    }
+
+    // Deletar anime - http://localhost:8080/animes/{id}
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        animeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        /*
+         * OBS. HttpStatus.NO_CONTENT - indica que uma solicitação foi processada com
+         * sucesso, mas não há conteúdo para retornar na resposta.
+         */
     }
 }

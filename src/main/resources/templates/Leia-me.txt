@@ -101,3 +101,25 @@ anime.setId(ThreadLocalRandom.current().nextLong(3, 100));
 
 Estou definindo um ID para o objeto Anime passado como parâmetro. O método nextLong(3, 100) da classe ThreadLocalRandom gera um número aleatório 
 do tipo long entre 3 (inclusive) e 100 (exclusivo). Esse número aleatório é usado como ID do objeto Anime.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Entendendo o código implementação no AnimeController: 
+
+```
+return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+```
+
+Estou definindo um ID para o objeto Anime passado como parâmetro. O método nextLong(3, 100) da classe ThreadLocalRandom gera um número aleatório 
+do tipo long entre 3 (inclusive) e 100 (exclusivo). Esse número aleatório é usado como ID do objeto Anime.
+
+O HttpStatus.NO_CONTENT é um valor enumerado (enum) da classe HttpStatus fornecida pelo Spring Framework. Ele representa o status HTTP 204 
+No _Content, que é uma resposta padrão usada em APIs RESTful para indicar que uma solicitação foi processada com sucesso, mas não há conteúdo 
+para retornar na resposta.
+
+Quando uma solicitação é tratada com sucesso e o servidor não precisa enviar nenhum conteúdo de volta ao cliente, o status HTTP 204 
+No_ Content é usado. Isso é comum em casos onde uma solicitação de exclusão, atualização ou outra ação bem-sucedida é processada, mas 
+não há necessidade de enviar um corpo de resposta.
+
+Em termos simples, o HttpStatus.NO_CONTENT é usado para indicar que a solicitação foi bem-sucedida e não há conteúdo adicional a ser 
+enviado no corpo da resposta. Isso economiza largura de banda e melhora a eficiência da comunicação entre o cliente e o servidor.
