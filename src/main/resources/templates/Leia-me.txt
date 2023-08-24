@@ -161,7 +161,68 @@ um banco de dados isolado e persistente em um contêiner.
 --------------- // ---------------
 IMPORTANTE!!!
 
- -> Para parar a execução do container do docker - Comando: CTRL + C 
- -> Lista os conatiners que estão sendo executados no momento no docker - Comando: docker ps
- -> Para listar todos os containers já criados - Comando: docker ps -a
- -> Para executar o container - Comando: docker-compose down
+ -> CTRL + C: Para parar a execução do container do docker
+ -> docker-compose up: Cria e inicia os containers definidos no arquivo docker-compose.yml.
+ -> docker-compose down: Para e remove os containers definidos no arquivo docker-compose.yml.
+ -> docker-compose ps: Lista os containers gerenciados pelo Docker Compose.
+ -> docker-compose logs: Exibe os logs dos containers gerenciados pelo Docker Compose.
+ -> docker-compose build: Constrói os serviços definidos no arquivo docker-compose.yml.
+ -> docker-compose start: Inicia os containers dos serviços definidos no arquivo docker-compose.yml.
+ -> docker-compose stop: Para os containers dos serviços definidos no arquivo docker-compose.yml.
+ -> docker-compose restart: Reinicia os containers dos serviços definidos no arquivo docker-compose.yml.
+ -> docker ps: Lista os conatiners que estão sendo executados no momento no docker.
+ -> docker ps: Lista os containers em execução no momento.
+ -> docker ps -a: Lista todos os containers, incluindo os que estão parados.
+
+ --------------- // ---------------
+
+Explicando cada parte desse script de configuração:
+
+```
+server:
+  error:
+    include-stacktrace: on-param
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/anime?useSSL=false&createDatabaseIfNotExist=true
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+```
+
+Este é um arquivo de configuração YAML que define várias configurações para um aplicativo Spring Boot que se conecta a um banco de dados MySQL. 
+Vou explicar cada seção:
+
+1. `server:`: Esta seção permite configurar algumas propriedades do servidor embutido do Spring Boot.
+
+   - `error:`: Aqui, está configurando o tratamento de erros. `include-stacktrace: on-param` significa que as mensagens de erro incluirão 
+     informações de rastreamento de pilha (stack trace) quando você passar um parâmetro de consulta chamado `on-param`.
+
+2. `spring:`: Esta é a seção principal de configuração relacionada ao Spring Boot.
+
+   - `datasource:`: Aqui, está configurando o DataSource, que é usado para se conectar ao banco de dados.
+
+     - `url`: Esta é a URL de conexão JDBC para o banco de dados MySQL. O `jdbc:mysql://localhost:3306/anime?useSSL=false&createDatabaseIfNotExist=true` 
+        indica que o banco de dados está localizado em `localhost` na porta `3306`. O `anime` é o nome do banco de dados. Os parâmetros 
+        `useSSL=false` e `createDatabaseIfNotExists=true` configuram a conexão para não usar SSL (útil em ambientes de desenvolvimento) e para 
+        criar o banco de dados automaticamente se ele não existir.
+
+     - `username`: Define o nome de usuário para autenticação no banco de dados. Aqui, é definido como "root".
+
+     - `password`: Define a senha para autenticação no banco de dados. Aqui, é definido como "root".
+
+   - `jpa:`: Esta é a seção de configuração relacionada à JPA (Java Persistence API), que é usada para trabalhar com persistência de dados em Java.
+
+     - `hibernate:`: Configurações específicas do Hibernate, que é a implementação JPA padrão do Spring Boot.
+
+       - `ddl-auto`: Essa propriedade controla como o Hibernate gerencia o esquema do banco de dados. No valor "update", o Hibernate tentará 
+          atualizar automaticamente o esquema do banco de dados com base nas mudanças nas entidades (classes de modelo) do seu aplicativo. Isso 
+          é útil durante o desenvolvimento, pois permite que você faça alterações nas suas entidades sem precisar recriar manualmente as tabelas 
+          no banco de dados.
+
+Em resumo, esse arquivo de configuração define como o Spring Boot se conectará a um banco de dados MySQL, configurações do Hibernate para 
+atualização automática do esquema e algumas configurações de tratamento de erros. Certifique-se de substituir os valores de `username` e 
+`password` por valores seguros e adequados para seu ambiente de desenvolvimento ou produção.
