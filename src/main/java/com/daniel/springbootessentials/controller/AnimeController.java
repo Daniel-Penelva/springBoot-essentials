@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.requests.AnimePostRequestBody;
+import com.daniel.springbootessentials.requests.AnimePutRequestBody;
 import com.daniel.springbootessentials.service.AnimeService;
 
 import lombok.AllArgsConstructor;
@@ -36,14 +38,14 @@ public class AnimeController {
     // Buscar por id o anime: http://localhost:8080/animes/{id}
     @GetMapping(path = "/{id}")
     public ResponseEntity<Anime> findById(@PathVariable("id") Long id) {
-        return new ResponseEntity(animeService.findById(id), HttpStatus.OK);
+        return new ResponseEntity(animeService.findByIdOrThrowBadRequestException(id), HttpStatus.OK);
     }
 
     // Salvar anime - http://localhost:8080/animes
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Anime> save(@RequestBody Anime anime) {
-        return new ResponseEntity<>(animeService.save(anime), HttpStatus.CREATED);
+    public ResponseEntity<Anime> save(@RequestBody AnimePostRequestBody animePostRequestBody) {
+        return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
     }
 
     // Deletar anime - http://localhost:8080/animes/{id}
@@ -62,8 +64,8 @@ public class AnimeController {
     // Alterar anime - http://localhost:8080/animes/
     @PutMapping
     @ResponseBody
-    public ResponseEntity<Void> replace(@RequestBody Anime anime) {
-        animeService.replace(anime);
+    public ResponseEntity<Void> replace(@RequestBody AnimePutRequestBody animePutRequestBody) {
+        animeService.replace(animePutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -9,47 +9,51 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.repository.AnimeRepository;
+import com.daniel.springbootessentials.requests.AnimePostRequestBody;
+import com.daniel.springbootessentials.requests.AnimePutRequestBody;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class AnimeService {
 
     /* Responsável pela regra de negócio */
 
-    private static List<Anime> animes;
-
-    static {
-        animes = new ArrayList<>(List.of(new Anime(1L, "DBZ"), new Anime(2L, "Naruto"),
-                new Anime(3L, "Cavalheiros dos Zodíacos")));
-    }
+    private final AnimeRepository animeRepository;
 
     // Buscar todos os animes
     public List<Anime> listAll() {
-        return animes;
+        return animeRepository.findAll();
     }
 
     // Buscar por id anime
-    public Anime findById(Long id) {
-        return animes.stream()
-                .filter(anime -> anime.getId().equals(id))
-                .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+    public Anime findByIdOrThrowBadRequestException(Long id) {
+        // findById - retorna um Optional
+        return animeRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
     }
 
     // Salvar anime
-    public Anime save(Anime anime){
-        anime.setId(ThreadLocalRandom.current().nextLong(3, 100));
-        animes.add(anime);
-        return anime;
+    public Anime save(AnimePostRequestBody animePostRequestBody) {
+        return animeRepository.save(Anime.builder().name(animePostRequestBody.getName()).build());
     }
 
     // Deletar anime
-    public void delete(Long id){
-        animes.remove(findById(id));
+    public void delete(Long id) {
+        animeRepository.delete(findByIdOrThrowBadRequestException(id));
     }
 
     // Alterar anime
-    public void replace(Anime anime){
-        delete(anime.getId());
-        animes.add(anime);
+    public void replace(AnimePutRequestBody animePutRequestBody) {
+
+        findByIdOrThrowBadRequestException(animePutRequestBody.getId());
+
+        Anime anime = Anime.builder().id(animePutRequestBody.getId())
+                .name(animePutRequestBody.getName()).build();
+
+        animeRepository.save(anime);
     }
 
 }

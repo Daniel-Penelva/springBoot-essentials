@@ -226,3 +226,74 @@ Vou explicar cada seção:
 Em resumo, esse arquivo de configuração define como o Spring Boot se conectará a um banco de dados MySQL, configurações do Hibernate para 
 atualização automática do esquema e algumas configurações de tratamento de erros. Certifique-se de substituir os valores de `username` e 
 `password` por valores seguros e adequados para seu ambiente de desenvolvimento ou produção.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Vamos Criar uma Classe DTO AnimePostRequestBody, uma classe DTO (Data Transfer Object) é um padrão de projeto usado no desenvolvimento de 
+software para transferir dados entre diferentes partes de um sistema. Ela é uma classe simples que contém campos para armazenar dados e pode
+incluir métodos para acessar e manipular esses dados. O principal objetivo de uma classe DTO é encapsular os dados e permitir sua transferência 
+eficiente entre diferentes componentes de um sistema, muitas vezes em cenários onde a estrutura dos dados entre esses componentes é diferente.
+
+Os DTOs são frequentemente usados em aplicações que seguem uma arquitetura em camadas, como as aplicações baseadas em microservices, onde 
+diferentes partes do sistema podem ter diferentes necessidades de dados e formatos de representação. Eles ajudam a evitar o vazamento de 
+abstrações de dados e a reduzir o acoplamento entre as camadas.
+
+Algumas razões pelas quais você pode querer usar DTOs incluem:
+
+1. **Redução de tráfego de rede**: Quando você precisa transferir dados entre um cliente e um servidor, ou entre microservices, pode ser mais 
+   eficiente transferir apenas os dados necessários para a operação em vez de todos os campos de uma entidade completa.
+
+2. **Mapeamento entre objetos**: Em um sistema, você pode ter diferentes representações de um objeto para diferentes partes da aplicação 
+   (por exemplo, uma representação completa para exibição na interface do usuário e uma representação resumida para APIs). DTOs ajudam a mapear 
+   essas diferentes representações.
+
+3. **Segurança**: Em certos casos, você pode querer ocultar certos campos sensíveis ou confidenciais de uma entidade ao transferir dados. DTOs 
+   permitem que você selecione apenas os campos necessários para transferência.
+
+4. **Evolução do sistema**: DTOs também permitem que você evolua diferentes partes do sistema independentemente umas das outras. Se a estrutura 
+   interna de uma entidade mudar, você pode ajustar apenas o mapeamento entre a entidade e seus DTOs correspondentes, sem afetar a camada que 
+   consome esses DTOs.
+
+5. **Aumento de performance**: Em algumas situações, especialmente quando você lida com grandes volumes de dados, o uso de DTOs específicos para 
+   as operações pode melhorar a performance, reduzindo a quantidade de dados transferidos e simplificando o processamento.
+
+Lembre-se de que a criação de DTOs adiciona alguma complexidade ao código, pois você terá que gerenciar o mapeamento entre as entidades do 
+domínio e os DTOs. Portanto, é importante considerar cuidadosamente se o uso de DTOs é apropriado para o seu caso de uso.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação @Builder
+
+A anotação `@Builder` é uma anotação do projeto Lombok, uma biblioteca popular para reduzir a verbosidade do código em Java. A anotação `@Builder` 
+é usada para gerar automaticamente um padrão de criação de objetos imutáveis usando o padrão Builder. Ela é frequentemente usada em conjunto com 
+outras anotações do Lombok, como `@Data` ou `@Value`.
+
+Quando você anota uma classe com `@Builder`, o Lombok cria automaticamente um padrão de construção fluent para a classe, permitindo que você 
+crie instâncias dessa classe com mais facilidade e clareza.
+
+Aqui está um exemplo simples de como você usaria a anotação `@Builder`:
+
+```
+import lombok.Builder;
+
+@Builder
+public class Person {
+    private String firstName;
+    private String lastName;
+    private int age;
+}
+```
+
+Com essa anotação, o Lombok automaticamente cria um construtor privado na classe `Person` e uma classe interna chamada `PersonBuilder`. Isso 
+permite que você crie instâncias de `Person` usando um padrão fluente, como este:
+
+```
+Person person = Person.builder()
+    .firstName("John")
+    .lastName("Doe")
+    .age(30)
+    .build();
+```
+
+Isso ajuda a melhorar a legibilidade do código ao criar objetos com muitos campos, eliminando a necessidade de criar diversos construtores ou 
+utilizar construtores telescópicos (com muitos parâmetros) que podem se tornar difíceis de entender.
