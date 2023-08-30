@@ -1,14 +1,13 @@
 package com.daniel.springbootessentials.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.mapper.AnimeMapper;
 import com.daniel.springbootessentials.repository.AnimeRepository;
 import com.daniel.springbootessentials.requests.AnimePostRequestBody;
 import com.daniel.springbootessentials.requests.AnimePutRequestBody;
@@ -37,7 +36,9 @@ public class AnimeService {
 
     // Salvar anime
     public Anime save(AnimePostRequestBody animePostRequestBody) {
-        return animeRepository.save(Anime.builder().name(animePostRequestBody.getName()).build());
+        
+        return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
+        //animeRepository.save(AnimeMapperImpl.INSTANCE.toAnime(animePostRequestBody));
     }
 
     // Deletar anime
@@ -48,11 +49,11 @@ public class AnimeService {
     // Alterar anime
     public void replace(AnimePutRequestBody animePutRequestBody) {
 
-        findByIdOrThrowBadRequestException(animePutRequestBody.getId());
+        Anime savedAnime = findByIdOrThrowBadRequestException(animePutRequestBody.getId());
 
-        Anime anime = Anime.builder().id(animePutRequestBody.getId())
-                .name(animePutRequestBody.getName()).build();
-
+        Anime anime = AnimeMapper.INSTANCE.toAnime(animePutRequestBody);
+        anime.setId(savedAnime.getId());
+        
         animeRepository.save(anime);
     }
 

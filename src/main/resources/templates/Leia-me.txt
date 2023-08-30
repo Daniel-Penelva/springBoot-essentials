@@ -161,7 +161,7 @@ um banco de dados isolado e persistente em um contêiner.
 --------------- // ---------------
 IMPORTANTE!!!
 
- -> CTRL + C: Para parar a execução do container do docker
+ -> CTRL + C ou docker-compose stop: Para parar a execução do container do docker
  -> docker-compose up: Cria e inicia os containers definidos no arquivo docker-compose.yml.
  -> docker-compose down: Para e remove os containers definidos no arquivo docker-compose.yml.
  -> docker-compose ps: Lista os containers gerenciados pelo Docker Compose.
@@ -297,3 +297,122 @@ Person person = Person.builder()
 
 Isso ajuda a melhorar a legibilidade do código ao criar objetos com muitos campos, eliminando a necessidade de criar diversos construtores ou 
 utilizar construtores telescópicos (com muitos parâmetros) que podem se tornar difíceis de entender.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Framework de Mapeamento MapStruct
+
+O MapStruct é uma biblioteca que simplifica o processo de mapeamento entre objetos Java. Ele gera automaticamente o código de mapeamento 
+eficiente em tempo de compilação com base nas definições de mapeamento que você especifica em interfaces anotadas com @Mapper. O objetivo 
+principal do MapStruct é evitar a necessidade de escrever manualmente o código de mapeamento repetitivo e suscetível a erros, reduzindo a 
+complexidade e o esforço envolvidos nesse processo.
+
+Aqui estão os conceitos-chave e como você pode usar o MapStruct para realizar mapeamentos entre objetos:
+
+Definindo Interfaces @Mapper:
+Você cria interfaces Java anotadas com @Mapper para definir as regras de mapeamento entre os tipos de objetos. Essas interfaces podem conter 
+métodos de mapeamento. O MapStruct gera automaticamente a implementação desses métodos com base nas configurações de mapeamento que você fornece.
+
+Mapeamento Automático:
+O MapStruct tenta mapear automaticamente os campos com nomes correspondentes e tipos compatíveis. Por exemplo, se você tiver um campo chamado 
+nome em ambas as classes de origem e destino, o MapStruct mapeará automaticamente esses campos.
+
+Configuração de Mapeamento Personalizado:
+Em alguns casos, você pode precisar de mapeamento personalizado entre campos com nomes diferentes ou tipos incompatíveis. Você pode usar a 
+anotação @Mapping para configurar o mapeamento personalizado. Isso permite que você especifique como os campos devem ser mapeados.
+
+Injeção de Dependência (Spring Integration):
+Com a configuração apropriada, o MapStruct pode gerar implementações que podem ser facilmente injetadas como beans gerenciados pelo Spring 
+Framework. Isso é útil para obter benefícios do Spring, como gerenciamento de ciclo de vida e transações.
+
+Processadores de Anotações:
+O MapStruct utiliza processadores de anotações para gerar o código de mapeamento em tempo de compilação. Para usar o MapStruct, você precisa 
+adicionar a dependência do MapStruct ao seu projeto e configurar a anotação @Mapper em suas interfaces de mapeamento.
+
+ --------------- // ---------------
+
+Instalação no Maven 
+https://mapstruct.org/documentation/installation/
+
+Vamos abordar a tag <org.mapstruct.version>1.5.5.Final</org.mapstruct.version> que fica dentro da propriedade. Essa tag define o mapstruct e a 
+versão (1.5.5.Final) a ser utilizada. 
+
+A tag <org.mapstruct.version> é uma propriedade definida no arquivo pom.xml do projeto Maven. Ela é usada para armazenar a versão da biblioteca 
+MapStruct que deseja usar em seu projeto. Ao definir essa propriedade, você pode facilmente atualizar a versão do MapStruct em um único lugar, o 
+que torna mais conveniente e consistente o controle da versão da biblioteca em todo o projeto.
+
+Detalhes sobre a tag <org.mapstruct.version>:
+
+<org.mapstruct.version>: Isso indica o início da definição da propriedade. O nome da propriedade segue a convenção usual de utilizar a estrutura 
+<groupId>.<artifactId>, substituindo os pontos por traços (-).
+
+1.5.5.Final: Este é o valor atribuído à propriedade, que representa a versão específica do MapStruct que você deseja usar em seu projeto.
+
+A tag <path> dentro da configuração do plugin Maven maven-compiler-plugin é usada para especificar os caminhos para os processadores de anotações 
+que serão usados durante a compilação. No contexto do MapStruct, o processador de anotações é responsável por gerar automaticamente o código de 
+mapeamento com base nas interfaces de mapeamento que você define.
+
+Detalhes sobre os valores especificados dentro da tag <path>:
+
+<groupId>org.mapstruct</groupId>: Este é o identificador de grupo (Group ID) da biblioteca MapStruct no repositório Maven. Ele identifica 
+exclusivamente a organização ou projeto responsável pela biblioteca.
+
+<artifactId>mapstruct-processor</artifactId>: Este é o identificador de artefato (Artifact ID) da biblioteca MapStruct no repositório Maven. Ele 
+identifica o nome específico da biblioteca.
+
+<version>${org.mapstruct.version}</version>: Esta é a versão do MapStruct que será usada como processador de anotações durante a compilação. O 
+${org.mapstruct.version} é uma referência a uma propriedade definida no seu arquivo pom.xml para especificar a versão do MapStruct que  deseja 
+usar.
+
+A configuração da tag <path> informa ao Maven onde encontrar o processador de anotações do MapStruct. Quando o Maven executa o processo de 
+compilação, ele identifica os processadores de anotações no caminho especificado e os aplica para gerar o código necessário.
+
+No geral, essa configuração é crucial para garantir que o MapStruct funcione corretamente durante a compilação, gerando o código de mapeamento 
+automaticamente com base nas interfaces definidas. 
+
+--------------- // ---------------
+
+Anotação `@Mapper` -> @Mapper(componentModel = "spring")
+
+A anotação `@Mapper` com o parâmetro `componentModel = "spring"`. A anotação `@Mapper` faz parte da biblioteca MapStruct, que é uma ferramenta 
+de geração automática de código usada para simplificar a implementação de mapeamentos entre objetos Java. A configuração 
+`componentModel = "spring"` é uma das formas de integrar o MapStruct com o framework Spring.
+
+Aqui estão os pontos principais sobre o uso dessa anotação:
+
+1. **MapStruct Overview:**
+   O MapStruct permite que você defina interfaces anotadas com `@Mapper` para definir os mapeamentos entre diferentes tipos de objetos. Em vez 
+   de escrever manualmente o código de mapeamento, o MapStruct gera automaticamente o código de mapeamento eficiente em tempo de compilação.
+
+2. **`@Mapper` Anotação:**
+   A anotação `@Mapper` é colocada em uma interface que você cria para definir os métodos de mapeamento. Esses métodos de mapeamento devem ter a 
+   assinatura apropriada, mapeando atributos de um objeto para outro. O MapStruct gera a implementação desses métodos.
+
+3. **`componentModel = "spring"`:**
+   O parâmetro `componentModel` na anotação `@Mapper` permite a integração direta com o Spring Framework. Quando definido como `spring`, 
+   o MapStruct automaticamente cria uma implementação gerenciada pelo Spring para a interface anotada com `@Mapper`. Isso significa que você 
+   pode injetar essa interface mapeadora onde for necessário no seu código Spring.
+
+4. **Vantagens do Uso do Spring com o MapStruct:**
+   - Injeção de dependência fácil: Como o MapStruct gera uma implementação gerenciada pelo Spring, você pode injetar essa implementação em outras 
+     partes do seu código.
+   - Uso natural de recursos do Spring, como transações e gerenciamento de ciclo de vida.
+
+5. **Exemplo de Uso:**
+
+Aqui está um exemplo qualquer que poderia usar a anotação `@Mapper` com `componentModel = "spring"`:
+
+```
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public interface ProdutoMapper {
+    @Mapping(target = "preco", source = "preço") // Exemplo de mapeamento personalizado
+    ProdutoDTO produtoToProdutoDTO(Produto produto);
+}
+```
+
+Neste exemplo, a interface `ProdutoMapper` usa a anotação `@Mapper` com `componentModel = "spring"`. O método `produtoToProdutoDTO` é responsável 
+por mapear um objeto `Produto` para um objeto `ProdutoDTO`. A anotação `@Mapping` é usada para definir mapeamentos personalizados entre os 
+atributos.
