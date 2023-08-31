@@ -416,3 +416,74 @@ public interface ProdutoMapper {
 Neste exemplo, a interface `ProdutoMapper` usa a anotação `@Mapper` com `componentModel = "spring"`. O método `produtoToProdutoDTO` é responsável 
 por mapear um objeto `Produto` para um objeto `ProdutoDTO`. A anotação `@Mapping` é usada para definir mapeamentos personalizados entre os 
 atributos.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Em uma estrutura de projeto, o pacote "handler" geralmente é usado para agrupar classes que lidam com a manipulação de solicitações HTTP, 
+especialmente aquelas que não se encaixam bem em um controlador tradicional. O uso de um pacote "handler" pode ajudar a organizar o código 
+relacionado ao tratamento de solicitações específicas, além de manter os controladores mais focados nas operações principais da sua aplicação.
+
+Aqui estão alguns cenários comuns em que um pacote "handler" pode ser usado:
+
+1. **Tratamento de Erros Globais**: Você pode ter classes dentro do pacote "handler" que lidam com o tratamento de erros globais da aplicação. 
+   Isso pode incluir a captura de exceções não tratadas e o envio de respostas de erro padronizadas.
+
+2. **Integração com APIs Externas**: Se a sua aplicação se comunica com APIs externas, você pode criar classes no pacote "handler" para 
+   encapsular a lógica de integração, como fazer chamadas HTTP, manipular respostas e lidar com erros.
+
+3. **Autenticação e Autorização Personalizadas**: Se você precisa de lógica personalizada para autenticação e autorização, pode criar classes no 
+   pacote "handler" para lidar com essas responsabilidades.
+
+4. **Validação de Dados**: Se você tem validações de dados específicas que não se encaixam nas anotações de validação padrão do Spring, pode 
+   criar classes no pacote "handler" para lidar com essa validação.
+
+5. **Conversão de Formatos**: Se você precisa converter dados de um formato para outro, como manipular dados XML ou JSON, pode criar classes no 
+   pacote "handler" para essa conversão.
+
+6. **Tarefas Agendadas**: Se você tem tarefas agendadas que precisam ser executadas em intervalos específicos, pode criar classes no pacote 
+   "handler" para lidar com essas tarefas.
+
+Lembre-se de que não existe uma regra estrita para o que deve ser colocado em um pacote "handler". A nomenclatura e a organização do seu projeto 
+podem variar com base nas melhores práticas adotadas pela sua equipe e nas necessidades específicas da aplicação. O objetivo é manter o código 
+organizado e fácil de entender, agrupando funcionalidades relacionadas em pacotes lógicos.
+
+--------------- // ---------------
+
+Anotação `@ControllerAdvice`
+
+A anotação `@ControllerAdvice` é uma anotação do Spring Framework que permite definir classes que fornecem tratamento global para exceções em 
+toda a aplicação. Essas classes são conhecidas como "global exception handlers" (manipuladores globais de exceção) e têm a capacidade de 
+centralizar a lógica de tratamento de exceções, evitando a duplicação de código em diversos pontos do código.
+
+Aqui estão as principais funcionalidades e usos da anotação `@ControllerAdvice`:
+
+1. **Tratamento Global de Exceções**: Ao anotar uma classe com `@ControllerAdvice`, você pode definir métodos que capturam exceções específicas 
+   ou genéricas e fornecem um tratamento unificado para elas.
+
+2. **Centralização de Lógica**: Com um "controller advice", você pode centralizar a lógica de tratamento de exceções em um único local. Isso 
+   evita que você precise repetir o mesmo código de tratamento de exceções em vários controladores.
+
+3. **Respostas Personalizadas de Erro**: Com `@ControllerAdvice`, você pode personalizar as respostas de erro, como definir códigos de status, 
+   mensagens de erro e outros detalhes da resposta.
+
+4. **Tratamento de Exceções de Validação**: Você pode usar `@ControllerAdvice` para lidar com exceções de validação, como as lançadas quando 
+   dados inválidos são enviados para os controladores.
+
+5. **Tratamento de Exceções de Formato**: Se a aplicação recebe dados em formatos diversos (JSON, XML, etc.), você pode usar `@ControllerAdvice` 
+   para lidar com exceções de conversão e formatação.
+
+6. **Integração com Exceções Personalizadas**: Você pode criar exceções personalizadas para cenários específicos da sua aplicação e definir 
+   tratamento específico para essas exceções usando `@ControllerAdvice`.
+
+--------------- // ---------------
+
+A anotação @ExceptionHandler é uma anotação do Spring Framework que indica um método que deve ser invocado para lidar com uma exceção específica 
+lançada durante a execução de um controlador. Essa anotação é comumente usada em conjunto com a anotação @ControllerAdvice para definir 
+tratamentos globais de exceção ou tratamentos específicos para determinados controladores.
+
+No contexto da anotação @ExceptionHandler(BadRequestException.class), o que acontece é:
+
+ 1. @ExceptionHandler: Indica que o método anotado é responsável por tratar uma exceção específica.
+
+ 2. (BadRequestException.class): Isso especifica qual exceção o método deve tratar. No exemplo, BadRequestException.class é uma classe de 
+    exceção que representa uma situação em que ocorreu uma requisição inválida (código de status HTTP 400 Bad Request).
