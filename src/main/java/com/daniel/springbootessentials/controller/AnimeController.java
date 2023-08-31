@@ -68,4 +68,12 @@ public class AnimeController {
         animeService.replace(animePutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    // Buscar anime por nome: http://localhost:8080/animes/find/{name}
+    @GetMapping(path = "/find/{name}")
+    public ResponseEntity<List<Anime>> findByName(@PathVariable String name) {
+        return ResponseEntity.ok(animeService.findByName(name));
+    }
+
+
 }

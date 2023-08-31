@@ -57,4 +57,9 @@ public class AnimeService {
         animeRepository.save(anime);
     }
 
+    // Buscar todos os animes por nome
+    public List<Anime> findByName(String name) {
+        return animeRepository.findByName(name);
+    }
+
 }
