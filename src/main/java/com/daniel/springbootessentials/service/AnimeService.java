@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.exception.BadRequestException;
 import com.daniel.springbootessentials.mapper.AnimeMapper;
 import com.daniel.springbootessentials.repository.AnimeRepository;
 import com.daniel.springbootessentials.requests.AnimePostRequestBody;
@@ -31,7 +32,7 @@ public class AnimeService {
     public Anime findByIdOrThrowBadRequestException(Long id) {
         // findById - retorna um Optional
         return animeRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Anime not found"));
+                .orElseThrow(() -> new BadRequestException("Anime not found"));
     }
 
     // Salvar anime
