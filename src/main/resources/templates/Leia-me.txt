@@ -487,3 +487,132 @@ No contexto da anotação @ExceptionHandler(BadRequestException.class), o que ac
 
  2. (BadRequestException.class): Isso especifica qual exceção o método deve tratar. No exemplo, BadRequestException.class é uma classe de 
     exceção que representa uma situação em que ocorreu uma requisição inválida (código de status HTTP 400 Bad Request).
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação `@Transactional`
+
+A anotação `@Transactional` é uma anotação usada no Spring Framework para controlar a transação de operações em um banco de dados. Ela define um 
+escopo transacional para um método ou um conjunto de métodos, garantindo que essas operações sejam executadas de forma atômica, consistente, 
+isolada e durável (princípios ACID de transações).
+
+A anotação `@Transactional` pode ser aplicada a nível de classe ou método. Quando aplicada a nível de classe, ela se aplica a todos os métodos 
+públicos da classe. Quando aplicada a nível de método, ela se aplica apenas ao método específico. Ela pode ser usada em controladores, serviços 
+ou qualquer componente gerenciado pelo Spring.
+
+Aqui estão algumas funcionalidades da anotação `@Transactional`:
+
+1. **Atomicidade**: Todas as operações dentro do escopo transacional são tratadas como uma unidade atômica. Isso significa que todas as operações 
+   são bem-sucedidas ou todas falham, evitando estados intermediários inconsistentes no banco de dados.
+
+2. **Consistência**: A transação garante que o banco de dados esteja em um estado consistente antes e depois das operações.
+
+3. **Isolamento**: A anotação permite controlar o nível de isolamento das transações, garantindo que as operações de uma transação não 
+   interfiram nas operações de outras transações concorrentes.
+
+4. **Durabilidade**: As alterações feitas dentro do escopo transacional são permanentes e persistem mesmo após um reinício do sistema.
+
+Exemplo qualquer de uso:
+
+```java
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+}
+```
+
+No exemplo acima, a anotação `@Transactional` é usada nos métodos `createUser` e `getUserById` do serviço `UserService`. No método `createUser`, 
+a anotação garante que a operação de salvamento no banco de dados seja tratada como uma única transação. No método `getUserById`, a anotação 
+com o parâmetro `readOnly = true` define que a transação será somente para leitura, o que pode otimizar o desempenho quando não há necessidade 
+de operações de gravação no banco de dados.
+
+a anotação @Transactional pode ser usada em vários métodos da camada de serviço, incluindo os métodos de busca, atualização e exclusão. Ela 
+ajuda a garantir a consistência das operações e a controlar o escopo da transação em torno dessas operações.
+
+Além da propriedade readOnly, existem outras propriedades que podem ser usadas com a anotação @Transactional para controlar o comportamento da 
+transação:
+
+1. isolation: Define o nível de isolamento da transação. Você pode usar valores como:
+   -> Isolation.DEFAULT - O nível de isolamento padrão definido pelo banco de dados ou pelo ambiente de execução. Isso geralmente equivale a 
+                          Isolation.READ_COMMITTED.
+   
+   -> Isolation.READ_UNCOMMITTED - O nível mais baixo de isolamento. As transações podem ver alterações não confirmadas por outras transações. 
+                                   Isso pode resultar em leituras sujas (dirty reads), onde as informações podem ser imprecisas.
+    
+   -> Isolation.READ_COMMITTED - As transações só podem ver dados confirmados por outras transações. Isso evita leituras sujas, mas ainda 
+                                 permite o fenômeno de leituras não repetíveis.
+                                 
+   -> Isolation.REPEATABLE_READ - Garante que, uma vez que uma linha seja lida por uma transação, qualquer leitura subsequente da mesma linha 
+                                  durante a mesma transação retornará o mesmo valor. Isso evita leituras não repetíveis, mas ainda permite o 
+                                  fenômeno da leitura fantasma.
+   
+   -> Isolation.SERIALIZABLE - É o nível de isolamento mais alto. Garante que as transações ocorram como se fossem executadas uma após a outra, 
+                               evitando leituras sujas, leituras não repetíveis e leituras fantasmas. No entanto, isso pode levar a um desempenho 
+                               mais baixo devido ao bloqueio rigoroso.
+
+ A escolha do nível de isolamento depende dos requisitos de consistência, desempenho e concorrência da sua aplicação. Níveis de isolamento mais 
+ altos fornecem maior consistência, mas podem resultar em bloqueios e possivelmente em degradação de desempenho. Por outro lado, níveis de 
+ isolamento mais baixos podem resultar em melhores desempenhos, mas podem introduzir inconsistências nos dados lidos.
+
+2. propagation: Define a propagação da transação quando chamado a partir de outro método transacional. Valores possíveis incluem: 
+   -> Propagation.REQUIRED - Esse é o valor padrão. Se um método transacional é chamado dentro de outro método que já está em uma transação, o 
+                             método chamado participará da transação existente. Caso contrário, uma nova transação será criada. Isso significa 
+                             que vários métodos dentro de uma mesma transação compartilham a mesma transação, e se a transação pai for revertida, 
+                             todas as operações serão revertidas.
+   
+   -> Propagation.REQUIRES_NEW -  Esse valor garante que um novo contexto de transação seja criado para o método chamado, independentemente de 
+                                  haver uma transação em andamento no método chamador. Isso cria uma transação separada para o método chamado, 
+                                  isolando completamente suas operações da transação pai.
+   
+   -> Propagation.MANDATORY - Esse valor indica que o método deve ser chamado dentro de uma transação existente. Se não houver uma transação, 
+                              uma exceção será lançada. Isso garante que um método só será executado dentro de uma transação existente.
+   
+   -> entre outros.
+
+Exemplo qualquer de uso:
+
+```
+@Service
+public class UserService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Transactional
+    public void createUser(User user) {
+        userRepository.save(user);
+        updateUserStats();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateUserStats() {
+        // Atualizar estatísticas do usuário em uma nova transação independente
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+}
+```
+ No exemplo acima, o método createUser chama o método updateUserStats com Propagation.REQUIRED, o que significa que ambos compartilham a mesma 
+ transação. O método updateUserStats utiliza Propagation.REQUIRES_NEW, criando uma nova transação. O método getUserById usa Propagation.MANDATORY, 
+ garantindo que ele seja chamado apenas dentro de uma transação existente.
+
+3. timeout: Define o tempo limite da transação em segundos. A transação será revertida se o tempo limite for excedido.
+
+4. rollbackFor e noRollbackFor: Define as exceções que devem ou não causar o rollback da transação.
+
+5. rollbackForClassName e noRollbackForClassName: Versões por nome das propriedades acima.

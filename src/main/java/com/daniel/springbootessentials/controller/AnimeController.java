@@ -70,17 +70,17 @@ public class AnimeController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    /* Buscar anime por nome: http://localhost:8080/animes/find/{name}
+    // Buscar anime por nome: http://localhost:8080/animes/find/{name}
     @GetMapping(path = "/find/{name}")
     public ResponseEntity<List<Anime>> findByName(@PathVariable String name) {
         return ResponseEntity.ok(animeService.findByName(name));
-    }*/
+    }
 
-     // Buscar anime por nome: http://localhost:8080/animes/find?name=Naruto
+     /* Buscar anime por nome: http://localhost:8080/animes/find?name=Naruto
     @GetMapping(path = "/find")
     public ResponseEntity<List<Anime>> findByName(@RequestParam(name = "name") String name) {
         return ResponseEntity.ok(animeService.findByName(name));
-    }
+    }*/
 
 
 }

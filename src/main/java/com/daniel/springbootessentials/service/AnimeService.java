@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.daniel.springbootessentials.domain.Anime;
@@ -24,11 +25,13 @@ public class AnimeService {
     private final AnimeRepository animeRepository;
 
     // Buscar todos os animes
+     @Transactional(readOnly = true)
     public List<Anime> listAll() {
         return animeRepository.findAll();
     }
 
     // Buscar por id anime
+    @Transactional(readOnly = true)
     public Anime findByIdOrThrowBadRequestException(Long id) {
         // findById - retorna um Optional
         return animeRepository.findById(id)
@@ -36,6 +39,7 @@ public class AnimeService {
     }
 
     // Salvar anime
+    @Transactional
     public Anime save(AnimePostRequestBody animePostRequestBody) {
         
         return animeRepository.save(AnimeMapper.INSTANCE.toAnime(animePostRequestBody));
@@ -43,11 +47,13 @@ public class AnimeService {
     }
 
     // Deletar anime
+    @Transactional
     public void delete(Long id) {
         animeRepository.delete(findByIdOrThrowBadRequestException(id));
     }
 
     // Alterar anime
+    @Transactional
     public void replace(AnimePutRequestBody animePutRequestBody) {
 
         Anime savedAnime = findByIdOrThrowBadRequestException(animePutRequestBody.getId());
@@ -59,6 +65,7 @@ public class AnimeService {
     }
 
     // Buscar todos os animes por nome
+    @Transactional(readOnly = true)
     public List<Anime> findByName(String name) {
         return animeRepository.findByName(name);
     }
