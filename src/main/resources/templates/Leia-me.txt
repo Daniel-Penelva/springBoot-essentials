@@ -616,3 +616,61 @@ public class UserService {
 4. rollbackFor e noRollbackFor: Define as exceções que devem ou não causar o rollback da transação.
 
 5. rollbackForClassName e noRollbackForClassName: Versões por nome das propriedades acima.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+As anotações como `@NotEmpty`, `@NotNull`, `@Min`, `@Max`, `@Size`, entre outras, fazem parte da biblioteca de validação do Bean Validation, que 
+é integrada ao Spring Boot através da dependência `spring-boot-starter-validation`. Essas anotações são usadas para validar os dados de entrada 
+e garantir que atendam aos critérios definidos antes de serem processados pela aplicação. Aqui estão algumas das anotações mais comuns:
+
+1. **`@NotNull`**: Essa anotação é usada para garantir que o valor do campo não seja nulo.
+
+2. **`@NotEmpty`**: Essa anotação é usada para garantir que uma coleção, uma string ou um array não esteja vazio ou nulo.
+
+3. **`@NotBlank`**: Semelhante ao `@NotEmpty`, mas também verifica se a string não consiste apenas em espaços em branco.
+
+4. **`@Min`**: Essa anotação define o valor mínimo que um campo numérico pode ter.
+
+5. **`@Max`**: Essa anotação define o valor máximo que um campo numérico pode ter.
+
+6. **`@Size`**: Essa anotação define o tamanho mínimo e máximo de uma coleção, string ou array.
+
+7. **`@Pattern`**: Essa anotação permite validar uma string usando uma expressão regular.
+
+8. **`@Email`**: Essa anotação valida se uma string é um endereço de e-mail válido.
+
+9. **`@Valid`**: Essa anotação é usada para indicar que uma propriedade deve ser validada recursivamente. Pode ser usada, por exemplo, para validar objetos aninhados.
+
+Exemplo de uso das anotações:
+
+```java
+public class User {
+
+    @NotNull
+    @Size(min = 2, max = 50)
+    private String name;
+
+    @NotEmpty
+    @Email
+    private String email;
+
+    @Min(18)
+    private int age;
+
+    // Getters e setters
+}
+```
+
+Neste exemplo, a classe `User` possui campos anotados com `@NotNull`, `@Size`, `@NotEmpty`, `@Email` e `@Min`. Quando um objeto `User` é validado 
+usando o Bean Validation, as restrições definidas por essas anotações serão aplicadas para garantir que os dados atendam aos critérios 
+estabelecidos. Caso contrário, exceções de validação serão lançadas, informando que os dados não estão em conformidade com as regras definidas.
+
+--------------- // ---------------
+
+Anotação @Valid
+
+A anotação @Valid é uma anotação do Bean Validation que é usada para indicar que um objeto aninhado deve ser validado. Essa anotação é frequentemente usada em campos que são objetos complexos ou coleções dentro de uma classe.
+
+Quando você coloca a anotação @Valid em um campo, o mecanismo de validação do Bean Validation verifica se o objeto contido nesse campo está em 
+conformidade com as regras de validação definidas para ele. Se o objeto não for válido, as restrições definidas pelas anotações no próprio objeto 
+aninhado serão aplicadas, e as exceções de validação apropriadas serão lançadas.
