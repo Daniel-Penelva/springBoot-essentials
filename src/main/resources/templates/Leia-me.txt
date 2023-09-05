@@ -788,3 +788,113 @@ http://localhost:8080/animes?size=5
 
 Usando paginação (define a página acessada) - listar todos os animes
 http://localhost:8080/animes?size=5&page=3
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação @Configuration
+
+A anotação `@Configuration` é uma das anotações fundamentais do Spring Framework e é usada para indicar que uma classe é uma classe de 
+configuração. Ela desempenha um papel crucial na configuração de aplicativos Spring e na definição de beans gerenciados pelo Spring Container.
+
+Aqui estão os principais pontos sobre a anotação `@Configuration`:
+
+1. **O Que Faz**: A anotação `@Configuration` é usada para identificar classes que definem configurações para o aplicativo. Essas configurações 
+   podem incluir definições de beans, configurações de componentes e outras configurações relacionadas ao Spring.
+
+2. **Classes de Configuração**: As classes anotadas com `@Configuration` geralmente contêm métodos anotados com `@Bean`. Esses métodos definem 
+   os beans gerenciados pelo Spring e suas configurações.
+
+3. **Beans Gerenciados**: Os métodos anotados com `@Bean` dentro de uma classe `@Configuration` são interpretados pelo Spring como instruções 
+   para criar beans gerenciados. Esses beans são inicializados e configurados pelo Spring Container e podem ser injetados em outras partes do 
+   aplicativo.
+
+4. **Substituição para XML**: A anotação `@Configuration` é frequentemente usada como uma alternativa ao uso de configurações XML para definir 
+   beans. Ela oferece uma abordagem mais programática e baseada em código para a configuração do aplicativo.
+
+5. **Escopo Singleton por Padrão**: Os beans definidos em classes anotadas com `@Configuration` têm escopo singleton por padrão. Isso significa 
+   que o Spring Container cria apenas uma instância do bean e a reutiliza sempre que o bean é injetado em outras partes do aplicativo.
+
+6. **Component Scanning**: Classes anotadas com `@Configuration` também podem ser detectadas automaticamente pelo mecanismo de varredura de 
+   componentes do Spring, tornando-as elegíveis para uso como configurações.
+
+Em resumo, a anotação `@Configuration` é uma parte fundamental da configuração baseada em Java no Spring Framework e desempenha um papel 
+importante na definição e configuração de beans gerenciados pelo Spring. Ela permite que você configure seu aplicativo de forma programática, 
+facilitando a organização e a manutenção do código de configuração.
+
+--------------- // ---------------
+
+Interface `WebMvcConfigurer`
+
+A interface `WebMvcConfigurer` é uma parte importante do Spring Framework e é usada para configurar vários aspectos do mecanismo Spring MVC 
+(Model-View-Controller) em um aplicativo web. Ela permite personalizar e ajustar o comportamento padrão do Spring MVC de acordo com as 
+necessidades do seu aplicativo.
+
+Principais funcionalidades que você pode realizar ao implementar a interface `WebMvcConfigurer`:
+
+1. **Configuração de Controladores**: Você pode adicionar seus próprios controladores personalizados, bem como configurar controladores padrão 
+   do Spring MVC.
+
+2. **Configuração de Visualizações**: É possível definir como as visualizações são resolvidas e configurar visualizações personalizadas.
+
+3. **Interceptadores**: Você pode adicionar interceptadores para executar código antes e depois do processamento da solicitação pelo controlador.
+
+4. **Recursos Estáticos**: É possível configurar o tratamento de recursos estáticos, como arquivos CSS, JavaScript e imagens.
+
+5. **Conversores e Formatadores**: Você pode registrar conversores e formatadores personalizados para mapear dados de solicitação para objetos 
+   Java e vice-versa.
+
+6. **Validação**: Você pode configurar validação personalizada para objetos de formulário.
+
+7. **Gerenciamento de Recursos**: É possível configurar o local de armazenamento de recursos, como arquivos de upload.
+
+8. **Configuração de Content Negotiation**: Definir regras para a negociação de conteúdo com base no cabeçalho `Accept` da solicitação.
+
+9. **Configuração de Mapeamento de URLs**: Personalizar o mapeamento de URLs para controladores e recursos.
+
+10. **Tratamento de Exceções**: Configurar como as exceções são tratadas e personalizar páginas de erro.
+
+11. **Configuração do Local**: Definir o local e a codificação padrão para seu aplicativo.
+
+Para implementar a interface `WebMvcConfigurer`, você geralmente cria uma classe de configuração que estende `WebMvcConfigurerAdapter` 
+(desde o Spring 5, você pode implementar diretamente `WebMvcConfigurer`). Em seguida, você sobrescreve os métodos apropriados para personalizar 
+o comportamento do Spring MVC.
+
+Aqui está um exemplo simples de uma classe que implementa `WebMvcConfigurer` para configurar um interceptor:
+
+```java
+@Configuration
+public class MyWebMvcConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new MyInterceptor());
+    }
+}
+```
+
+Neste exemplo, a classe `MyWebMvcConfig` é anotada com `@Configuration` e implementa `WebMvcConfigurer`. Ela sobrescreve o método 
+`addInterceptors` para adicionar um interceptor personalizado.
+
+Em resumo, a interface `WebMvcConfigurer` fornece uma maneira flexível de personalizar o comportamento do Spring MVC em um aplicativo web. Ela 
+permite que você adapte o Spring MVC para atender às necessidades específicas do seu projeto, tornando-o uma ferramenta poderosa para configurar 
+a camada de controle de um aplicativo web Spring.
+
+--------------- // ---------------
+
+O método `addArgumentResolvers` faz parte da interface `WebMvcConfigurer` e é usado para configurar os resolutores de argumentos personalizados 
+que serão usados pelo Spring MVC ao lidar com solicitações HTTP.
+
+Em um controlador Spring MVC, os métodos podem receber argumentos que representam partes da solicitação HTTP, como parâmetros da URL, cabeçalhos 
+HTTP, corpo da solicitação e muito mais. O Spring MVC usa resolutores de argumentos para converter esses componentes da solicitação em objetos 
+que podem ser passados como argumentos para os métodos do controlador.
+
+O método `addArgumentResolvers` permite que você registre resolutores de argumentos personalizados para que o Spring MVC possa usá-los ao 
+processar solicitações HTTP. Isso é útil quando você deseja estender o comportamento padrão do Spring MVC para lidar com tipos de argumento 
+personalizados ou quando precisa realizar alguma lógica especial durante a resolução de argumentos.
+
+Você pode criar resolutores de argumentos personalizados para atender às necessidades específicas do seu aplicativo. Por exemplo, você pode 
+criar um resolutor de argumentos que converte um cabeçalho HTTP personalizado em um objeto Java específico ou realiza alguma validação 
+personalizada durante a resolução de argumentos.
+
+Em resumo, o método `addArgumentResolvers` é usado para configurar resolutores de argumentos personalizados no Spring MVC, permitindo que você 
+estenda e personalize o processamento de solicitações HTTP nos controladores.
