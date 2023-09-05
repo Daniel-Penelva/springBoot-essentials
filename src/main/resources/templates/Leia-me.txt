@@ -898,3 +898,41 @@ personalizada durante a resolução de argumentos.
 
 Em resumo, o método `addArgumentResolvers` é usado para configurar resolutores de argumentos personalizados no Spring MVC, permitindo que você 
 estenda e personalize o processamento de solicitações HTTP nos controladores.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Utilizando o Sorting para ordenar a lista por name - usando o Postman ou o Thunder Client (VSCode)
+http://localhost:8080/animes?size=20&sort=name
+
+
+--------------- // ---------------
+
+Esse script faz parte da configuração de log em um aplicativo Spring que utiliza o framework Hibernate para interagir com um banco de dados. 
+Essa configuração está usando o mecanismo de log SLF4J (Simple Logging Facade for Java) com uma configuração específica para o Hibernate.
+
+Aqui está uma explicação do script:
+
+```yaml
+logging:  # Início da configuração de log
+  level:  # Nível de log
+    org:  # Pacote raiz para a configuração de níveis de log
+      hibernate:  # Pacote Hibernate para a configuração de níveis de log
+        SQL: DEBUG  # Define o nível de log DEBUG para as mensagens SQL do Hibernate
+```
+
+- `logging`: Isso marca o início da configuração de log para o aplicativo.
+
+- `level`: Aqui você pode definir os níveis de log para diferentes pacotes ou classes do seu aplicativo.
+
+- `org`: Este é o pacote raiz para a configuração de níveis de log. Qualquer pacote ou classe que esteja abaixo deste pacote no sistema de pacotes 
+   Java será afetado por essa configuração.
+
+- `hibernate`: Este é um subpacote do Hibernate dentro do pacote `org`. Esta configuração específica se aplica apenas ao Hibernate.
+
+- `SQL: DEBUG`: Aqui, o nível de log DEBUG é configurado para as mensagens SQL geradas pelo Hibernate. Isso significa que o Hibernate registrará 
+   mensagens de log com o nível DEBUG sempre que executar consultas SQL. Isso pode ser útil para depurar e entender o que está acontecendo no 
+   banco de dados quando o Hibernate interage com ele.
+
+Em resumo, esse script configura o nível de log DEBUG para as mensagens SQL do Hibernate. Isso permite que você veja detalhes das consultas SQL 
+executadas pelo Hibernate, o que pode ser útil durante o desenvolvimento e a depuração de aplicativos que utilizam o Hibernate para persistência 
+de dados.
