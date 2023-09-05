@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,8 +35,8 @@ public class AnimeController {
 
     // Listar todos os animes: http://localhost:8080/animes
     @GetMapping
-    public List<Anime> list() {
-        return animeService.listAll();
+    public ResponseEntity<Page<Anime>>  list(Pageable pageable) {
+        return ResponseEntity.ok(animeService.listAll(pageable));
     }
 
     // Buscar por id o anime: http://localhost:8080/animes/{id}

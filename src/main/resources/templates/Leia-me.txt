@@ -745,3 +745,46 @@ em um aplicativo Spring Boot:
 Estes são apenas alguns dos métodos disponíveis na classe `ResponseEntityExceptionHandler`. Você pode criar métodos personalizados adicionais 
 para lidar com exceções específicas de seu aplicativo. Além disso, você pode personalizar as respostas HTTP retornadas para cada tipo de exceção, 
 definindo um objeto `ResponseEntity` personalizado com o status HTTP e o corpo desejados.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Classes `Page` e `Pageable` no contexto de aplicativos Spring Data e Spring Boot:
+
+1. **`Page`**:
+   - A classe `Page` é uma parte do framework Spring Data e é usada para representar uma página de resultados de consulta em uma lista paginada 
+     de elementos.
+   - Ela encapsula uma lista de elementos de dados junto com informações sobre a página, como número total de páginas, número total de elementos, 
+     tamanho da página e outros detalhes relacionados à paginação.
+   - É frequentemente usada quando você deseja dividir grandes conjuntos de dados em partes menores para melhorar a eficiência e a usabilidade 
+     de seu aplicativo.
+   - O Spring Data geralmente retorna objetos `Page` como resultado de consultas que envolvem a paginação, permitindo fácil navegação pelos 
+     resultados.
+
+2. **`Pageable`**:
+   - A interface `Pageable` é usada para representar informações sobre a paginação, como número da página, tamanho da página, ordenação e outros 
+     detalhes relacionados à recuperação de resultados paginados.
+   - Ela define métodos para acessar e configurar essas informações, permitindo que você especifique qual página de resultados deseja recuperar, 
+     qual é o tamanho da página e como os resultados devem ser ordenados.
+   - No Spring Data, você geralmente cria objetos `Pageable` e os passa como argumentos para métodos de consulta que suportam a paginação. Dessa 
+     forma, você pode personalizar a consulta para retornar a página desejada.
+
+Em resumo, `Page` é usada para encapsular uma página de resultados paginados, enquanto `Pageable` é usada para configurar os detalhes da 
+paginação, como número da página, tamanho da página e ordenação. Essas classes são muito úteis ao lidar com grandes volumes de dados e ao criar 
+consultas paginadas em aplicativos Spring Data.
+
+O Page<Anime> é usado para representar um conjunto paginado de objetos do tipo Anime. Isso pode ser útil ao consultar grandes conjuntos de dados 
+em um banco de dados e dividir os resultados em páginas para melhorar o desempenho e a usabilidade de um aplicativo.
+
+A classe Page geralmente oferece métodos para navegar pelas páginas, acessar informações sobre a página atual, como número total de páginas, 
+tamanho da página, número total de elementos, etc. Isso permite a criação de recursos de paginação em APIs ou interfaces de usuário, onde os 
+resultados são exibidos em partes gerenciáveis.
+
+--------------- // ---------------
+
+Acessando no Postman:
+
+Usando paginação (define qtd de páginas) - listar todos os animes
+http://localhost:8080/animes?size=5
+
+Usando paginação (define a página acessada) - listar todos os animes
+http://localhost:8080/animes?size=5&page=3
