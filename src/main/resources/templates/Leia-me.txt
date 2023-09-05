@@ -674,3 +674,26 @@ A anotação @Valid é uma anotação do Bean Validation que é usada para indic
 Quando você coloca a anotação @Valid em um campo, o mecanismo de validação do Bean Validation verifica se o objeto contido nesse campo está em 
 conformidade com as regras de validação definidas para ele. Se o objeto não for válido, as restrições definidas pelas anotações no próprio objeto 
 aninhado serão aplicadas, e as exceções de validação apropriadas serão lançadas.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação @SuperBuilder
+
+A anotação @SuperBuilder faz parte do projeto Lombok, que é uma biblioteca do Java que ajuda a reduzir a quantidade de código boilerplate, como 
+getters, setters, construtores e outros métodos repetitivos, tornando o código mais conciso e legível.
+
+A anotação @SuperBuilder é usada para criar construtores fluentes em classes que herdam de outras classes. Ela é particularmente útil quando 
+você está trabalhando com herança e deseja que as subclasses tenham construtores com a mesma funcionalidade da classe pai.
+
+O uso de @SuperBuilder economiza muito código e torna mais fácil criar objetos complexos com herança. É importante notar que você precisará 
+configurar o Lombok corretamente em seu projeto para usar essa anotação.
+
+--------------- // ---------------
+
+Anotação @Getter
+
+A anotação @Getter faz parte do projeto Lombok, que é uma biblioteca Java que ajuda a reduzir a verbosidade do código, eliminando a necessidade 
+de escrever métodos getters manualmente. Ela é usada para gerar automaticamente métodos getter para os campos (atributos) de uma classe.
+
+A anotação @Getter é uma maneira eficiente de criar métodos getter em suas classes, economizando tempo e reduzindo a quantidade de código que 
+você precisa escrever manualmente. Isso também ajuda a manter seu código mais limpo e legível.
