@@ -697,3 +697,51 @@ de escrever métodos getters manualmente. Ela é usada para gerar automaticament
 
 A anotação @Getter é uma maneira eficiente de criar métodos getter em suas classes, economizando tempo e reduzindo a quantidade de código que 
 você precisa escrever manualmente. Isso também ajuda a manter seu código mais limpo e legível.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+A classe ResponseEntityExceptionHandler faz parte do framework Spring e é projetada para lidar com exceções globais em um aplicativo Spring 
+Boot que produz respostas HTTP. Ela é uma classe abstrata que estende ResponseEntityExceptionHandler e fornece métodos para tratar várias 
+exceções comuns, como erros de validação, exceções de servidor interno, exceções de método não suportado e muito mais.
+
+A principal finalidade da ResponseEntityExceptionHandler é capturar exceções lançadas em seu aplicativo e transformá-las em respostas HTTP 
+adequadas, que geralmente têm um formato JSON ou XML para serem consumidos por clientes da API.
+
+Você pode personalizar o tratamento de exceções de acordo com as necessidades do seu aplicativo, adicionando métodos adicionais anotados com 
+@ExceptionHandler para lidar com tipos de exceções específicos.
+
+Em resumo, ResponseEntityExceptionHandler é uma classe útil para lidar com exceções globalmente em seu aplicativo Spring Boot e personalizar as 
+respostas HTTP retornadas em caso de erros. Ela é amplamente usada para padronizar o tratamento de exceções em APIs RESTful.
+
+Alguns dos métodos mais comuns fornecidos pela classe `ResponseEntityExceptionHandler` que são frequentemente utilizados para lidar com exceções 
+em um aplicativo Spring Boot:
+
+1. `handleExceptionInternal`: Este método é usado para lidar com exceções gerais e pode ser personalizado para gerar uma resposta HTTP 
+    personalizada. É frequentemente usado para lidar com exceções não tratadas.
+
+2. `handleMethodArgumentNotValid`: Este método lida com exceções relacionadas à validação de argumentos de métodos, geralmente lançadas quando 
+    os dados de entrada não estão em conformidade com as regras de validação definidas. Ele pode ser usado em conjunto com anotações de 
+    validação, como `@Valid`.
+
+3. `handleHttpRequestMethodNotSupported`: Este método lida com exceções lançadas quando um método HTTP não é suportado em um endpoint específico. 
+    Por exemplo, ao tentar acessar um endpoint com um método HTTP que não é permitido, como POST em um endpoint que só permite GET.
+
+4. `handleHttpMediaTypeNotSupported`: Este método lida com exceções relacionadas à falta de suporte ao tipo de mídia (por exemplo, JSON, XML) 
+    solicitado pelo cliente.
+
+5. `handleHttpMediaTypeNotAcceptable`: Este método lida com exceções lançadas quando o servidor não pode produzir uma resposta no formato de 
+    mídia aceitável pelo cliente.
+
+6. `handleMissingPathVariable`: Lidar com exceções lançadas quando um caminho da URL esperado não é encontrado.
+
+7. `handleNoHandlerFoundException`: Este método lida com exceções quando nenhum manipulador (controlador) é encontrado para a solicitação do 
+    cliente.
+
+8. `handleTypeMismatch`: Este método lida com exceções lançadas quando um valor do parâmetro não pode ser convertido para o tipo esperado.
+
+9. `handleDataIntegrityViolation`: Usado para tratar exceções relacionadas à integridade dos dados, geralmente lançadas quando há violações de 
+    restrições de chave primária ou chave única.
+
+Estes são apenas alguns dos métodos disponíveis na classe `ResponseEntityExceptionHandler`. Você pode criar métodos personalizados adicionais 
+para lidar com exceções específicas de seu aplicativo. Além disso, você pode personalizar as respostas HTTP retornadas para cada tipo de exceção, 
+definindo um objeto `ResponseEntity` personalizado com o status HTTP e o corpo desejados.
