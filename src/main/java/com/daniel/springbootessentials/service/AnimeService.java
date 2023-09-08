@@ -30,6 +30,11 @@ public class AnimeService {
         return animeRepository.findAll(pageable);
     }
 
+    // Buscar todos os animes sem paginação 
+    public List<Anime> listAllNonPageable(){
+        return animeRepository.findAll();
+    }
+
     // Buscar por id anime
     @Transactional(readOnly = true)
     public Anime findByIdOrThrowBadRequestException(Long id) {

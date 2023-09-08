@@ -988,3 +988,42 @@ informações como cabeçalhos e status, use `getForEntity`. Se você só precis
 Lembre-se de que, ao usar esses métodos, você deve tratar exceções de rede, como `RestClientException`, que podem ocorrer se houver problemas de 
 conectividade com o serviço REST ou se a solicitação não for bem-sucedida. Além disso, é importante tratar possíveis exceções ao fazer o parsing 
 do corpo da resposta, dependendo do tipo esperado.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+O script abaixo usa o `RestTemplate` para fazer uma chamada HTTP GET a uma URL específica e receber uma resposta que é do tipo `List<Anime>`. Vamos analisar o código linha por linha:
+
+ResponseEntity<List<Anime>> exchange = new RestTemplate().exchange("http://localhost:8080/animes/all",
+                HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Anime>>() {
+                });
+
+1. `ResponseEntity<List<Anime>> exchange = new RestTemplate().exchange("http://localhost:8080/animes/all", HttpMethod.GET, null, new 
+    ParameterizedTypeReference<List<Anime>>() {});`
+
+   - `ResponseEntity<List<Anime>>`: Isso declara uma variável chamada `exchange` do tipo `ResponseEntity` que irá armazenar a resposta da 
+      chamada HTTP. Neste caso, a resposta é esperada como uma lista de objetos do tipo `Anime`.
+
+   - `new RestTemplate()`: Aqui, estamos criando uma nova instância de `RestTemplate`, que é uma classe do Spring Framework usada para fazer 
+      chamadas HTTP a serviços web.
+
+   - `.exchange("http://localhost:8080/animes/all", HttpMethod.GET, null, new ParameterizedTypeReference<List<Anime>>() {})`: Este é o método 
+      `exchange` do `RestTemplate`, usado para fazer uma chamada HTTP. Vamos analisar os argumentos:
+
+     - `"http://localhost:8080/animes/all"`: É a URL para a qual a chamada HTTP será feita. Neste caso, a URL é 
+        `"http://localhost:8080/animes/all"`.
+
+     - `HttpMethod.GET`: Indica que estamos fazendo uma chamada HTTP GET. Ou seja, estamos solicitando informações do servidor.
+
+     - `null`: Este é o corpo da solicitação HTTP. Como estamos fazendo uma chamada GET sem enviar dados no corpo, usamos `null`.
+
+     - `new ParameterizedTypeReference<List<Anime>>() {}`: Aqui, estamos especificando que tipo de resposta esperamos da chamada HTTP. Neste 
+        caso, estamos esperando uma lista de objetos do tipo `Anime`. A classe `ParameterizedTypeReference` é usada para representar tipos 
+      genéricos, como listas ou mapas com tipos específicos de elementos.
+
+Após a execução deste script, a variável `exchange` conterá a resposta da chamada HTTP. Se a chamada for bem-sucedida, `exchange` conterá a 
+lista de objetos `Anime` retornados pelo servidor. Você pode acessar os elementos da lista e outras informações, como cabeçalhos HTTP e status, 
+usando métodos disponíveis em `ResponseEntity`. Por exemplo, `exchange.getBody()` lhe dará a lista de animes.
+
+Este código é útil quando você precisa fazer chamadas HTTP a serviços web RESTful e deseja receber respostas tipadas, especialmente quando a 
+resposta é uma lista ou outro tipo genérico.
