@@ -4,7 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -30,5 +33,29 @@ public class SpringClient {
                 });
         System.out.println(exchange.getBody());
 
+        // Esse método (Anime.builder()) retorna um construtor especial chamado de builder que é usado para criar objetos da classe Anime de maneira mais conveniente e legível.
+        Anime kingdom = Anime.builder().name("kingdom").build();
+        Anime kingdomSave = new RestTemplate().postForObject("http://localhost:8080/animes/", kingdom, Anime.class);
+        System.out.println("Anime salvo: " + kingdomSave);
+
+        // Exemplo utilizando exchange
+        Anime samuraiChamploo = Anime.builder().name("Samurai Champloo").build();
+        ResponseEntity<Anime> samuraiChamplooSave = new RestTemplate().exchange("http://localhost:8080/animes/",
+                HttpMethod.POST, new HttpEntity<>(samuraiChamploo), Anime.class);
+
+        System.out.println("Anime salvo: " + samuraiChamplooSave);
+
+        // Exemplo com HttpHeaders
+        Anime boruto = Anime.builder().name("Boruto").build();
+        ResponseEntity<Anime> borutoSave = new RestTemplate().exchange("http://localhost:8080/animes/",
+                HttpMethod.POST, new HttpEntity<>(boruto, createJSonHeader()), Anime.class);
+        
+        System.out.println("Anime salvo: " + borutoSave);     
+    }
+
+    private static HttpHeaders createJSonHeader(){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return httpHeaders;
     }
 }

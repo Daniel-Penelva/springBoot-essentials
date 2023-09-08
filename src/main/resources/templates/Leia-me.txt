@@ -1027,3 +1027,122 @@ usando métodos disponíveis em `ResponseEntity`. Por exemplo, `exchange.getBody
 
 Este código é útil quando você precisa fazer chamadas HTTP a serviços web RESTful e deseja receber respostas tipadas, especialmente quando a 
 resposta é uma lista ou outro tipo genérico.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+O script abaixo está usando o padrão de design **Builder** para criar uma instância da classe `Anime`. Vamos analisar cada parte:
+
+```
+Anime kingdom = Anime.builder().name("kingdom").build();
+Anime kingdomSave = new RestTemplate().postForObject("http://localhost:8080/animes/", kingdom, Anime.class);
+```
+
+1. `Anime.builder()`: Aqui, você está chamando um método estático chamado `builder()` na classe `Anime`. Esse método retorna um construtor 
+especial chamado de **builder** que é usado para criar objetos da classe `Anime` de maneira mais conveniente e legível.
+
+2. `.name("kingdom")`: Uma vez que você tenha o **builder**, pode chamar métodos no builder para definir os valores dos atributos do objeto 
+que deseja criar. Neste caso, você está chamando o método `name()` no builder e passando a string `"kingdom"` como argumento. Isso define o 
+nome do anime como "kingdom".
+
+3. `.build()`: Finalmente, você chama o método `build()` no **builder**. Isso cria e retorna uma instância da classe `Anime` com os atributos 
+que você definiu anteriormente. O objeto resultante, neste caso, é atribuído à variável `kingdom`.
+
+Em resumo, este script cria um objeto `Anime` com o nome definido como "kingdom" usando o padrão de design **Builder**, que é uma abordagem 
+comum para construir objetos com muitos atributos opcionais ou configuráveis de maneira mais clara e concisa. O objeto resultante, `kingdom`, 
+agora possui o nome "kingdom" definido como seu atributo.
+
+Já o outro script está usando a classe `RestTemplate` para fazer uma solicitação HTTP POST e criar um novo recurso do tipo `Anime` no servidor. 
+Vamos dividi-lo em partes:
+
+1. `new RestTemplate()`: Isso cria uma instância da classe `RestTemplate`, que é uma classe fornecida pelo Spring Framework para fazer chamadas 
+HTTP em aplicativos Java. O `RestTemplate` é usado para realizar operações HTTP, como POST, GET, PUT e DELETE.
+
+2. `.postForObject("http://localhost:8080/animes/", kingdom, Anime.class)`: Aqui, você está chamando o método `postForObject()` do 
+`RestTemplate`. Este método é usado para enviar uma solicitação HTTP POST para a URL especificada e esperar uma resposta que pode ser 
+desserializada em um objeto Java da classe especificada (`Anime.class` neste caso).
+
+   - `"http://localhost:8080/animes/"`: Esta é a URL de destino para a solicitação POST. Presumivelmente, esta é a URL onde seu servidor está 
+       ouvindo para criar um novo recurso do tipo `Anime`.
+
+   - `kingdom`: Este é o objeto `Anime` que você deseja enviar como parte do corpo da solicitação POST. Em outras palavras, você está enviando 
+      os detalhes do anime que deseja criar no servidor.
+
+   - `Anime.class`: Isso indica que você espera que a resposta da solicitação seja desserializada em um objeto `Anime`. Isso significa que o 
+      servidor deve responder com os detalhes do anime recém-criado, e o `RestTemplate` irá transformar essa resposta em um objeto `Anime` que é armazenado na variável `kingdomSave`.
+
+Portanto, após a execução desta linha de código, `kingdomSave` conterá os detalhes do anime recém-criado no servidor, como ID, nome, ou qualquer 
+outro atributo que tenha sido configurado pelo servidor durante a criação. Isso é útil quando você deseja criar recursos no servidor por meio 
+de uma solicitação HTTP POST e, em seguida, manipular ou exibir as informações retornadas pelo servidor.
+
+--------------- // ---------------
+
+O script abaixo cria um objeto `HttpHeaders` e o configura para indicar que o conteúdo da solicitação ou resposta HTTP é do tipo JSON 
+(JavaScript Object Notation). 
+
+```
+private static HttpHeaders createJSonHeader(){
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return httpHeaders;
+    }
+```
+
+Vamos analisá-lo linha por linha:
+
+1. `HttpHeaders httpHeaders = new HttpHeaders();`: Aqui, você está criando uma instância de `HttpHeaders`, que é uma classe fornecida pelo 
+Spring Framework para representar os cabeçalhos HTTP de uma solicitação ou resposta HTTP. Cada cabeçalho HTTP pode conter informações 
+específicas, como o tipo de conteúdo, cookies, autenticação, etc.
+
+2. `httpHeaders.setContentType(MediaType.APPLICATION_JSON);`: Esta linha configura o cabeçalho `Content-Type` para indicar que o conteúdo da 
+solicitação ou resposta será no formato JSON. O método `setContentType` é usado para definir o tipo de conteúdo do cabeçalho.
+
+   - `MediaType.APPLICATION_JSON`: `MediaType` é uma classe que faz parte do Spring Framework e contém várias constantes estáticas que 
+      representam tipos de mídia comuns. `APPLICATION_JSON` é uma dessas constantes e representa o tipo de mídia JSON.
+
+3. `return httpHeaders;`: Finalmente, a função retorna o objeto `HttpHeaders` configurado. Isso permite que você use esse objeto para definir 
+os cabeçalhos de uma solicitação HTTP, especificando que o conteúdo é JSON. Por exemplo, você pode definir esses cabeçalhos em uma solicitação 
+POST ou PUT para indicar que está enviando dados JSON para o servidor.
+
+Em resumo, o objetivo dessa função é fornecer um cabeçalho HTTP configurado corretamente para lidar com dados JSON em suas solicitações ou 
+respostas HTTP. Isso é útil quando você está trabalhando com APIs RESTful ou qualquer outra situação em que precise especificar o tipo de 
+conteúdo como JSON.
+
+O Método "createJSonHeader()" acima vai ser chamado por esse script:
+
+```
+Anime boruto = Anime.builder().name("Boruto").build();
+        ResponseEntity<Anime> borutoSave = new RestTemplate().exchange("http://localhost:8080/animes/",
+                HttpMethod.POST, new HttpEntity<>(boruto, createJSonHeader()), Anime.class);      
+        System.out.println("Anime salvo: " + borutoSave);
+```
+
+Este script é usado para fazer uma solicitação HTTP POST a um servidor que se espera estar rodando localmente na URL 
+`http://localhost:8080/animes/`. Ele cria um novo objeto `Anime` chamado "Boruto" e, em seguida, o envia para o servidor usando uma solicitação 
+POST. Vamos analisar as partes do script:
+
+1. `Anime boruto = Anime.builder().name("Boruto").build();`: Aqui, você está criando um novo objeto `Anime` usando um padrão de construção 
+(Builder Pattern). O `builder()` é um método que cria um construtor de objeto `Anime` e, em seguida, você chama `name("Boruto")` para definir o 
+nome do anime como "Boruto". Finalmente, `build()` é chamado para criar o objeto `Anime`.
+
+2. `new RestTemplate()`: Aqui, você está criando uma instância de `RestTemplate`. O `RestTemplate` é uma classe da biblioteca Spring Framework 
+que facilita o envio de solicitações HTTP para um servidor. Ele é usado para interagir com APIs RESTful.
+
+3. `new HttpEntity<>(boruto, createJSonHeader())`: Este é o corpo da solicitação HTTP POST. Ele cria uma instância de `HttpEntity`, que é usada 
+para representar o corpo da solicitação HTTP. O corpo é o objeto `boruto` que você deseja enviar para o servidor, e `createJSonHeader()` é 
+chamado para criar os cabeçalhos HTTP necessários, indicando que o conteúdo é do tipo JSON.
+
+4. `HttpMethod.POST`: Aqui, você está especificando que deseja fazer uma solicitação HTTP POST. Isso é apropriado quando você deseja criar um 
+novo recurso no servidor.
+
+5. `Anime.class`: Este é o tipo de retorno esperado da solicitação. Você está informando ao `RestTemplate` que deseja que o resultado da 
+solicitação seja desserializado em um objeto `Anime`. Isso é útil para processar a resposta do servidor.
+
+6. `ResponseEntity<Anime> borutoSave = new RestTemplate().exchange(...)`: Aqui, você está usando o método `exchange()` do `RestTemplate` para 
+enviar a solicitação HTTP. Ele retorna um `ResponseEntity<Anime>`, que contém a resposta do servidor, incluindo o status HTTP, cabeçalhos e 
+corpo da resposta.
+
+7. `System.out.println("Anime salvo: " + borutoSave);`: Finalmente, você está imprimindo a resposta do servidor no console. Isso mostrará 
+informações sobre a solicitação, como o status HTTP (por exemplo, 200 OK se a solicitação for bem-sucedida) e outros detalhes relevantes.
+
+No geral, este script cria um objeto `Anime` chamado "Boruto" e o envia para o servidor usando uma solicitação POST. Em seguida, ele imprime a 
+resposta do servidor no console para que você possa ver os detalhes da solicitação e confirmar se o anime foi salvo com sucesso no servidor.
