@@ -50,7 +50,23 @@ public class SpringClient {
         ResponseEntity<Anime> borutoSave = new RestTemplate().exchange("http://localhost:8080/animes/",
                 HttpMethod.POST, new HttpEntity<>(boruto, createJSonHeader()), Anime.class);
         
-        System.out.println("Anime salvo: " + borutoSave);     
+        System.out.println("Anime salvo: " + borutoSave); 
+        
+
+        // Rest Template PUT (atualizar) utilizando o exchange
+        Anime animeToBeUpdate = samuraiChamplooSave.getBody();
+        animeToBeUpdate.setName("samuraiChamploo Up");
+       
+        ResponseEntity<Void> samuraiChamplooUpdate = new RestTemplate().exchange("http://localhost:8080/animes/",
+                HttpMethod.PUT, new HttpEntity<>(animeToBeUpdate), Void.class);
+
+        System.out.println("Anime atualizado: " + samuraiChamplooUpdate);
+
+         // Rest Template DELETE (deletar) utilizando o exchange
+         ResponseEntity<Void> samuraiChamplooDelete = new RestTemplate().exchange("http://localhost:8080/animes/{id}",
+                HttpMethod.DELETE, null, Void.class, animeToBeUpdate.getId());
+
+         System.out.println("Anime Deletado: " + samuraiChamplooDelete);
     }
 
     private static HttpHeaders createJSonHeader(){
