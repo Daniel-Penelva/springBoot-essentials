@@ -1146,3 +1146,58 @@ informações sobre a solicitação, como o status HTTP (por exemplo, 200 OK se 
 
 No geral, este script cria um objeto `Anime` chamado "Boruto" e o envia para o servidor usando uma solicitação POST. Em seguida, ele imprime a 
 resposta do servidor no console para que você possa ver os detalhes da solicitação e confirmar se o anime foi salvo com sucesso no servidor.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Vamos fazer teste unitário escrito usando o framework JUnit 5 e a biblioteca AssertJ para testar a persistência de um objeto `Anime` em um 
+repositório. Vamos quebrá-lo em partes:
+
+```java
+@Test
+@DisplayName("Save creates anime when Successful")
+void savePersistenceAnimeWhenSuccessful(){
+    Anime animeToBeSaved = createAnime();
+
+    Anime animeSaved = this.animeRepository.save(animeToBeSaved);
+
+    Assertions.assertThat(animeSaved).isNotNull();
+    Assertions.assertThat(animeSaved.getId()).isNotNull();
+    Assertions.assertThat(animeSaved.getName()).isEqualTo(animeToBeSaved.getName());
+}
+```
+
+- `@Test`: Esta anotação do JUnit 5 indica que o método é um caso de teste. Esse método será executado quando você executar seus testes.
+
+- `@DisplayName("Save creates anime when Successful")`: Esta anotação fornece um nome personalizado para o teste que será exibido nos resultados 
+   do teste. Isso ajuda a identificar o que exatamente está sendo testado.
+
+- `void savePersistenceAnimeWhenSuccessful()`: Este é o método de teste em si. Ele não aceita argumentos e não retorna nada, pois é um teste de 
+   verificação de estado.
+
+- `Anime animeToBeSaved = createAnime();`: Aqui, você está criando um objeto `Anime` chamado `animeToBeSaved` usando o método `createAnime()` 
+   para inicializá-lo. Este é o objeto que você planeja salvar no repositório.
+
+- `Anime animeSaved = this.animeRepository.save(animeToBeSaved);`: Você está usando o método `save()` do `animeRepository` para salvar o objeto
+  `animeToBeSaved` no repositório. O método `save()` retorna o objeto `animeSaved` após a persistência no banco de dados.
+
+- `Assertions.assertThat(animeSaved).isNotNull();`: Esta linha usa a biblioteca AssertJ para verificar se o objeto `animeSaved` não é nulo. Se 
+   a persistência for bem-sucedida, o objeto salvo não deve ser nulo.
+
+- `Assertions.assertThat(animeSaved.getId()).isNotNull();`: Aqui, você está verificando se o `id` do objeto `animeSaved` não é nulo. Isso é 
+   importante porque geralmente o `id` é gerado pelo banco de dados durante a persistência.
+
+- `Assertions.assertThat(animeSaved.getName()).isEqualTo(animeToBeSaved.getName());`: Esta linha verifica se o nome do objeto `animeSaved` é 
+   igual ao nome do objeto `animeToBeSaved`. Isso garante que os dados salvos correspondam aos dados originais que você planejou salvar.
+
+```java
+private Anime createAnime(){
+    return Anime.builder().name("Hajime in Ippo").build();
+}
+```
+
+- `private Anime createAnime()`: Este é um método auxiliar usado para criar um objeto `Anime` com um nome específico, neste caso, "Hajime in 
+   Ippo". Este método é chamado no início do teste para criar o objeto que será salvo no repositório.
+
+Em resumo, esse teste verifica se a persistência de um objeto `Anime` no repositório é bem-sucedida. Ele cria um objeto, o salva no repositório 
+e, em seguida, verifica se o objeto salvo não é nulo, se possui um `id` não nulo e se o nome é igual ao nome original. Se todas essas 
+verificações passarem, o teste é considerado bem-sucedido. Caso contrário, qualquer falha indicaria um problema na persistência.
