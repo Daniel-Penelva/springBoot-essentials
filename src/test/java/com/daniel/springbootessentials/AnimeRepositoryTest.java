@@ -1,5 +1,6 @@
 package com.daniel.springbootessentials;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
@@ -32,7 +33,7 @@ public class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Save update anime when Successful")
-    void UpdateAnimeWhenSuccessful(){
+    void updateAnimeWhenSuccessful(){
         Anime animeToBeSaved = createAnime();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
@@ -47,7 +48,7 @@ public class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Delete removes anime when Successful")
-    void DeleteAnimeWhenSuccessful(){
+    void deleteAnimeWhenSuccessful(){
         Anime animeToBeSaved = createAnime();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
@@ -57,6 +58,21 @@ public class AnimeRepositoryTest {
         Optional<Anime> animeOptional = this.animeRepository.findById(animeSaved.getId());
 
         Assertions.assertThat(animeOptional.isEmpty());
+    }
+
+    @Test
+    @DisplayName("Find by name returns list anime when Successful")
+    void findByNameAnimeWhenSuccessful(){
+        Anime animeToBeSaved = createAnime();
+
+        Anime animeSaved = this.animeRepository.save(animeToBeSaved);
+
+        String anime = animeSaved.getName();
+
+        List<Anime> animes = this.animeRepository.findByName(anime);
+
+        Assertions.assertThat(animes).isNotEmpty();
+        Assertions.assertThat(animes).contains(animeSaved);
     }
     
     private Anime createAnime(){

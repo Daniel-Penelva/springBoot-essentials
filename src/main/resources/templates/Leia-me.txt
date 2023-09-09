@@ -1301,3 +1301,51 @@ void DeleteAnimeWhenSuccessful(){
 Em resumo, este teste verifica se a exclusão de um objeto `Anime` do repositório é bem-sucedida. Ele cria um objeto, salva-o no repositório, 
 exclui-o do repositório e depois verifica se o objeto não pode mais ser encontrado no repositório, o que seria indicativo de uma exclusão 
 bem-sucedida. Se a asserção passar, o teste é considerado bem-sucedido.
+
+No teste find by name:
+
+```java
+@Test
+@DisplayName("Find by name returns list anime when Successful")
+void findByNameAnimeWhenSuccessful(){
+    // Cria um objeto Anime que será salvo no banco de dados
+    Anime animeToBeSaved = createAnime();
+
+    // Salva o anime no banco de dados usando o repositório
+    Anime animeSaved = this.animeRepository.save(animeToBeSaved);
+
+    // Obtém o nome do anime salvo
+    String anime = animeSaved.getName();
+
+    // Realiza uma consulta no banco de dados para encontrar animes pelo nome
+    List<Anime> animes = this.animeRepository.findByName(anime);
+
+    // Afirmações (Assertions) para verificar se o teste é bem-sucedido
+
+    // 1. Verifica se a lista de animes encontrada não está vazia
+    Assertions.assertThat(animes).isNotEmpty();
+
+    // 2. Verifica se a lista de animes encontrada contém o anime salvo anteriormente
+    Assertions.assertThat(animes).contains(animeSaved);
+}
+```
+
+1. Começa criando um objeto `Anime` chamado `animeToBeSaved` que representa um anime a ser salvo no banco de dados.
+
+2. Em seguida, salva esse anime no banco de dados usando o método `save` do repositório `animeRepository`. Isso insere o anime no banco de dados 
+   para que você possa consultá-lo posteriormente.
+
+3. Obtém o nome do anime salvo na variável `anime`.
+
+4. Em seguida, executa uma consulta no banco de dados usando o método `findByName` do repositório `animeRepository`. Isso deve encontrar todos 
+   os animes com o mesmo nome que o anime salvo anteriormente.
+
+5. Aqui, realiza as asserções para verificar se o teste é bem-sucedido:
+   - A primeira asserção verifica se a lista de animes encontrada não está vazia, o que significa que pelo menos um anime com o mesmo nome foi 
+     encontrado no banco de dados.
+   - A segunda asserção verifica se a lista de animes encontrada contém o anime salvo anteriormente, garantindo que o anime foi corretamente 
+     armazenado e recuperado do banco de dados.
+
+Basicamente, este teste verifica se o método `findByName` do repositório `animeRepository` é capaz de encontrar um anime pelo seu nome no banco 
+de dados e se o anime encontrado é o mesmo que foi salvo anteriormente.
+
