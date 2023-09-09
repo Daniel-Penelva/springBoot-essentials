@@ -1201,3 +1201,57 @@ private Anime createAnime(){
 Em resumo, esse teste verifica se a persistência de um objeto `Anime` no repositório é bem-sucedida. Ele cria um objeto, o salva no repositório 
 e, em seguida, verifica se o objeto salvo não é nulo, se possui um `id` não nulo e se o nome é igual ao nome original. Se todas essas 
 verificações passarem, o teste é considerado bem-sucedido. Caso contrário, qualquer falha indicaria um problema na persistência.
+
+Outro exemplo de um teste unitário escrito usando o JUnit 5 e a biblioteca AssertJ. Este teste verifica se a atualização de um objeto `Anime` 
+no repositório é bem-sucedida. Vamos analisá-lo em detalhes:
+
+```java
+@Test
+@DisplayName("Save update anime when Successful")
+void saveUpdateAnimeWhenSuccessful(){
+    Anime animeToBeSaved = createAnime();
+
+    Anime animeSaved = this.animeRepository.save(animeToBeSaved);
+    animeSaved.setName("Overlod");
+
+    Anime animeUpdate = this.animeRepository.save(animeSaved);
+
+    Assertions.assertThat(animeUpdate).isNotNull();
+    Assertions.assertThat(animeUpdate.getId()).isNotNull();
+    Assertions.assertThat(animeUpdate.getName()).isEqualTo(animeSaved.getName());
+}
+```
+
+- `@Test`: Esta anotação indica que o método é um caso de teste a ser executado.
+
+- `@DisplayName("Save update anime when Successful")`: Esta anotação fornece um nome personalizado para o teste, que será exibido nos resultados 
+   do teste.
+
+- `void saveUpdateAnimeWhenSuccessful()`: Este é o método de teste em si, que não aceita argumentos e não retorna nada, pois é um teste de 
+   verificação de estado.
+
+- `Anime animeToBeSaved = createAnime();`: Aqui, você está criando um objeto `Anime` chamado `animeToBeSaved` usando o método `createAnime()` 
+   para inicializá-lo. Este é o objeto que você planeja salvar no repositório.
+
+- `Anime animeSaved = this.animeRepository.save(animeToBeSaved);`: Você está usando o método `save()` do `animeRepository` para salvar o objeto 
+  `animeToBeSaved` no repositório. O objeto salvo é atribuído à variável `animeSaved`.
+
+- `animeSaved.setName("Overlod");`: Você está atualizando o nome do objeto `animeSaved` para "Overlod". Esta linha simula uma atualização de 
+   dados em um objeto já persistido no repositório.
+
+- `Anime animeUpdate = this.animeRepository.save(animeSaved);`: Você está usando novamente o método `save()` do `animeRepository` para atualizar 
+   o objeto `animeSaved` no repositório. O objeto atualizado é atribuído à variável `animeUpdate`.
+
+- `Assertions.assertThat(animeUpdate).isNotNull();`: Esta linha usa a biblioteca AssertJ para verificar se o objeto `animeUpdate` não é nulo. 
+   Se a atualização for bem-sucedida, o objeto atualizado não deve ser nulo.
+
+- `Assertions.assertThat(animeUpdate.getId()).isNotNull();`: Aqui, você está verificando se o `id` do objeto `animeUpdate` não é nulo. Isso é 
+   importante porque geralmente o `id` é gerado pelo banco de dados durante a persistência.
+
+- `Assertions.assertThat(animeUpdate.getName()).isEqualTo(animeSaved.getName());`: Esta linha verifica se o nome do objeto `animeUpdate` é 
+   igual ao nome atualizado ("Overlod") que foi definido em `animeSaved`. Isso garante que os dados do objeto atualizado correspondam às alterações planejadas.
+
+Em resumo, este teste verifica se a atualização de um objeto `Anime` no repositório é bem-sucedida. Ele cria um objeto, salva-o no repositório, 
+atualiza o nome e, em seguida, verifica se o objeto atualizado não é nulo, se possui um `id` não nulo e se o nome corresponde à atualização 
+planejada. Se todas essas verificações passarem, o teste é considerado bem-sucedido, indicando que a atualização ocorreu como esperado. Caso 
+contrário, qualquer falha indicaria um problema na atualização.
