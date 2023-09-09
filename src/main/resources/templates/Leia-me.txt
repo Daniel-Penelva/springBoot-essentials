@@ -1202,6 +1202,8 @@ Em resumo, esse teste verifica se a persistência de um objeto `Anime` no reposi
 e, em seguida, verifica se o objeto salvo não é nulo, se possui um `id` não nulo e se o nome é igual ao nome original. Se todas essas 
 verificações passarem, o teste é considerado bem-sucedido. Caso contrário, qualquer falha indicaria um problema na persistência.
 
+--------------- // ---------------
+
 Outro exemplo de um teste unitário escrito usando o JUnit 5 e a biblioteca AssertJ. Este teste verifica se a atualização de um objeto `Anime` 
 no repositório é bem-sucedida. Vamos analisá-lo em detalhes:
 
@@ -1256,6 +1258,8 @@ atualiza o nome e, em seguida, verifica se o objeto atualizado não é nulo, se 
 planejada. Se todas essas verificações passarem, o teste é considerado bem-sucedido, indicando que a atualização ocorreu como esperado. Caso 
 contrário, qualquer falha indicaria um problema na atualização.
 
+--------------- // ---------------
+
 Outro exemplo de teste unitário escrito com JUnit 5 e AssertJ. Neste caso, o teste verifica se a exclusão (ou remoção) de um objeto `Anime` do 
 repositório é bem-sucedida. Vamos analisar o código linha a linha:
 
@@ -1301,6 +1305,8 @@ void DeleteAnimeWhenSuccessful(){
 Em resumo, este teste verifica se a exclusão de um objeto `Anime` do repositório é bem-sucedida. Ele cria um objeto, salva-o no repositório, 
 exclui-o do repositório e depois verifica se o objeto não pode mais ser encontrado no repositório, o que seria indicativo de uma exclusão 
 bem-sucedida. Se a asserção passar, o teste é considerado bem-sucedido.
+
+--------------- // ---------------
 
 No teste find by name:
 
@@ -1349,3 +1355,35 @@ void findByNameAnimeWhenSuccessful(){
 Basicamente, este teste verifica se o método `findByName` do repositório `animeRepository` é capaz de encontrar um anime pelo seu nome no banco 
 de dados e se o anime encontrado é o mesmo que foi salvo anteriormente.
 
+--------------- // ---------------
+
+Teste que retorna uma lista vazia se não tiver o nome do anime no BD
+
+```java
+@Test
+@DisplayName("Find by name returns empty list when no anime is found")
+void findByName_returnsEmptyList_whenAnimeIsNotFound(){
+
+    // Realiza uma consulta no banco de dados para encontrar animes pelo nome "outro anime"
+    List<Anime> animes = this.animeRepository.findByName("outro anime");
+
+    // Afirmações (Assertions) para verificar se o teste é bem-sucedido
+
+    // Verifica se a lista de animes encontrada está vazia (isEmpty)
+    Assertions.assertThat(animes).isEmpty();
+}
+```
+
+1. Executa uma consulta no banco de dados usando o método `findByName` do repositório `animeRepository`, especificando o nome "outro anime" 
+   como o critério de pesquisa.
+
+2. A consulta será realizada no banco de dados para encontrar todos os animes com o nome "outro anime". No entanto, se não houver animes com 
+   esse nome no banco de dados, a lista de resultados será vazia.
+
+3. Em seguida, realiza uma asserção para verificar se o teste é bem-sucedido:
+   - A asserção `Assertions.assertThat(animes).isEmpty()` verifica se a lista de animes encontrada está vazia. Se estiver vazia, isso significa 
+     que nenhum anime foi encontrado com o nome "outro anime", o que é o resultado esperado neste caso de teste.
+
+Basicamente, este teste verifica se o método `findByName` do repositório `animeRepository` retorna uma lista vazia quando nenhum anime com o 
+nome especificado é encontrado no banco de dados. Isso é útil para garantir que o método se comporte corretamente em casos em que nenhum 
+resultado é encontrado.
