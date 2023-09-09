@@ -1,5 +1,7 @@
 package com.daniel.springbootessentials;
 
+import java.util.Optional;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,7 @@ public class AnimeRepositoryTest {
 
     @Test
     @DisplayName("Save update anime when Successful")
-    void saveUpdateAnimeWhenSuccessful(){
+    void UpdateAnimeWhenSuccessful(){
         Anime animeToBeSaved = createAnime();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
@@ -41,6 +43,20 @@ public class AnimeRepositoryTest {
         Assertions.assertThat(animeUpdate).isNotNull();
         Assertions.assertThat(animeUpdate.getId()).isNotNull();
         Assertions.assertThat(animeUpdate.getName()).isEqualTo(animeSaved.getName());
+    }
+
+    @Test
+    @DisplayName("Delete removes anime when Successful")
+    void DeleteAnimeWhenSuccessful(){
+        Anime animeToBeSaved = createAnime();
+
+        Anime animeSaved = this.animeRepository.save(animeToBeSaved);
+
+        this.animeRepository.delete(animeSaved);
+        
+        Optional<Anime> animeOptional = this.animeRepository.findById(animeSaved.getId());
+
+        Assertions.assertThat(animeOptional.isEmpty());
     }
     
     private Anime createAnime(){
