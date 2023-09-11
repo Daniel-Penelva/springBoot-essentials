@@ -30,11 +30,15 @@ public class AnimeControllerTest {
 
     @BeforeEach
     void SetUp(){
-      PageImpl<Anime> animePage = new PageImpl<>(List.of(AnimeCreator.createAnimeToBeSaved()));
-      BDDMockito.when(animeService.listAll(ArgumentMatchers.any())).thenReturn(animePage);
+      PageImpl<Anime> animePage = new PageImpl<>(List.of(AnimeCreator.createAnimeToBeSaved())); 
+
+      BDDMockito.when(animeService.listAll(ArgumentMatchers.any())).thenReturn(animePage); // com paginação
+
+      BDDMockito.when(animeService.listAllNonPageable()).thenReturn(List.of(AnimeCreator.createAnimeToBeSaved())); // sem paginação
     }
 
 
+    // Listar anime com paginação
     @Test
     @DisplayName("List returns list of anime inside page object when successful")
     void list_ReturnsListOfanimesInsidePageObject_whenSuccessful() {
@@ -46,5 +50,19 @@ public class AnimeControllerTest {
         Assertions.assertThat(animePage).isNotNull();
         Assertions.assertThat(animePage).isNotEmpty().hasSize(1);
         Assertions.assertThat(animePage.toList().get(0).getName()).isEqualTo(expectedName);
+    }
+
+    // Listar anime sem paginação
+    @Test
+    @DisplayName("List returns list of anime when successful")
+    void listAll_ReturnsListOfanimes_whenSuccessful() {
+
+        String expectedName = AnimeCreator.createValidAnime().getName();
+
+       List<Anime> listAnimes = animeController.listAll().getBody();
+
+        Assertions.assertThat(listAnimes).isNotNull();
+        Assertions.assertThat(listAnimes).isNotEmpty().hasSize(1);
+        Assertions.assertThat(listAnimes.get(0).getName()).isEqualTo(expectedName);
     }
 }
