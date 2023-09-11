@@ -1,4 +1,4 @@
-package com.daniel.springbootessentials;
+package com.daniel.springbootessentials.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.daniel.springbootessentials.domain.Anime;
-import com.daniel.springbootessentials.repository.AnimeRepository;
+import com.daniel.springbootessentials.util.AnimeCreator;
 
 @DataJpaTest
 @DisplayName("Tests for Anime Repository")
@@ -22,7 +22,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Save creates anime when Successful")
     void savePersistenceAnimeWhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
@@ -34,7 +34,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Save update anime when Successful")
     void updateAnimeWhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
         animeSaved.setName("Overlod");
@@ -49,7 +49,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Delete removes anime when Successful")
     void deleteAnimeWhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
@@ -63,7 +63,7 @@ public class AnimeRepositoryTest {
     @Test
     @DisplayName("Find by name returns list anime when Successful")
     void findByNameAnimeWhenSuccessful(){
-        Anime animeToBeSaved = createAnime();
+        Anime animeToBeSaved = AnimeCreator.createAnimeToBeSaved();
 
         Anime animeSaved = this.animeRepository.save(animeToBeSaved);
 
@@ -81,9 +81,5 @@ public class AnimeRepositoryTest {
 
         List<Anime> animes = this.animeRepository.findByName("outro anime");
         Assertions.assertThat(animes).isEmpty();
-    }
-    
-    private Anime createAnime(){
-        return Anime.builder().name("Hajime in Ippo").build();
     }
 }
