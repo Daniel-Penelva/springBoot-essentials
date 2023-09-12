@@ -54,10 +54,13 @@ public class AnimeControllerTest {
 
       // Atualizar anime - lembrando que esse método replace no AnimeService retorna void, logo vai ser usado o método doNothing() para que o método não faça nada.
       BDDMockito.doNothing().when(animeService).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
+
+      // Deletar anime - tb retorna um void no método delete() do AnimeService.
+      BDDMockito.doNothing().when(animeService).delete(ArgumentMatchers.anyLong());
     }
 
 
-    // Listar anime com paginação
+    // Teste para listar anime com paginação
     @Test
     @DisplayName("List returns list of anime inside page object when successful")
     void list_ReturnsListOfanimesInsidePageObject_whenSuccessful() {
@@ -71,7 +74,7 @@ public class AnimeControllerTest {
         Assertions.assertThat(animePage.toList().get(0).getName()).isEqualTo(expectedName);
     }
 
-    // Listar anime sem paginação
+    // Teste para listar anime sem paginação
     @Test
     @DisplayName("List returns list of anime when successful")
     void listAll_ReturnsListOfanimes_whenSuccessful() {
@@ -85,7 +88,7 @@ public class AnimeControllerTest {
         Assertions.assertThat(listAnimes.get(0).getName()).isEqualTo(expectedName);
     }
 
-    // Buscar anime por id
+    // Teste para buscar anime por id
     @Test
     @DisplayName("findById returns anime when successful")
     void findById_ReturnsAnime_whenSuccessful() {
@@ -98,7 +101,7 @@ public class AnimeControllerTest {
         Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
     }
 
-    // Buscar anime por nome
+    // Teste para buscar anime por nome
     @Test
     @DisplayName("findByNome returns a list of anime when successful")
     void findByNome_ReturnsListOfAnime_whenSuccessful() {
@@ -144,6 +147,19 @@ public class AnimeControllerTest {
         Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody())).doesNotThrowAnyException();
 
        ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
+
+        Assertions.assertThat(entity).isNotNull();  
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    // Teste para deletar anime por id
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_whenSuccessful() {
+
+       Assertions.assertThatCode(() -> animeController.delete(1L)).doesNotThrowAnyException();
+
+       ResponseEntity<Void> entity = animeController.delete(1L);
 
         Assertions.assertThat(entity).isNotNull();  
         Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);

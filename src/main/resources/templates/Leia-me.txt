@@ -1866,3 +1866,38 @@ Vou explicar cada parte do script:
 Basicamente, esse teste está verificando se o método `replace` do `animeController` pode ser chamado com sucesso sem lançar exceções, se ele 
 retorna uma resposta não nula e se essa resposta tem um código de status `HttpStatus.NO_CONTENT`. Isso é útil para garantir que o método esteja 
 funcionando conforme o esperado e que as atualizações de anime sejam tratadas corretamente.
+
+--------------- // ---------------
+
+void delete_RemovesAnime_whenSuccessful() {
+
+   Assertions.assertThatCode(() -> animeController.delete(1L)).doesNotThrowAnyException();
+
+   ResponseEntity<Void> entity = animeController.delete(1L);
+
+   Assertions.assertThat(entity).isNotNull();  
+   Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+}
+
+O script acima é um exemplo de um teste de unidade que verifica o comportamento do método `delete` de um controlador chamado `animeController`. 
+Vou explicar cada parte do script:
+
+1. `Assertions.assertThatCode(() -> animeController.delete(1L)).doesNotThrowAnyException();`:
+   - Neste trecho, o AssertJ é usado para verificar se a chamada do método `delete` não lança nenhuma exceção (`doesNotThrowAnyException`). Isso 
+     é uma forma de testar se o método é executado com sucesso e não gera exceções inesperadas.
+
+2. `ResponseEntity<Void> entity = animeController.delete(1L);`:
+   - Aqui, o método `delete` do `animeController` é chamado novamente para obter a resposta (uma instância de `ResponseEntity<Void>`) após o 
+     primeiro teste para verificar o status da resposta.
+
+3. `Assertions.assertThat(entity).isNotNull();`:
+   - Verifica se a variável `entity` (a resposta da chamada do método `delete`) não é nula. Isso garante que a chamada do método tenha retornado 
+     uma resposta.
+
+4. `Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);`:
+   - Verifica se o código de status da resposta (`entity.getStatusCode()`) é igual a `HttpStatus.NO_CONTENT`. Isso verifica se a resposta 
+     indica que a operação foi bem-sucedida e que o recurso foi removido com sucesso (um código de status 204).
+
+Em resumo, este teste verifica se o método `delete` do `animeController` pode ser chamado com sucesso sem lançar exceções, se ele retorna uma 
+resposta não nula e se essa resposta tem um código de status `HttpStatus.NO_CONTENT`. Isso é útil para garantir que o método esteja funcionando 
+conforme o esperado e que a remoção de um anime seja tratada corretamente.
