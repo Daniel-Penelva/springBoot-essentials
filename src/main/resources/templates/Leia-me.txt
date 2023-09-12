@@ -1534,7 +1534,7 @@ void listAll_ReturnsListOfanimes_whenSuccessful() {
    Assertions.assertThat(listAnimes.get(0).getName()).isEqualTo(expectedName);
 }
 
-CO script acima, marcado com `@Test` e com a anotação `@DisplayName`, testa o comportamento de um método chamado `listAll` do controlador 
+O script acima, marcado com `@Test` e com a anotação `@DisplayName`, testa o comportamento de um método chamado `listAll` do controlador 
 `animeController`. Aqui está uma explicação passo a passo do que ele faz:
 
 1. `@Test`: Essa anotação marca o método como um método de teste que deve ser executado pelo framework de teste (geralmente JUnit ou TestNG).
@@ -1561,3 +1561,42 @@ retornado pelo controlador tem o nome esperado.
 Em resumo, esse método de teste verifica se o método `listAll` do `animeController` retorna uma lista de animes não nula, com pelo menos um 
 anime, e se o nome desse anime é igual ao nome esperado. Isso ajuda a garantir que o endpoint do controlador esteja funcionando corretamente 
 ao listar todos os animes.
+
+--------------- // ---------------
+
+@Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_whenSuccessful() {
+
+       Long expectedId = AnimeCreator.createValidAnime().getId();
+
+       Anime anime = animeController.findById(1L).getBody();
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+O script acima marcado com `@Test` e com a anotação `@DisplayName`, testa o comportamento de um método chamado `findById` do controlador 
+`animeController`. Aqui está uma explicação passo a passo do que ele faz:
+
+1. `@Test`: Essa anotação marca o método como um método de teste que deve ser executado pelo framework de teste (geralmente JUnit ou TestNG).
+
+2. `@DisplayName("findById returns anime when successful")`: Essa anotação `@DisplayName` permite que você forneça um nome mais legível para o 
+    teste. Neste caso, o nome do teste é "findById returns anime when successful".
+
+3. `Long expectedId = AnimeCreator.createValidAnime().getId();`: Aqui, está definindo uma variável `expectedId` para armazenar o ID esperado de 
+    um anime válido. Isso será usado posteriormente para verificar se o anime retornado pelo controlador tem o ID esperado.
+
+4. `Anime anime = animeController.findById(1L).getBody();`: Nesta linha está chamando o método `findById` do `animeController` com um ID 
+específico (neste caso, 1L). Esse método retorna uma resposta HTTP contendo um objeto `Anime`. Com `.getBody()`, aqui, está obtendo o corpo da 
+resposta, que deve ser o objeto `Anime` com o ID especificado.
+
+5. `Assertions.assertThat(anime).isNotNull();`: Aqui, está usando a biblioteca de assertivas (geralmente o AssertJ) para fazer uma afirmação 
+    sobre o objeto `anime`. Aqui, verifica se o objeto não é nulo, o que significa que um anime foi encontrado com o ID especificado.
+
+6. `Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);`: Esta linha faz duas verificações. Primeiro, verifica se o ID do 
+    anime retornado não é nulo. Em segundo lugar, verifica se o ID do anime é igual ao `expectedId` que você definiu anteriormente. Isso 
+    verifica se o anime retornado pelo controlador tem o ID esperado.
+
+Em resumo, esse método de teste verifica se o método `findById` do `animeController` retorna um objeto `Anime` não nulo, com o ID correto. Isso 
+ajuda a garantir que o endpoint do controlador esteja funcionando corretamente ao buscar um anime pelo ID.
