@@ -1682,3 +1682,39 @@ nenhum anime com o nome especificado. Vamos analisar cada parte do script:
 
 Em resumo, esse teste garante que o endpoint do controlador `animeController` lida adequadamente com a situação em que nenhum anime é encontrado 
 com o nome especificado e retorna uma lista vazia como resposta.
+
+--------------- // ---------------
+
+@Test
+@DisplayName("save returns anime when successful")
+void save_ReturnsAnime_whenSuccessful() {
+
+  Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();
+  Assertions.assertThat(anime).isNotNull().isEqualTo(AnimeCreator.createValidAnime());  
+}
+
+O método acima de teste verifica o comportamento de um endpoint em que o serviço `animeController` cria e salva um novo anime com sucesso. 
+Vamos analisar cada parte do script:
+
+1. `@Test`: Essa anotação marca o método como um método de teste para o JUnit. Isso significa que o método será executado como parte do processo 
+    de teste.
+
+2. `@DisplayName("save returns anime when successful")`: Essa anotação fornece um nome personalizado para o teste que será exibido nos relatórios 
+    de teste. Neste caso, o nome personalizado é "save returns anime when successful", que descreve o comportamento esperado do teste.
+
+3. `void save_ReturnsAnime_whenSuccessful()`: Este é o método de teste em si. Ele testa se o endpoint de salvar um anime no `animeController` 
+   retorna um anime quando a operação é bem-sucedida.
+
+4. `Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();`: Nesta linha, está chamando o 
+    método `save` do `animeController` e passando um objeto `AnimePostRequestBody` criado pelo método `createAnimePostRequestBody` como 
+    argumento. A chamada ao método `getBody()` obtém o corpo da resposta HTTP, que deve conter o anime criado.
+
+5. `Assertions.assertThat(anime)`: Esta linha inicia uma série de verificações usando asserções do AssertJ. 
+
+6. `isNotNull()`: Verifica se o anime retornado não é nulo, ou seja, se foi criado e retornado com sucesso.
+
+7. `isEqualTo(AnimeCreator.createValidAnime())`: Verifica se o anime retornado é igual ao anime válido criado previamente com 
+   `AnimeCreator.createValidAnime()`. Isso garante que os dados do anime retornado coincidam com os dados esperados.
+
+Em resumo, esse teste verifica se o endpoint do `animeController` é capaz de criar e retornar um anime com sucesso quando os dados são 
+fornecidos corretamente. Ele verifica se o objeto anime retornado não é nulo e se seus atributos correspondem aos valores esperados.

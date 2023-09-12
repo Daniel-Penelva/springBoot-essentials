@@ -1,5 +1,7 @@
 package com.daniel.springbootessentials.controller;
 
+import static org.mockito.ArgumentMatchers.isNotNull;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -18,8 +20,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.requests.AnimePostRequestBody;
 import com.daniel.springbootessentials.service.AnimeService;
 import com.daniel.springbootessentials.util.AnimeCreator;
+import com.daniel.springbootessentials.util.AnimePostRequestBodyCreator;
 
 @ExtendWith(SpringExtension.class)
 public class AnimeControllerTest {
@@ -42,7 +46,10 @@ public class AnimeControllerTest {
       BDDMockito.when(animeService.findByIdOrThrowBadRequestException(ArgumentMatchers.anyLong())).thenReturn(AnimeCreator.createValidAnime()); // sem paginação
 
       // Buscar anime por nome
-      BDDMockito.when(animeService.findByName(ArgumentMatchers.anyString())).thenReturn(List.of(AnimeCreator.createValidAnime())); 
+      BDDMockito.when(animeService.findByName(ArgumentMatchers.anyString())).thenReturn(List.of(AnimeCreator.createValidAnime()));
+      
+      // Salvar anime
+      BDDMockito.when(animeService.save(ArgumentMatchers.any(AnimePostRequestBody.class))).thenReturn(AnimeCreator.createValidAnime()); 
     }
 
 
@@ -113,5 +120,15 @@ public class AnimeControllerTest {
 
         Assertions.assertThat(listAnimes).isNotNull();
         Assertions.assertThat(listAnimes).isEmpty();
+    }
+
+    // salvar anime 
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_whenSuccessful() {
+
+       Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();
+
+        Assertions.assertThat(anime).isNotNull().isEqualTo(AnimeCreator.createValidAnime());  
     }
 }
