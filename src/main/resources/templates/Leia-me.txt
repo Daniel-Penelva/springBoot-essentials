@@ -1600,3 +1600,85 @@ resposta, que deve ser o objeto `Anime` com o ID especificado.
 
 Em resumo, esse método de teste verifica se o método `findById` do `animeController` retorna um objeto `Anime` não nulo, com o ID correto. Isso 
 ajuda a garantir que o endpoint do controlador esteja funcionando corretamente ao buscar um anime pelo ID.
+
+--------------- // ---------------
+
+@Test
+@DisplayName("findByNome returns a list of anime when successful")
+void findByNome_ReturnsListOfAnime_whenSuccessful() {
+
+  String expectedName = AnimeCreator.createValidAnime().getName();
+
+   List<Anime> listAnimes = animeController.findByName("anime").getBody();
+
+   Assertions.assertThat(listAnimes).isNotNull();
+   Assertions.assertThat(listAnimes).isNotEmpty().hasSize(1);
+   Assertions.assertThat(listAnimes.get(0).getName()).isEqualTo(expectedName);
+}
+
+O script acima também testa o comportamento de um método no controlador `animeController`. Vamos explicar passo a passo o que esse teste faz:
+
+1. `@Test`: Essa anotação marca o método como um método de teste que deve ser executado durante os testes automatizados.
+
+2. `@DisplayName("findByNome returns a list of anime when successful")`: A anotação `@DisplayName` permite fornecer um nome mais descritivo para 
+   o teste. Neste caso, o nome é "findByNome returns a list of anime when successful".
+
+3. `String expectedName = AnimeCreator.createValidAnime().getName();`: Aqui, está definindo uma variável `expectedName` para armazenar o nome 
+    esperado de um anime válido. Isso será usado posteriormente para verificar se o anime retornado pelo controlador tem o nome esperado.
+
+4. `List<Anime> listAnimes = animeController.findByName("anime").getBody();`: Esta linha está chamando o método `findByName` do `animeController` 
+    com o argumento "anime". O método retornará uma resposta HTTP que contém uma lista de objetos `Anime`. O `.getBody()` é usado para obter o 
+    corpo da resposta, que deve ser a lista de animes.
+
+5. `Assertions.assertThat(listAnimes).isNotNull();`: Aqui, está usando as asserções da biblioteca (provavelmente AssertJ) para verificar se a 
+    lista de animes (`listAnimes`) não é nula. Isso garante que a chamada ao método `findByName` do controlador tenha retornado uma lista 
+    válida.
+
+6. `Assertions.assertThat(listAnimes).isNotEmpty().hasSize(1);`: Esta linha faz duas verificações. Primeiro, ela verifica se a lista de animes
+    não está vazia, ou seja, contém pelo menos um anime. Em segundo lugar, ela verifica se a lista tem tamanho igual a 1. Isso indica que apenas 
+    um anime foi encontrado com o nome "anime".
+
+7. `Assertions.assertThat(listAnimes.get(0).getName()).isEqualTo(expectedName);`: Aqui, está verificando se o nome do primeiro anime na lista 
+    (`listAnimes.get(0).getName()`) é igual ao `expectedName` que definiu anteriormente. Isso garante que o anime retornado pelo controlador 
+    tenha o nome esperado.
+
+Resumindo, esse teste verifica se o método `findByName` do `animeController` retorna uma lista não nula de animes, contendo pelo menos um anime 
+com o nome esperado. Isso ajuda a garantir que o endpoint do controlador esteja funcionando corretamente ao buscar animes pelo nome.
+
+--------------- // ---------------
+
+@Test
+@DisplayName("findByNome returns an empty list of anime is not found")
+void findByNome_ReturnsEmptyListOfAnime_whenIsNotFound() {
+
+   BDDMockito.when(animeService.findByName(ArgumentMatchers.anyString()))
+       .thenReturn(Collections.emptyList()); 
+
+   List<Anime> listAnimes = animeController.findByName("anime").getBody();
+
+   Assertions.assertThat(listAnimes).isNotNull();
+   Assertions.assertThat(listAnimes).isEmpty();
+}
+
+O método de teste acima verifica o comportamento de um endpoint em que o serviço `animeService` retorna uma lista vazia quando não encontra 
+nenhum anime com o nome especificado. Vamos analisar cada parte do script:
+
+1. `void findByNome_ReturnsEmptyListOfAnime_whenIsNotFound()`: Este é um método de teste semelhante aos outros, mas com um foco específico. Ele 
+    testa o cenário em que nenhum anime é encontrado com o nome especificado.
+
+2. `BDDMockito.when(animeService.findByName(ArgumentMatchers.anyString()))`: Aqui, está usando o framework Mockito (com a extensão BDDMockito) 
+    para criar um comportamento simulado. Aqui, está dizendo que quando o método `findByName` do `animeService` for chamado com qualquer 
+    argumento de string (`ArgumentMatchers.anyString()`), ele deve retornar uma lista vazia (`Collections.emptyList()`).
+
+3. `List<Anime> listAnimes = animeController.findByName("anime").getBody();`: Nesta linha, está chamando o método `findByName` do 
+    `animeController` com o argumento "anime". O método provavelmente retornará uma resposta HTTP que contém uma lista de objetos `Anime`. 
+    Aqui, está pegando o corpo da resposta usando `.getBody()` e armazenando-o na variável `listAnimes`.
+
+4. `Assertions.assertThat(listAnimes).isNotNull();`: Aqui, está usando as asserções para verificar se a lista de animes (`listAnimes`) não é 
+    nula. Isso garante que a chamada ao método `findByName` do controlador tenha retornado uma resposta válida.
+
+5. `Assertions.assertThat(listAnimes).isEmpty();`: Esta linha verifica se a lista de animes está vazia. Isso é esperado neste cenário, pois 
+    configurou o `animeService` para retornar uma lista vazia quando não encontra nenhum anime com o nome especificado.
+
+Em resumo, esse teste garante que o endpoint do controlador `animeController` lida adequadamente com a situação em que nenhum anime é encontrado 
+com o nome especificado e retorna uma lista vazia como resposta.
