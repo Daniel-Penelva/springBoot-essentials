@@ -1,8 +1,5 @@
 package com.daniel.springbootessentials.controller;
 
-import static org.mockito.ArgumentMatchers.isNotNull;
-
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -17,13 +14,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.daniel.springbootessentials.domain.Anime;
 import com.daniel.springbootessentials.requests.AnimePostRequestBody;
+import com.daniel.springbootessentials.requests.AnimePutRequestBody;
 import com.daniel.springbootessentials.service.AnimeService;
 import com.daniel.springbootessentials.util.AnimeCreator;
 import com.daniel.springbootessentials.util.AnimePostRequestBodyCreator;
+import com.daniel.springbootessentials.util.AnimePutRequestBodyCreator;
 
 @ExtendWith(SpringExtension.class)
 public class AnimeControllerTest {
@@ -49,7 +50,10 @@ public class AnimeControllerTest {
       BDDMockito.when(animeService.findByName(ArgumentMatchers.anyString())).thenReturn(List.of(AnimeCreator.createValidAnime()));
       
       // Salvar anime
-      BDDMockito.when(animeService.save(ArgumentMatchers.any(AnimePostRequestBody.class))).thenReturn(AnimeCreator.createValidAnime()); 
+      BDDMockito.when(animeService.save(ArgumentMatchers.any(AnimePostRequestBody.class))).thenReturn(AnimeCreator.createValidAnime());
+
+      // Atualizar anime - lembrando que esse método replace no AnimeService retorna void, logo vai ser usado o método doNothing() para que o método não faça nada.
+      BDDMockito.doNothing().when(animeService).replace(ArgumentMatchers.any(AnimePutRequestBody.class));
     }
 
 
@@ -122,7 +126,7 @@ public class AnimeControllerTest {
         Assertions.assertThat(listAnimes).isEmpty();
     }
 
-    // salvar anime 
+    // Teste para salvar anime 
     @Test
     @DisplayName("save returns anime when successful")
     void save_ReturnsAnime_whenSuccessful() {
@@ -130,5 +134,18 @@ public class AnimeControllerTest {
        Anime anime = animeController.save(AnimePostRequestBodyCreator.createAnimePostRequestBody()).getBody();
 
         Assertions.assertThat(anime).isNotNull().isEqualTo(AnimeCreator.createValidAnime());  
+    }
+
+    // Teste para atualizar anime 
+    @Test
+    @DisplayName("replace update anime when successful")
+    void replace_UpdatesAnime_whenSuccessful() {
+
+        Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody())).doesNotThrowAnyException();
+
+       ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
+
+        Assertions.assertThat(entity).isNotNull();  
+        Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
 }

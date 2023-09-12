@@ -1389,6 +1389,119 @@ nome especificado é encontrado no banco de dados. Isso é útil para garantir q
 resultado é encontrado.
 
 -------------------------------------------------------------------- // -----------------------------------------------------------------------
+BDDMockito
+
+O BDDMockito é uma extensão do Mockito, uma biblioteca amplamente usada para criar mocks em testes unitários em Java. O BDDMockito, por sua vez, 
+segue o estilo BDD (Behavior-Driven Development) para escrever testes de maneira mais descritiva e legível. Ele fornece um conjunto de métodos 
+e recursos que facilitam a escrita de testes com esse estilo. Alguns dos métodos mais comuns do BDDMockito:
+
+1. `given(...).willReturn(...)`:
+   - O método `given` é usado para definir um cenário de teste. Você usa `given` para configurar o comportamento esperado do mock.
+   - O método `willReturn` indica o que o mock deve retornar quando o método sendo testado for chamado.
+
+```java
+given(animeRepository.findById(1L)).willReturn(Optional.of(anime));
+```
+
+Neste exemplo, estamos configurando o mock `animeRepository` para retornar um objeto `Optional` contendo um anime quando o método `findById` 
+for chamado com o argumento `1L`.
+
+2. `doNothing()`:
+   - O método `doNothing` é usado para especificar que nenhuma ação deve ser executada quando um método de um mock for chamado.
+   
+```java
+doNothing().when(animeRepository).deleteById(1L);
+```
+
+Aqui, estamos dizendo que quando o método `deleteById` for chamado com o argumento `1L`, nada deve acontecer.
+
+3. `verify(...)`:
+   - O método `verify` é usado para verificar se um método de um mock foi chamado com os argumentos corretos e o número correto de vezes.
+
+```java
+verify(animeRepository, times(1)).findById(1L);
+```
+
+Neste exemplo, estamos verificando se o método `findById` do mock `animeRepository` foi chamado exatamente uma vez com o argumento `1L`.
+
+4. `willThrow(...)`:
+   - O método `willThrow` é usado para indicar que um mock deve lançar uma exceção quando um método específico é chamado.
+
+```java
+willThrow(new RuntimeException("Erro")).given(animeRepository).save(any(Anime.class));
+```
+
+Aqui, estamos configurando o mock `animeRepository` para lançar uma exceção quando o método `save` for chamado com qualquer instância de `Anime`.
+
+5. `any(...)`:
+   - O método `any` é usado para corresponder a qualquer argumento de um tipo específico ao configurar ou verificar o comportamento de um mock.
+
+```java
+given(animeRepository.save(any(Anime.class))).willReturn(anime);
+```
+
+Neste exemplo, estamos configurando o mock `animeRepository` para retornar o objeto `anime` quando o método `save` for chamado com qualquer 
+instância de `Anime`.
+
+6. `thenReturn(...)`:
+   - Usado para retornar um valor específico quando um método do mock é chamado.
+
+```java
+given(animeRepository.findById(1L)).willReturn(Optional.of(anime));
+```
+
+7. `will(...)`:
+   - Permite configurar comportamentos de mocks de maneira mais flexível.
+
+```java
+will(invocation -> {
+    Long id = invocation.getArgument(0);
+    return id == 1L ? Optional.of(anime) : Optional.empty();
+}).given(animeRepository).findById(anyLong());
+```
+
+8. `doReturn(...).when(...)`:
+   - Usado para especificar o retorno de um método de mock em uma linha separada.
+
+```java
+doReturn(Optional.of(anime)).when(animeRepository).findById(1L);
+```
+
+9. `timeout(...)`:
+   - Permite verificar se um método de mock foi chamado dentro de um determinado período de tempo.
+
+```java
+verify(animeRepository, timeout(100)).findById(1L);
+```
+
+10. `atLeast(...)`, `atMost(...)`, `never()`:
+    - São usados para verificar se um método de mock foi chamado um número mínimo, máximo ou zero de vezes, respectivamente.
+
+```java
+verify(animeRepository, atLeast(1)).save(any(Anime.class));
+verify(animeRepository, atMost(3)).findById(anyLong());
+verify(animeRepository, never()).delete(any(Anime.class));
+```
+
+11. `thenThrow(...)`:
+    - Usado para indicar que um mock deve lançar uma ou mais exceções quando um método é chamado.
+
+```java
+thenThrow(new RuntimeException("Erro")).given(animeRepository).deleteById(1L);
+```
+
+12. `callsRealMethods()`:
+    - Usado para instruir o mock a chamar os métodos reais de uma classe parcialmente mockada.
+
+```java
+given(animeRepository.findById(1L)).willCallRealMethod();
+```
+
+Esses são apenas alguns dos métodos mais comuns disponíveis no BDDMockito. Eles ajudam a criar cenários de teste, configurar comportamentos de 
+mocks e verificar interações entre o código sendo testado e os mocks de maneira mais descritiva e legível, seguindo o estilo BDD.
+
+--------------- // ---------------
+
 Class PageImpl
 
 O `PageImpl` é uma classe da biblioteca Spring Data que representa uma página de resultados de consulta em uma lista paginada. Ela é 
@@ -1718,3 +1831,38 @@ Vamos analisar cada parte do script:
 
 Em resumo, esse teste verifica se o endpoint do `animeController` é capaz de criar e retornar um anime com sucesso quando os dados são 
 fornecidos corretamente. Ele verifica se o objeto anime retornado não é nulo e se seus atributos correspondem aos valores esperados.
+
+--------------- // ---------------
+
+void replace_UpdatesAnime_whenSuccessful() {
+
+   Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody())).doesNotThrowAnyException();
+
+   ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());
+
+   Assertions.assertThat(entity).isNotNull();  
+   Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+}
+
+O script acima é um exemplo de um teste de unidade em que você está testando o método `replace` de um controlador chamado `animeController`. 
+Vou explicar cada parte do script:
+
+1. `Assertions.assertThatCode(() -> animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody())).doesNotThrowAnyException();`:
+   - Este trecho de código usa o AssertJ para verificar se a chamada do método `replace` não lança nenhuma exceção (`doesNotThrowAnyException`). 
+     Isso é uma forma de testar se o método é executado com sucesso e não gera exceções inesperadas.
+
+2. `ResponseEntity<Void> entity = animeController.replace(AnimePutRequestBodyCreator.createAnimePutRequestBody());`:
+   - Aqui, o método `replace` do `animeController` é chamado novamente para obter a resposta (uma instância de `ResponseEntity<Void>`) após o 
+     primeiro teste para verificar o status da resposta.
+
+3. `Assertions.assertThat(entity).isNotNull();`:
+   - Verifica se a variável `entity` (a resposta da chamada do método `replace`) não é nula. Isso garante que a chamada do método tenha 
+     retornado uma resposta.
+
+4. `Assertions.assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);`:
+   - Verifica se o código de status da resposta (`entity.getStatusCode()`) é igual a `HttpStatus.NO_CONTENT`. Isso verifica se a resposta 
+     indica que a operação foi bem-sucedida e não retornou conteúdo (um código de status 204).
+
+Basicamente, esse teste está verificando se o método `replace` do `animeController` pode ser chamado com sucesso sem lançar exceções, se ele 
+retorna uma resposta não nula e se essa resposta tem um código de status `HttpStatus.NO_CONTENT`. Isso é útil para garantir que o método esteja 
+funcionando conforme o esperado e que as atualizações de anime sejam tratadas corretamente.
