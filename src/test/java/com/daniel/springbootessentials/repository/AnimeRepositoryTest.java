@@ -3,6 +3,8 @@ package com.daniel.springbootessentials.repository;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,5 +83,17 @@ public class AnimeRepositoryTest {
 
         List<Anime> animes = this.animeRepository.findByName("outro anime");
         Assertions.assertThat(animes).isEmpty();
+    }
+
+    @DisplayName("Save throw ConstraintViolationException_WhenNameIsEmpty")
+    @Test
+    void save_ThrowsConstraintViolationException_WhenNameIsEmpty(){
+
+        Anime anime = new Anime();
+
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
+        .isThrownBy(() -> this.animeRepository.save(anime))
+        .withMessageContaining("The anime name cannot be empty");
+
     }
 }

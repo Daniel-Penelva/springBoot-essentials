@@ -1901,3 +1901,50 @@ Vou explicar cada parte do script:
 Em resumo, este teste verifica se o método `delete` do `animeController` pode ser chamado com sucesso sem lançar exceções, se ele retorna uma 
 resposta não nula e se essa resposta tem um código de status `HttpStatus.NO_CONTENT`. Isso é útil para garantir que o método esteja funcionando 
 conforme o esperado e que a remoção de um anime seja tratada corretamente.
+
+--------------- // ---------------
+
+@DisplayName("Save throw ConstraintViolationException_WhenNameIsEmpty")
+@Test
+void save_ThrowsConstraintViolationException_WhenNameIsEmpty(){
+
+        Anime anime = new Anime();
+
+        Assertions.assertThatExceptionOfType(ConstraintViolationException.class)
+        .isThrownBy(() -> this.animeRepository.save(anime))
+        .withMessageContaining("The anime name cannot be empty");
+
+    }
+
+O script acima é teste de unidade escrito em Java usando a biblioteca de teste JUnit e a biblioteca de assertiva AssertJ. Vou explicar o que 
+está acontecendo linha por linha:
+
+1. `void save_ThrowsConstraintViolationException_WhenNameIsEmpty() {`
+
+   - Isso é uma declaração de um método de teste chamado `save_ThrowsConstraintViolationException_WhenNameIsEmpty`. O método de teste é 
+     declarado com a palavra-chave `void` porque não retorna nenhum valor.
+
+2. `Anime anime = new Anime();`
+
+   - Aqui, uma nova instância da classe `Anime` é criada e armazenada na variável `anime`. Presumivelmente, a classe `Anime` representa algum 
+     tipo de entidade ou objeto relacionado a animes.
+
+3. `Assertions.assertThatExceptionOfType(ConstraintViolationException.class)`
+
+   - Esta linha usa a biblioteca AssertJ para definir uma asserção. A função `assertThatExceptionOfType` é usada para verificar se uma exceção 
+     de um tipo específico é lançada durante a execução do código dentro do bloco `isThrownBy`.
+
+4. `.isThrownBy(() -> this.animeRepository.save(anime))`
+
+   - Aqui, está sendo configurada uma expectativa de que a operação dentro do lambda `() -> this.animeRepository.save(anime)` lançará uma 
+     exceção do tipo `ConstraintViolationException`. Essa operação estar relacionada a salvar o objeto `anime` no repositório, como um banco 
+     de dados.
+
+5. `.withMessageContaining("The anime name cannot be empty");`
+
+   - Esta linha verifica se a mensagem de exceção lançada contém a frase "The anime name cannot be empty". Isso é útil para verificar se a 
+     exceção possui uma mensagem específica associada a ela.
+
+Resumindo, este teste de unidade verifica se a operação de salvar um objeto `anime` em algum repositório lança uma exceção do tipo 
+`ConstraintViolationException` com a mensagem "The anime name cannot be empty" quando o nome do anime está vazio. Essa é uma técnica comum de 
+teste para garantir que as validações e restrições estejam funcionando corretamente ao salvar objetos em um sistema.
