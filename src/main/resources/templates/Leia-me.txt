@@ -1948,3 +1948,228 @@ está acontecendo linha por linha:
 Resumindo, este teste de unidade verifica se a operação de salvar um objeto `anime` em algum repositório lança uma exceção do tipo 
 `ConstraintViolationException` com a mensagem "The anime name cannot be empty" quando o nome do anime está vazio. Essa é uma técnica comum de 
 teste para garantir que as validações e restrições estejam funcionando corretamente ao salvar objetos em um sistema.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Anotação @SpringBootTest
+
+A anotação `@SpringBootTest` é uma anotação usada em aplicações Spring Boot, que é uma estrutura popular para o desenvolvimento de aplicativos 
+Java baseados em Spring. Essa anotação é usada para configurar testes de integração em seu aplicativo Spring Boot e fornece várias opções de 
+configuração. O `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)`, está configurando um ambiente de teste específico.
+
+Aqui estão os detalhes dessa anotação:
+
+1. `@SpringBootTest`: Esta anotação indica que você está criando um teste de integração para sua aplicação Spring Boot. Ela inicializa o 
+contexto da aplicação Spring e carrega todas as configurações, incluindo as configurações de beans, conforme definido em sua aplicação.
+
+2. `webEnvironment`: É um atributo da anotação que define o ambiente em que o teste será executado. No exemplo, 
+`SpringBootTest.WebEnvironment.RANDOM_PORT` é usado. Isso significa que o teste será executado em um ambiente de web, e o Spring Boot escolherá 
+aleatoriamente uma porta disponível para iniciar o servidor incorporado.
+
+Isso é especialmente útil para testes que precisam acessar sua aplicação por meio de solicitações HTTP, como testes de integração de API. Ao 
+usar um número de porta aleatório, você evita conflitos de porta se vários testes estiverem sendo executados simultaneamente.
+
+Portanto, a anotação `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)` é usada para criar um teste de integração 
+que carrega o contexto da aplicação Spring Boot e inicia um servidor web incorporado em uma porta aleatória para que você possa testar a 
+funcionalidade de sua aplicação que requer comunicação via HTTP. Isso é muito útil para garantir que sua aplicação esteja funcionando 
+corretamente em um ambiente semelhante ao ambiente de produção.
+
+--------------- // ---------------
+
+Anotação @AutoConfigureTestDatabase
+
+A anotação `@AutoConfigureTestDatabase` é usada em testes de integração em aplicativos Spring Boot para configurar automaticamente o banco de 
+dados que será usado durante os testes. Ela é uma maneira conveniente de definir as configurações de banco de dados específicas para testes sem 
+a necessidade de configurar manualmente essas configurações.
+
+Essa anotação permite que você controle como o banco de dados é configurado para seus testes. Alguns dos principais atributos que você pode usar 
+com `@AutoConfigureTestDatabase` incluem:
+
+1. `replace`: Esse atributo permite especificar como o banco de dados deve ser substituído. Os valores comuns são `Replace.NONE` (não 
+substituir), `Replace.AUTO_CONFIGURED` (substituir apenas o banco de dados que é configurado automaticamente) e `Replace.NONE` (usar a 
+configuração padrão do banco de dados).
+
+2. `connection`: Este atributo permite que você especifique o nome da fonte de dados a ser usada para os testes. Isso é útil quando você deseja 
+usar uma fonte de dados específica para testes em vez da fonte de dados principal configurada para sua aplicação.
+
+3. `initScripts` e `schema`: Esses atributos permitem que você especifique scripts SQL de inicialização e esquema que devem ser executados antes 
+dos testes. Isso é útil para preparar o banco de dados com dados iniciais ou esquemas específicos para cada teste.
+
+Em resumo, `@AutoConfigureTestDatabase` é uma anotação útil para personalizar a configuração do banco de dados em testes de integração em 
+aplicativos Spring Boot, permitindo que você tenha controle sobre como o banco de dados é configurado e inicializado durante os testes.
+
+--------------- // ---------------
+
+Classe TestRestTemplate
+
+A classe `TestRestTemplate` é uma classe fornecida pelo Spring Framework e é usada comumente em testes de integração de aplicativos Spring Boot 
+para fazer solicitações HTTP a endpoints da sua aplicação durante os testes. Ela é uma extensão da classe `RestTemplate` projetada 
+especificamente para facilitar os testes de integração e permite que você interaja com a sua aplicação como faria em um cenário real, fazendo 
+solicitações HTTP e verificando as respostas.
+
+Aqui estão alguns pontos-chave sobre a classe `TestRestTemplate`:
+
+1. **Integração com o ambiente Spring Boot:** A `TestRestTemplate` é configurada automaticamente para usar o ambiente de teste do Spring Boot. 
+Isso significa que ela aproveita a configuração de aplicativo e contexto de aplicativo que você definiu para seus testes.
+
+2. **Uso de URLs relativas:** Em vez de fornecer URLs absolutas para seus endpoints, você pode usar URLs relativas com a `TestRestTemplate`. 
+Ela se baseia na configuração do servidor incorporado que é iniciado durante o teste para determinar a URL base.
+
+3. **Fácil verificação de respostas:** A `TestRestTemplate` facilita a verificação das respostas das solicitações HTTP. Você pode usar métodos 
+convenientes para acessar o status da resposta, o corpo da resposta e os cabeçalhos de resposta, facilitando a validação dos resultados dos 
+testes.
+
+Aqui está um exemplo simples de como você pode usar a `TestRestTemplate` em um teste de integração:
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.ResponseEntity;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class MeuTesteDeIntegracao {
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    public void testEndpoint() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/meu-endpoint", String.class);
+
+        // Verificar o status da resposta
+        assertEquals(200, response.getStatusCodeValue());
+
+        // Verificar o corpo da resposta
+        assertEquals("Conteúdo Esperado", response.getBody());
+    }
+}
+```
+
+Neste exemplo, estamos injetando a `TestRestTemplate` usando a anotação `@Autowired` e a usando para fazer uma solicitação GET a um endpoint da 
+aplicação. Em seguida, verificamos o status da resposta e o corpo da resposta para garantir que a resposta seja a esperada.
+
+A `TestRestTemplate` é uma ferramenta útil para simplificar os testes de integração de aplicativos Spring Boot que envolvem comunicação via 
+HTTP com a sua aplicação. Ela torna mais fácil simular solicitações HTTP e verificar as respostas em seus testes de unidade.
+
+--------------- // ---------------
+
+Anotação @LocalServerPort
+
+A anotação `@LocalServerPort` é uma anotação fornecida pelo Spring Framework e é frequentemente usada em testes de integração de aplicativos 
+Spring Boot para obter a porta na qual o servidor web incorporado foi iniciado durante o teste. Essa anotação é especialmente útil quando você 
+precisa fazer solicitações HTTP para a sua aplicação durante os testes e precisa saber em qual porta o servidor está ouvindo.
+
+Aqui estão algumas informações importantes sobre a anotação `@LocalServerPort`:
+
+1. **Injeção de Porta:** Você pode usar `@LocalServerPort` para injetar automaticamente a porta do servidor web em uma variável em seu teste. A 
+anotação funciona com tipos inteiros, então você pode declarar uma variável do tipo `int` e o Spring injetará automaticamente o número da porta 
+nessa variável.
+
+2. **Uso com a `TestRestTemplate`:** Uma maneira comum de usar `@LocalServerPort` é em conjunto com a classe `TestRestTemplate`, que é usada 
+para fazer solicitações HTTP em seus testes de integração. Você pode combinar essas duas funcionalidades para construir a URL completa para seus 
+endpoints da aplicação durante o teste.
+
+Aqui está um exemplo simples de como você pode usar `@LocalServerPort` em um teste de integração:
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.web.client.RestTemplate;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class MeuTesteDeIntegracao {
+
+    @LocalServerPort
+    private int portaDoServidor;
+
+    @Test
+    public void testEndpoint() {
+        String url = "http://localhost:" + portaDoServidor + "/meu-endpoint";
+        RestTemplate restTemplate = new RestTemplate();
+        String resposta = restTemplate.getForObject(url, String.class);
+
+        // Realize verificações com a resposta
+    }
+}
+```
+
+Neste exemplo, a anotação `@LocalServerPort` é usada para injetar o número da porta em `portaDoServidor`, que é então usado para construir a URL 
+completa para o endpoint que será testado.
+
+Isso é especialmente útil quando você deseja que seus testes de integração sejam independentes de portas fixas, permitindo que o Spring Boot 
+selecione automaticamente uma porta disponível para o servidor web incorporado durante o teste.
+
+--------------- // ---------------
+
+Wrapper
+
+Um "wrapper" (ou invólucro, em tradução livre) é um conceito geralmente usado na programação para se referir a um componente, classe, ou função 
+que encapsula ou envolve outro componente, classe ou função. O objetivo principal de um wrapper é fornecer uma interface mais conveniente ou 
+uma camada de abstração em torno do componente subjacente para simplificar seu uso ou fornecer funcionalidades adicionais.
+
+Aqui estão alguns contextos comuns em que wrappers são usados:
+
+1. **Wrappers para Bibliotecas Externas**: Muitas vezes, quando você está trabalhando com bibliotecas externas ou APIs, você pode criar wrappers 
+em torno delas para tornar a interação mais fácil e segura. Por exemplo, você pode criar um wrapper em torno de uma API de serviço da web para 
+fornecer métodos mais simples e semelhantes à linguagem que encapsulam a lógica de autenticação, tratamento de erros, etc.
+
+2. **Wrappers para Tipos de Dados Primitivos**: Em linguagens de programação, você pode criar classes de invólucro (como `Integer` em Java) para 
+tipos de dados primitivos (como `int`) para fornecer funcionalidades adicionais, como métodos auxiliares.
+
+3. **Wrappers para Gerenciamento de Recursos**: Wrappers também podem ser usados para gerenciar recursos, como arquivos, conexões de banco de 
+dados, sockets, etc. Eles garantem que os recursos sejam adequadamente abertos, usados e fechados, mesmo em cenários de exceção.
+
+4. **Wrappers para Testes**: Em testes de unidade ou testes de integração, você pode criar wrappers para isolar o componente que está sendo 
+testado, permitindo que você substitua partes do componente com simulações ou mock objects para facilitar os testes.
+
+5. **Wrappers para APIs de Terceiros**: Quando você está integrando com serviços de terceiros, como APIs de redes sociais, serviços de pagamento, 
+etc., você pode criar wrappers para lidar com a comunicação e autenticação, tornando a integração mais simples e encapsulando detalhes complexos.
+
+Em resumo, um wrapper é uma camada intermediária de código que envolve e simplifica a interação com componentes subjacentes, classes ou recursos 
+para tornar o uso mais conveniente, seguro ou abstrato. Eles são usados para encapsular detalhes complexos e expor uma interface mais amigável 
+para os desenvolvedores que desejam usar esses componentes.
+
+--------------- // ---------------
+
+A classe `PageableResponse` é um exemplo de um conceito de wrapper em programação, projetado para encapsular informações relacionadas a uma 
+resposta paginada. Ela estende a classe `PageImpl` do Spring Data, que é frequentemente usada para representar resultados paginados de consultas 
+em bancos de dados.
+
+Aqui está uma explicação de cada parte dessa classe:
+
+- `@Getter` e `@Setter`: Essas são anotações do projeto Lombok que geram automaticamente os métodos getter e setter para as propriedades da 
+classe, evitando a necessidade de escrevê-los manualmente.
+
+- `public class PageableResponse<T> extends PageImpl<T>`: Esta classe `PageableResponse` é parametrizada com um tipo genérico `T`, o que 
+significa que ela pode ser usada para representar páginas de qualquer tipo de conteúdo. Ela estende `PageImpl<T>`, que é uma classe do Spring 
+Data que implementa a interface `Page<T>` para representar uma página de resultados paginados.
+
+As linhas subsequentes fazem o mesmo para outras propriedades JSON, como "number", "size", "totalElements", "last", "first", "totalPages", 
+"numberOfElements", "pageable" e "sort". Cada uma dessas propriedades JSON é mapeada para um parâmetro correspondente do construtor.Os tipos 
+dos parâmetros correspondem aos tipos esperados para essas propriedades no objeto JSON que está sendo desserializado.
+
+- As seguintes propriedades são adicionadas à classe `PageableResponse`:
+
+  - `private boolean first`: Indica se a página atual é a primeira.
+  - `private boolean last`: Indica se a página atual é a última.
+  - `private int totalPages`: O número total de páginas disponíveis.
+  - `private int numberOfElements`: O número de elementos na página atual.
+
+- `@JsonCreator(mode = Mode.PROPERTIES)`: Esta anotação é parte do Jackson, uma biblioteca usada para serializar e desserializar objetos JSON 
+em Java. Ela indica que o construtor que segue deve ser usado para desserializar o objeto JSON.
+
+- `@JsonIgnoreProperties(ignoreUnknown = true)`: Esta anotação do Jackson indica que qualquer propriedade desconhecida encontrada ao 
+desserializar o objeto JSON deve ser ignorada. Isso é útil quando você está desserializando objetos JSON que podem conter propriedades 
+adicionais que não são mapeadas para propriedades da classe.
+
+- O construtor `public PageableResponse(...)` é usado para criar uma instância de `PageableResponse` a partir dos dados fornecidos, que são 
+normalmente obtidos de uma consulta paginada. Ele chama o construtor da superclasse `PageImpl` com os parâmetros apropriados, configurando 
+assim a parte básica da resposta paginada.
+
+Em resumo, a classe `PageableResponse` é um exemplo de wrapper que encapsula informações relacionadas a uma resposta paginada, estendendo a 
+classe `PageImpl` do Spring Data e adicionando propriedades extras e um construtor personalizado para desserialização de objetos JSON. Isso 
+torna mais fácil trabalhar com respostas paginadas em seu código, fornecendo uma abstração conveniente para as informações de paginação.
