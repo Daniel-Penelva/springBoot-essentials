@@ -73,4 +73,19 @@ public class AnimeControllerIT {
         Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
         Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
     }
+
+    // Teste para buscar anime por id
+    @Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_whenSuccessful() {
+
+       Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+       
+       Long expectedId = savedAnime.getId();
+
+       Anime anime = testRestTemplate. getForObject("/animes/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
 }
