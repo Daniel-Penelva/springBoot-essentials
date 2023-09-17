@@ -2173,3 +2173,42 @@ assim a parte básica da resposta paginada.
 Em resumo, a classe `PageableResponse` é um exemplo de wrapper que encapsula informações relacionadas a uma resposta paginada, estendendo a 
 classe `PageImpl` do Spring Data e adicionando propriedades extras e um construtor personalizado para desserialização de objetos JSON. Isso 
 torna mais fácil trabalhar com respostas paginadas em seu código, fornecendo uma abstração conveniente para as informações de paginação.
+
+--------------- // ---------------
+
+Logback 
+site: https://www.baeldung.com/logback
+
+O Logback é uma estrutura de registro (logging) em Java muito popular e flexível. Ele é comumente usado para configurar e gerenciar logs em
+aplicativos Java, incluindo testes. O Logback fornece várias funcionalidades para a geração, formatação e redirecionamento de logs. Para testes, 
+o Logback pode ser configurado de várias maneiras para auxiliar no diagnóstico de problemas, registro de informações relevantes e rastreamento 
+de execução. Aqui estão algumas das maneiras pelas quais o Logback pode ser útil em testes:
+
+1. **Registro de Informações de Depuração**: Durante o desenvolvimento e execução de testes, é comum desejar registrar informações de depuração 
+para rastrear o fluxo de execução, variáveis e resultados intermediários. O Logback permite que você configure níveis de log (por exemplo, 
+DEBUG) para registrar informações detalhadas apenas quando necessário.
+
+2. **Identificação de Problemas**: Quando um teste falha, é importante ter informações detalhadas para diagnosticar o problema. O Logback pode 
+ser configurado para registrar informações relevantes, como mensagens de erro, pilha de chamadas (stack trace) e valores de variáveis, para 
+ajudar na identificação de problemas.
+
+3. **Rastreamento de Execução**: Em alguns casos, você pode desejar rastrear a execução de um teste, incluindo quando certos métodos são 
+chamados e com que argumentos. O Logback pode ser usado para registrar essas informações, permitindo um rastreamento mais detalhado.
+
+4. **Redirecionamento de Logs**: O Logback pode ser configurado para redirecionar logs para diferentes destinos, como arquivos de log ou 
+consoles. Isso pode ser útil para verificar os logs após a execução do teste ou para depurar problemas específicos.
+
+5. **Configuração Flexível**: O Logback permite a configuração flexível de logs por meio de arquivos de configuração, o que significa que você 
+pode ajustar o comportamento de registro sem precisar modificar o código de teste. Isso é útil para alternar entre diferentes níveis de log ou 
+direcionamentos de log com facilidade.
+
+6. **Isolamento de Testes**: Às vezes, é importante isolar os logs gerados durante um teste específico para não interferir em outros testes ou 
+no ambiente de desenvolvimento. O Logback pode ser configurado para fornecer essa isolamento.
+
+7. **Integração com Estruturas de Teste**: Muitas estruturas de teste, como JUnit, TestNG e Spring Test, permitem a integração fácil com o 
+Logback, facilitando a configuração e o uso de logs em testes automatizados.
+
+Em resumo, o Logback é uma ferramenta versátil que pode melhorar significativamente a capacidade de diagnosticar e depurar problemas durante a 
+execução de testes em aplicativos Java. Sua flexibilidade e recursos de configuração o tornam uma escolha popular para desenvolvedores que
+ desejam controlar e analisar registros durante o desenvolvimento e teste de software.
+
