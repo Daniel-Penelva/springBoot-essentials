@@ -2260,3 +2260,207 @@ ser importante quando os testes alteram o estado do contexto de alguma forma.
 
 O uso específico do modo de classe depende dos requisitos do seu projeto e da necessidade de manter o estado consistente entre os testes. Em 
 muitos casos, o valor padrão (`BEFORE_EACH_TEST_METHOD`) é suficiente para garantir que os testes sejam isolados uns dos outros.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Spring Security
+
+O Spring Security é uma estrutura amplamente utilizada para adicionar segurança a aplicativos baseados em Spring. O filtro `SecurityFilterChain` 
+é um dos componentes cruciais do Spring Security e é usado para configurar as regras de segurança que serão aplicadas a diferentes partes de 
+sua aplicação. O `SecurityFilterChain` é uma configuração composta por vários filtros que definem como a segurança deve ser aplicada em várias 
+partes de sua aplicação.
+
+Alguns conceitos-chave relacionados ao `SecurityFilterChain` no Spring Security:
+
+1. **Security Filter Chain:** É um conjunto de filtros que são executados na ordem especificada para processar solicitações HTTP. Cada filtro 
+executa uma tarefa específica relacionada à segurança, como autenticação, autorização, proteção contra CSRF, entre outros.
+
+2. **Filter Chain Order:** Os filtros no `SecurityFilterChain` são executados em uma ordem específica, determinada pelo número de ordem (ou 
+prioridade) de cada filtro. Isso permite que você controle a sequência exata em que os filtros são aplicados às solicitações.
+
+3. **Filter Chain Entry Points:** Cada `SecurityFilterChain` geralmente começa com um "entry point", que é responsável por decidir como tratar 
+solicitações não autenticadas. Por exemplo, ele pode redirecionar para uma página de login ou retornar um erro não autorizado.
+
+4. **Matcher:** O Spring Security permite que você associe filtros a padrões de URL específicos por meio de matchers. Isso significa que você 
+pode configurar regras de segurança diferentes para URLs diferentes em sua aplicação.
+
+Aqui está um exemplo simplificado de como você pode configurar um `SecurityFilterChain` em uma aplicação Spring Security:
+
+```java
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests(authorizeRequests ->
+                authorizeRequests
+                    .antMatchers("/public/**").permitAll()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .anyRequest().authenticated()
+            )
+            .formLogin(withDefaults());
+    }
+}
+```
+
+Neste exemplo:
+
+- O `SecurityFilterChain` é configurado para permitir acesso não autenticado a URLs que correspondam a `/public/**`, exigir a função "ADMIN" 
+  para URLs que correspondam a `/admin/**` e exigir autenticação para todas as outras URLs.
+
+- `formLogin()` é usado para configurar o suporte à autenticação baseada em formulário.
+
+O `SecurityFilterChain` é uma parte essencial da configuração do Spring Security e permite que você defina como as regras de segurança devem 
+ser aplicadas em diferentes partes de sua aplicação. Ele oferece flexibilidade para personalizar a segurança de acordo com as necessidades 
+específicas do seu aplicativo.
+
+--------------- // ---------------
+
+Anotação @EnableWebSecurity
+
+A anotação `@EnableWebSecurity` é uma anotação importante e uma parte fundamental da configuração do Spring Security em aplicativos baseados em 
+Spring. Essa anotação é geralmente usada em uma classe de configuração para habilitar o suporte do Spring Security e configurar as políticas de 
+segurança para sua aplicação web.
+
+Alguns pontos-chave sobre a anotação `@EnableWebSecurity`:
+
+1. **Ativação do Spring Security:** Quando você anota uma classe de configuração com `@EnableWebSecurity`, você está ativando o suporte do 
+Spring Security para seu aplicativo. Isso faz com que o Spring Security se torne parte do contexto de aplicativo e comece a aplicar as 
+configurações de segurança.
+
+2. **Personalização de Configurações:** A anotação `@EnableWebSecurity` é frequentemente usada em conjunto com uma classe de configuração que 
+estende `WebSecurityConfigurerAdapter`. Isso permite que você personalize as configurações de segurança do Spring Security, como regras de 
+autorização, autenticação, configurações de CORS (Cross-Origin Resource Sharing), proteção CSRF (Cross-Site Request Forgery), entre outros.
+
+3. **Ponto de Início da Configuração:** A classe de configuração anotada com `@EnableWebSecurity` serve como o ponto de entrada para configurar 
+políticas de segurança em seu aplicativo. Ela geralmente inclui métodos anotados com `@Override` que permitem personalizar aspectos específicos 
+da segurança.
+
+Em resumo, a anotação `@EnableWebSecurity` é essencial para ativar e configurar o Spring Security em seu aplicativo web Spring. Ela marca a 
+classe de configuração que será usada para definir as políticas de segurança, como controle de acesso, autenticação e outras configurações 
+relacionadas à segurança.
+
+--------------- // ---------------
+
+Classe WebSecurityConfigurerAdapter
+
+A classe `WebSecurityConfigurerAdapter` é uma classe importante no framework Spring Security que fornece uma maneira conveniente de personalizar 
+as configurações de segurança em um aplicativo web Spring. Ela faz parte do módulo Spring Security e é frequentemente estendida para criar 
+classes de configuração personalizadas que definem políticas de segurança específicas para um aplicativo.
+
+Principais pontos sobre a classe `WebSecurityConfigurerAdapter`:
+
+1. **Personalização de Configurações de Segurança:** A classe `WebSecurityConfigurerAdapter` é uma classe base que pode ser estendida para 
+personalizar as configurações de segurança do Spring Security em um aplicativo web. Ela oferece métodos configuráveis que permitem definir 
+políticas de segurança, regras de autorização, autenticação e outras configurações relacionadas à segurança.
+
+2. **Uso de Anotações:** Você pode usar anotações Java, como `@Configuration`, `@EnableWebSecurity`, `@EnableGlobalMethodSecurity`, `@Order` e 
+outras, para configurar a classe que estende `WebSecurityConfigurerAdapter`. Essas anotações ajudam a definir quando e como as configurações de 
+segurança personalizadas devem ser aplicadas.
+
+3. **Métodos Configuráveis:** A classe `WebSecurityConfigurerAdapter` possui uma série de métodos configuráveis que podem ser sobrescritos na 
+classe filha para definir comportamentos específicos de segurança. Alguns dos métodos mais comuns incluem:
+
+   - `configure(HttpSecurity http)`: Este método permite configurar as regras de segurança para URLs específicos, como regras de autorização, 
+      configurações de CORS, proteção CSRF e muito mais.
+
+   - `configure(AuthenticationManagerBuilder auth)`: Este método permite configurar como a autenticação será realizada, como autenticação em 
+      memória, autenticação baseada em banco de dados, autenticação LDAP, etc.
+
+   - `configure(WebSecurity web)`: Este método permite configurar como as solicitações de recursos estáticos (por exemplo, arquivos CSS, 
+      JavaScript) são tratadas em relação à segurança.
+
+4. **Prioridade de Configuração:** Quando você estende a classe `WebSecurityConfigurerAdapter`, pode criar várias classes de configuração de 
+    segurança, cada uma com um propósito diferente. A ordem de prioridade entre essas classes é determinada pelas anotações `@Order` ou pela 
+    ordem de carregamento definida pelo Spring. Isso permite que você defina configurações gerais em uma classe e substitua ou adicione 
+    configurações específicas em outras classes, se necessário.
+
+5. **Integração com Spring Boot:** Se você estiver usando o Spring Boot, pode simplesmente criar uma classe que estenda 
+   `WebSecurityConfigurerAdapter` e, em seguida, personalizar suas configurações de segurança. O Spring Boot fará a configuração automática do 
+   Spring Security com base nas configurações que você fornecer.
+
+Em resumo, a classe `WebSecurityConfigurerAdapter` é uma parte crucial do Spring Security que facilita a personalização e configuração das 
+políticas de segurança em um aplicativo web Spring. Ela fornece métodos configuráveis que permitem definir como a autenticação e a autorização 
+devem ser tratadas em seu aplicativo. É amplamente usada para criar configurações de segurança personalizadas em aplicativos Spring Security.
+
+--------------- // ---------------
+
+Classe PasswordEncoder
+
+A classe `PasswordEncoder` é uma parte importante do Spring Security que é usada para codificar senhas e validar senhas codificadas em 
+aplicativos web. Ela faz parte do módulo Spring Security e é essencial para a segurança de autenticação em sistemas onde as senhas dos usuários 
+são armazenadas.
+
+A principal função do `PasswordEncoder` é fornecer uma maneira segura de armazenar senhas no banco de dados e verificar se a senha fornecida 
+pelo usuário durante o processo de autenticação corresponde à senha armazenada.
+
+Principais aspectos da classe `PasswordEncoder`:
+
+1. **Codificação de Senhas:** O principal objetivo do `PasswordEncoder` é transformar (codificar) uma senha em uma representação não reversível, 
+conhecida como "hash". Isso é feito para que a senha real não seja armazenada diretamente no banco de dados. O hash é uma sequência de 
+caracteres fixa e única que é gerada a partir da senha original. Quando um usuário tenta fazer login, a senha fornecida é codificada da mesma 
+maneira e o resultado é comparado com o hash armazenado no banco de dados.
+
+2. **Segurança:** O uso de um `PasswordEncoder` é crucial para a segurança de senhas. Ele protege as senhas dos usuários de exposição em caso 
+de violação de dados. Mesmo que um invasor acesse o banco de dados, ele não pode obter as senhas reais, apenas os hashes.
+
+3. **Múltiplos Algoritmos:** O Spring Security oferece várias implementações de `PasswordEncoder`, cada uma usando um algoritmo de hash 
+diferente. Alguns dos algoritmos comuns incluem BCrypt, SCrypt, PBKDF2 e muito mais. A escolha do algoritmo dependerá dos requisitos de 
+segurança do aplicativo. O BCrypt é frequentemente recomendado devido à sua segurança e desempenho.
+
+4. **Configuração:** Em um aplicativo Spring Security, você pode configurar o `PasswordEncoder` para ser usado em sua classe de configuração 
+que estende `WebSecurityConfigurerAdapter`. Isso é feito por meio do método `configure(AuthenticationManagerBuilder auth)`, onde você define 
+como as senhas serão codificadas e verificadas durante o processo de autenticação.
+
+5. **Verificação de Senha:** Além de codificar senhas, o `PasswordEncoder` também fornece métodos para verificar se uma senha não codificada 
+(fornecida pelo usuário durante a autenticação) corresponde ao hash armazenado no banco de dados. O Spring Security cuida dessa verificação 
+automaticamente quando você configura um `PasswordEncoder` apropriado.
+
+--------------- // ---------------
+
+Classe PasswordEncoderFactories
+
+A classe `PasswordEncoderFactories` faz parte do Spring Security e é usada para criar instâncias de `PasswordEncoder` com base em vários 
+algoritmos de codificação de senha. Ela fornece uma maneira fácil de criar um `PasswordEncoder` usando diferentes algoritmos, sem a necessidade 
+de configurá-lo manualmente. A classe `PasswordEncoderFactories` é uma fábrica de `PasswordEncoder`.
+
+Alguns dos métodos estáticos da classe `PasswordEncoderFactories` e os algoritmos de codificação de senha que eles podem criar:
+
+1. **`createDelegatingPasswordEncoder()`**: Este método cria um `PasswordEncoder` que é capaz de verificar senhas codificadas com diferentes algoritmos. Ele suporta senhas codificadas com os seguintes algoritmos:
+   - `bcrypt`: Usando o BCryptPasswordEncoder.
+   - `noop`: Senhas não codificadas (não recomendado para produção).
+   - `sha256`: Usando o StandardPasswordEncoder.
+   - `sha256-hex`: Usando o StandardPasswordEncoder com hash em formato hexadecimal.
+   - `sha256-b64`: Usando o StandardPasswordEncoder com hash em Base64.
+
+2. **`createDelegatingPasswordEncoder(PasswordEncoder defaultPasswordEncoder, Map<String, PasswordEncoder> idToPasswordEncoder)`**: Este método 
+permite que você crie um `PasswordEncoder` personalizado com um codificador padrão e um mapa de codificadores adicionais. Isso é útil quando 
+você deseja adicionar suporte a algoritmos de codificação personalizados.
+
+Exemplo simples de uso:
+
+```java
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+public class Main {
+    public static void main(String[] args) {
+        // Criar um PasswordEncoder delegado com BCrypt como padrão
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        // Codificar uma senha usando BCrypt
+        String encodedPassword = passwordEncoder.encode("minhaSenha");
+
+        // Verificar se uma senha corresponde ao hash usando o PasswordEncoder
+        boolean matches = passwordEncoder.matches("minhaSenha", encodedPassword);
+        System.out.println("Senha corresponde: " + matches);
+    }
+}
+```
+
+Neste exemplo, usamos o `createDelegatingPasswordEncoder()` para criar um `PasswordEncoder` que suporta múltiplos algoritmos, com o BCrypt 
+como padrão. Em seguida, codificamos uma senha usando o BCrypt e verificamos se outra senha corresponde ao hash usando o método `matches()`. O 
+Spring Security cuidará automaticamente da seleção do algoritmo correto com base na senha armazenada no banco de dados.
+
