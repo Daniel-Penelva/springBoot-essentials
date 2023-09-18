@@ -2212,3 +2212,51 @@ Em resumo, o Logback é uma ferramenta versátil que pode melhorar significativa
 execução de testes em aplicativos Java. Sua flexibilidade e recursos de configuração o tornam uma escolha popular para desenvolvedores que
  desejam controlar e analisar registros durante o desenvolvimento e teste de software.
 
+--------------- // ---------------
+
+Anotação: @DirtiesContext
+
+A anotação `@DirtiesContext` é uma anotação usada em testes com o Spring Framework para indicar que o contexto de aplicação (ApplicationContext) 
+deve ser "sujado" ou "resetado" após a execução de um método de teste específico. Isso significa que, quando um método de teste é marcado com 
+`@DirtiesContext`, o Spring reinicializa o contexto de aplicação antes de executar o próximo teste, garantindo que cada teste seja executado 
+em um contexto limpo e independente dos outros.
+
+Essa anotação é útil em cenários em que um método de teste altera o estado do contexto de alguma forma e você deseja garantir que isso não 
+afete outros testes. Por exemplo, se um teste cria ou modifica beans no contexto de aplicação e você deseja evitar que essas alterações afetem 
+outros testes que compartilham o mesmo contexto, você pode usar `@DirtiesContext`.
+
+Existem três modos principais de uso da anotação `@DirtiesContext`:
+
+1. `@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)`: Isso indica que o contexto de aplicação será sujado após todos os 
+métodos de teste em uma classe de teste terem sido executados. É útil quando vários métodos de teste em uma classe interagem de forma complexa 
+com o contexto e você deseja garantir que o contexto seja recriado completamente após todos os testes.
+
+2. `@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)`: O contexto será sujado antes de todos os métodos de teste em uma 
+classe de teste serem executados. Isso pode ser útil quando você deseja que o contexto seja reiniciado uma vez antes de qualquer teste na 
+classe ser executado.
+
+3. `@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)`: O contexto será sujado e recriado antes da execução de cada 
+método de teste. Isso garante que cada teste seja executado em um contexto limpo e independente.
+
+O uso específico da anotação `@DirtiesContext` depende dos requisitos do seu projeto e da necessidade de manter o estado consistente entre os 
+testes. Certifique-se de usá-la com cuidado, pois reinicializar o contexto pode ter um impacto significativo no desempenho dos testes, 
+especialmente se o contexto for grande ou complexo. No entanto, em muitos casos, é uma ferramenta útil para garantir que os testes sejam 
+isolados uns dos outros.
+
+--------------- // ---------------
+
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+
+1. `classMode` (Modo de Classe):
+   - O atributo `classMode` especifica o modo em que o contexto de aplicação deve ser "sujado" ou "resetado". Ele aceita os seguintes valores:
+     - `AFTER_CLASS`: Isso significa que o contexto será sujado uma vez após todos os métodos de teste em uma classe de teste terem sido executados.
+     - `BEFORE_CLASS`: O contexto será sujado uma vez antes de todos os métodos de teste em uma classe de teste serem executados.
+     - `AFTER_EACH_TEST_METHOD`: O contexto será sujado após a execução de cada método de teste (padrão).
+     - `BEFORE_EACH_TEST_METHOD`: O contexto será sujado antes da execução de cada método de teste.
+
+No exemplo acima, `classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD` indica que o contexto de aplicação será sujado e resetado 
+antes da execução de cada método de teste. Isso ajuda a garantir que cada teste seja executado em um contexto limpo e independente, o que pode 
+ser importante quando os testes alteram o estado do contexto de alguma forma.
+
+O uso específico do modo de classe depende dos requisitos do seu projeto e da necessidade de manter o estado consistente entre os testes. Em 
+muitos casos, o valor padrão (`BEFORE_EACH_TEST_METHOD`) é suficiente para garantir que os testes sejam isolados uns dos outros.

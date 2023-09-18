@@ -15,18 +15,18 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import com.daniel.springbootessentials.domain.Anime;
 import com.daniel.springbootessentials.repository.AnimeRepository;
 import com.daniel.springbootessentials.requests.AnimePostRequestBody;
-import com.daniel.springbootessentials.requests.AnimePutRequestBody;
 import com.daniel.springbootessentials.util.AnimeCreator;
 import com.daniel.springbootessentials.util.AnimePostRequestBodyCreator;
-import com.daniel.springbootessentials.util.AnimePutRequestBodyCreator;
 import com.daniel.springbootessentials.wrapper.PageableResponse;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AnimeControllerIT {
 
     @Autowired
@@ -134,7 +134,7 @@ public class AnimeControllerIT {
     Assertions.assertThat(response.getBody()).isNotNull().isEmpty();
     }
 
-    
+
     // Teste para atualizar anime 
     @Test
     @DisplayName("replace update anime when successful")
@@ -144,6 +144,20 @@ public class AnimeControllerIT {
          savedAnime.setName("Dragon Ball Heroes");
 
         ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/animes", HttpMethod.PUT, new HttpEntity<>(savedAnime), Void.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+
+    // Teste para deletar anime por id
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplate.exchange("/animes/{id}", HttpMethod.DELETE, null, Void.class, savedAnime.getId());
 
         Assertions.assertThat(animeResponseEntity).isNotNull();  
         Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
