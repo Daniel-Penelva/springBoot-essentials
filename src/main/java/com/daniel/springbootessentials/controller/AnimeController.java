@@ -80,7 +80,7 @@ public class AnimeController {
 
     // Buscar anime por nome: http://localhost:8080/animes/find/{name}
     @GetMapping(path = "/find/{name}")
-    public ResponseEntity<List<Anime>> findByName(@PathVariable String name) {
+    public ResponseEntity<List<Anime>> findByName(@PathVariable(value = "name") String name) {
         return ResponseEntity.ok(animeService.findByName(name));
     }
 

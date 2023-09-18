@@ -98,4 +98,21 @@ public class AnimeControllerIT {
         Assertions.assertThat(animeResponseEntity.getBody()).isNotNull();
         Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
     }
+
+    // Teste para buscar anime por nome
+    @Test
+    @DisplayName("findByNome returns a list of anime when successful")
+    void findByNome_ReturnsListOfAnime_whenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+        String expectedName = savedAnime.getName();
+    
+        ResponseEntity<List<Anime>> response = testRestTemplate.exchange("/animes/find/{name}", HttpMethod.GET, null, 
+                new ParameterizedTypeReference<List<Anime>>() {}, expectedName);
+    
+        List<Anime> animes = response.getBody();
+    
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }    
+
 }
