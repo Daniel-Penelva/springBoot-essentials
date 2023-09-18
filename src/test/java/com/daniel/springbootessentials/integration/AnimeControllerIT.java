@@ -115,4 +115,20 @@ public class AnimeControllerIT {
         Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
     }    
 
+    // Teste para buscar anime por nome não encontrado 
+    @Test
+    @DisplayName("findByNome returns an empty list of anime is not found")
+    void findByNome_ReturnsEmptyListOfAnime_whenIsNotFound() {
+
+     String url = String.format("/animes/find/dbz");
+
+    ResponseEntity<List<Anime>> response = testRestTemplate.exchange(
+        url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Anime>>() {}
+    );
+
+    // Verificações
+    Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+    Assertions.assertThat(response.getBody()).isNotNull().isEmpty();
+    }
+
 }
