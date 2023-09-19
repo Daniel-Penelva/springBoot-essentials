@@ -342,3 +342,133 @@ Explicando o que cada parte faz:
 7. `.httpBasic()`: Esta linha configura a autenticação básica HTTP. Isso significa que, quando um usuário tentar acessar um recurso protegido, o navegador solicitará um nome de usuário e senha.
 
 Resumidamente, o script acima configura um aplicativo Spring Security para exigir autenticação básica (HTTP Basic Authentication) para todas as solicitações e protege contra ataques CSRF, armazenando os tokens CSRF em cookies acessíveis por JavaScript no navegador. Isso é uma configuração básica e pode ser personalizada de acordo com os requisitos específicos de segurança do aplicativo.
+
+## Anotação `@PreAuthorize` do Spring Security
+
+**`@PreAuthorize`** é uma anotação de segurança oferecida pelo Spring Security que permite a você definir expressões de autorização em métodos de seus controladores ou serviços Spring. Essas expressões determinam se um usuário tem permissão para acessar ou executar um método específico com base em critérios definidos por você.
+
+Explicação mais detalhada de como a anotação `@PreAuthorize` funciona:
+
+1. **Expressões de Autorização**:
+   - A anotação `@PreAuthorize` aceita uma expressão de autorização como seu valor.
+   - Essa expressão é avaliada pelo Spring Security antes de executar o método associado à anotação.
+   - A expressão pode ser uma combinação de operadores lógicos, funções e informações do usuário para determinar se a solicitação deve ser permitida.
+
+2. **Informações do Usuário**:
+   - Você pode usar informações sobre o usuário atual na expressão de autorização, como seu nome de usuário, funções (roles), atributos personalizados, entre outros.
+   - Exemplos de informações do usuário que você pode acessar na expressão incluem: `#authentication`, `#principal`, `#username`, `#hasRole('ROLE_ADMIN')`, entre outros.
+
+3. **Exemplos de Expressões**:
+   - Alguns exemplos de expressões de autorização:
+     - `@PreAuthorize("hasRole('ROLE_ADMIN')")`: Requer que o usuário tenha a função (role) "ROLE_ADMIN".
+     - `@PreAuthorize("hasIpAddress('192.168.0.1')")`: Permite apenas solicitações de um endereço IP específico.
+     - `@PreAuthorize("isAuthenticated()")`: Requer que o usuário esteja autenticado.
+     - `@PreAuthorize("#username == 'daniel'")`: Permite apenas se o nome de usuário for "daniel".
+
+4. **Operadores Lógicos**:
+   - Você pode usar operadores lógicos, como `and`, `or` e `not`, para criar condições de autorização mais complexas.
+   - Por exemplo, `@PreAuthorize("hasRole('ROLE_ADMIN') and hasIpAddress('192.168.0.1')")` requer que o usuário seja um administrador e esteja acessando de um endereço IP específico.
+
+5. **Uso em Controladores e Serviços**:
+   - A anotação `@PreAuthorize` pode ser usada em métodos de classes de controladores (annotated com `@Controller`) e serviços (annotated com `@Service`).
+   - Ela permite definir regras de autorização específicas para cada método, adaptadas às necessidades do aplicativo.
+
+6. **Configuração do Spring Security**:
+   - Para que as expressões de autorização definidas com `@PreAuthorize` funcionem corretamente, você precisa configurar o Spring Security em seu aplicativo e configurar regras de segurança adequadas, como definição de funções e configuração de autenticação.
+
+Em resumo, a anotação `@PreAuthorize` é uma maneira poderosa e flexível de adicionar camadas de segurança granulares em métodos específicos de seus componentes Spring. Ela permite que você controle o acesso com base em critérios personalizados, aproveitando informações do usuário e expressões de autorização flexíveis. Isso ajuda a garantir que apenas usuários autorizados tenham acesso a recursos específicos em seu aplicativo.
+
+## Anotação `@EnableGlobalMethodSecurity` do Spring Security
+
+A anotação `@EnableGlobalMethodSecurity` é usada em configurações do Spring Security para habilitar o suporte a segurança em nível de método. Quando você a usa com a opção `prePostEnabled = true`, permite o uso de anotações de segurança, como `@PreAuthorize` e `@PostAuthorize`, para controlar o acesso a métodos específicos em seu aplicativo.
+
+Aqui estão os detalhes dessa anotação:
+
+- `@EnableGlobalMethodSecurity` é uma anotação de configuração do Spring Security.
+- `prePostEnabled = true` é um parâmetro da anotação que, quando definido como `true`, habilita o uso de anotações de segurança baseadas em expressões, como `@PreAuthorize` e `@PostAuthorize`, em seus métodos.
+
+Como isso funciona:
+
+1. **Habilitar a Segurança em Nível de Método**:
+   - Quando você adiciona a anotação `@EnableGlobalMethodSecurity(prePostEnabled = true)` à sua configuração do Spring Security, você está ativando o suporte a segurança em nível de método em seu aplicativo.
+
+2. **Uso de Anotações de Segurança**:
+   - Com o suporte a segurança em nível de método habilitado, você pode usar anotações de segurança, como `@PreAuthorize` e `@PostAuthorize`, em métodos de seus controladores ou serviços.
+   - Essas anotações permitem que você defina regras de autorização personalizadas para métodos específicos com base em expressões.
+
+Em resumo, a anotação `@EnableGlobalMethodSecurity(prePostEnabled = true)` é usada para habilitar o suporte a segurança em nível de método no Spring Security, permitindo o uso de anotações de segurança como `@PreAuthorize` e `@PostAuthorize` para controlar o acesso a métodos específicos com base em regras de autorização personalizadas. Isso é útil quando você precisa de granularidade nas permissões dentro de seu aplicativo, permitindo que diferentes métodos tenham diferentes requisitos de autorização.
+
+---
+
+## Alterando o método `save(...)` da Classe `AnimeController` e desabilitando o CSRF TOKEN
+
+```java
+package com.daniel.springbootessentials.controller;
+
+imports...
+
+@RestController
+@RequestMapping("animes")
+@AllArgsConstructor // Lombok - Para injeção de dependência (gera construtor)
+public class AnimeController {
+
+    private AnimeService animeService;
+
+    ...
+
+    // Salvar anime - http://localhost:8080/animes
+    @PostMapping
+    @ResponseBody
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody) {
+        return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
+    }
+
+    ...
+}
+```
+
+No exemplo acima, o método `save` só pode ser executado por usuários que têm a função (role) "ADMIN". Isso é possível graças ao uso da anotação @PreAuthorize, que é habilitada pela configuração @EnableGlobalMethodSecurity(prePostEnabled = true) mostrado na imagem abaixo.
+
+```java
+package com.daniel.springbootessentials.config;
+
+imports...
+
+@Log4j2
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable()
+//              .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .httpBasic();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        log.info("Password enconded {}", passwordEncoder.encode("admin"));
+
+        auth.inMemoryAuthentication()
+                .withUser("Daniel")
+                .password(passwordEncoder.encode("admin"))
+                .roles("USER", "ADMIN")
+                .and()
+                .withUser("Biana")
+                .password(passwordEncoder.encode("admin"))
+                .roles("USER");
+    }
+
+}
+```
+
+A configuração de autenticação, somente quem tem a função Role "ADMIN" poderá executar a requisição do método 
+HTTP POST, ou seja, para o usuário "Daniel" a sua função definida "ADMIN" permitirá executar tal requisição, ao contrário do usuário "Biana" que a sua função definida é de apenas de usuário (USER), logo ela não está autorizada a utilizar o método HTTP POST para criação de anime.

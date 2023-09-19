@@ -2516,5 +2516,103 @@ Aqui está uma visão geral de como o CSRF Token funciona no Spring Security:
 Em resumo, o CSRF Token no Spring Security é uma medida fundamental para proteger aplicativos da web contra ataques CSRF, e sua implementação 
 é facilitada pelo framework, permitindo que os desenvolvedores foquem mais em sua lógica de negócios enquanto mantêm a segurança da aplicação.
 
+--------------- // ---------------
+
+Anotação @PreAuthorize
+
+A anotação `@PreAuthorize` faz parte do Spring Security, que é um módulo do Spring Framework usado para adicionar recursos de segurança a 
+aplicativos Java. Essa anotação é uma das maneiras de definir regras de autorização personalizadas em métodos de controladores, serviços ou 
+outros componentes do Spring.
+
+A anotação `@PreAuthorize` permite que você especifique condições de autorização em um método antes que o método seja executado. Essas condições 
+são expressas usando uma linguagem de expressão que avalia se o usuário atual tem permissão para acessar o método. Essa expressão pode ser 
+baseada em informações do usuário, como seu nome de usuário, funções (roles) ou qualquer outro atributo relevante.
+
+Exemplo simples de como usar a anotação `@PreAuthorize`:
+
+```java
+import org.springframework.security.access.prepost.PreAuthorize;
+
+@Controller
+public class MyController {
+
+    @GetMapping("/secure")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String securePage() {
+        // Código para a página protegida
+        return "securePage";
+    }
+}
+```
+
+Neste exemplo:
+
+- A anotação `@PreAuthorize` é usada no método `securePage()`.
+- A expressão `"hasRole('ROLE_ADMIN')"` é definida como condição de autorização. Isso significa que apenas os usuários que têm a função (role) 
+  "ROLE_ADMIN" têm permissão para acessar esse método.
+
+Além disso, você pode usar operadores lógicos, como `and`, `or` e `not`, para criar condições mais complexas. Por exemplo:
+
+```java
+@PreAuthorize("hasRole('ROLE_ADMIN') and hasIpAddress('192.168.0.1')")
+```
+
+Neste caso, a condição de autorização exige que o usuário tenha a função "ROLE_ADMIN" e esteja acessando de um endereço IP específico 
+(192.168.0.1).
+
+Em resumo, a anotação `@PreAuthorize` é uma poderosa ferramenta do Spring Security que permite definir regras de autorização personalizadas em 
+métodos de seus componentes Spring, ajudando a controlar o acesso a partes específicas do seu aplicativo com base em condições específicas.
+
+--------------- // ---------------
+
+Anotação @EnableGlobalMethodSecurity
+
+A anotação `@EnableGlobalMethodSecurity` é usada em configurações do Spring Security para habilitar o suporte a segurança em nível de método. 
+Quando usa a opção `prePostEnabled = true`, permite o uso de anotações de segurança, como `@PreAuthorize` e `@PostAuthorize`, para controlar o 
+acesso a métodos específicos em seu aplicativo.
+
+Detalhes dessa anotação:
+
+- `@EnableGlobalMethodSecurity` é uma anotação de configuração do Spring Security.
+- `prePostEnabled = true` é um parâmetro da anotação que, quando definido como `true`, habilita o uso de anotações de segurança baseadas em 
+   expressões, como `@PreAuthorize` e `@PostAuthorize`, em seus métodos.
+
+como isso funciona:
+
+1. **Habilitar a Segurança em Nível de Método**:
+   - Quando adiciona a anotação `@EnableGlobalMethodSecurity(prePostEnabled = true)` à sua configuração do Spring Security, significa que
+    você está ativando o suporte a segurança em nível de método em seu aplicativo.
+
+2. **Uso de Anotações de Segurança**:
+   - Com o suporte a segurança em nível de método habilitado, você pode usar anotações de segurança, como `@PreAuthorize` e `@PostAuthorize`, 
+     em métodos de seus controladores ou serviços.
+
+   - Essas anotações permitem que você defina regras de autorização personalizadas para métodos específicos com base em expressões.
+
+Exemplo de uso:
+
+```java
+import org.springframework.security.access.prepost.PreAuthorize;
+
+@Service
+public class MyService {
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public void adminOnlyMethod() {
+        // Este método só pode ser acessado por usuários com a função ROLE_ADMIN.
+    }
+}
+```
+
+Neste exemplo, o método `adminOnlyMethod` só pode ser executado por usuários que têm a função (role) "ROLE_ADMIN". Isso é possível graças ao 
+uso da anotação `@PreAuthorize`, que é habilitada pela configuração `@EnableGlobalMethodSecurity(prePostEnabled = true)`.
+
+Em resumo, a anotação `@EnableGlobalMethodSecurity(prePostEnabled = true)` é usada para habilitar o suporte a segurança em nível de método no 
+Spring Security, permitindo o uso de anotações de segurança como `@PreAuthorize` e `@PostAuthorize` para controlar o acesso a métodos 
+específicos com base em regras de autorização personalizadas. Isso é útil quando você precisa de granularidade nas permissões dentro de seu 
+aplicativo, permitindo que diferentes métodos tenham diferentes requisitos de autorização.
+
+OBS. A utilização dessas anotações (@PreAuthorize e @EnableGlobalMethodSecurity) é para exemplificar que somente quem for admin poderá utilizar 
+o método HTTP GET, ou seja, na classe "SecurityConfig", o usuario Biana não terá autorização para criar um anime.
 
 
