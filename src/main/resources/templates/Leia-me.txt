@@ -2464,3 +2464,57 @@ Neste exemplo, usamos o `createDelegatingPasswordEncoder()` para criar um `Passw
 como padrão. Em seguida, codificamos uma senha usando o BCrypt e verificamos se outra senha corresponde ao hash usando o método `matches()`. O 
 Spring Security cuidará automaticamente da seleção do algoritmo correto com base na senha armazenada no banco de dados.
 
+--------------- // ---------------
+
+Para acessar a listar pelo método HTTP GET, essa linha de código:
+                .withUser("Daniel")
+                .password(passwordEncoder.encode("admin"))
+                .roles("USER", "ADMIN")
+
+Precisa ser inserida na Auth Basic, nela será colocado o user "Daniel" e o password "admin" para que suas requisições  HTTP GET quando forem 
+feitas possam ser validadas e autorizadas.
+
+Esse trecho de código adicionado ".csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())" garante a criação de token que 
+vai ser gerado no cookie do Postman ou do Thunder Client. É a partir desse token gerado que você irá copiar e colar na "Key" da aba "Headers" 
+quando quiser utilizar o método HTTP POST. 
+
+No Postman será inserido a key: "X-XSRF-TOKEN" e o value: <colar_token>
+No Thunder Cliente será inserido no header: "X-XSRF-TOKEN" e o value: <colar_token>
+
+--------------- // ---------------
+
+CSRF Token no Spring Security
+
+O Spring Security é uma estrutura popular para segurança em aplicativos Java e oferece suporte robusto para proteger aplicativos da web contra
+várias ameaças, incluindo ataques CSRF (Cross-Site Request Forgery). No Spring Security, a proteção CSRF é implementada usando um recurso 
+conhecido como "CSRF Token."
+
+Aqui está uma visão geral de como o CSRF Token funciona no Spring Security:
+
+1. **Geração do CSRF Token**:
+   - Quando um usuário faz login em um aplicativo protegido pelo Spring Security, um token CSRF é gerado automaticamente pelo framework.
+   - Esse token é exclusivo para a sessão do usuário e normalmente é armazenado em uma sessão HTTP ou em um cookie seguro.
+
+2. **Inclusão no Formulário HTML**:
+   - O token CSRF gerado é então incluído automaticamente em todos os formulários HTML gerados pelo aplicativo.
+   - Isso é feito usando a tag `<input>` especial com o nome `_csrf` (esse nome pode ser personalizado, se necessário).
+
+```html
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+```
+
+3. **Verificação do CSRF Token**:
+   - Quando o usuário envia um formulário ou uma solicitação HTTP que modifica o estado do aplicativo (por exemplo, uma solicitação POST), o 
+     Spring Security verifica automaticamente se o token CSRF fornecido na solicitação corresponde ao token armazenado na sessão do usuário.
+
+   - Se os tokens não corresponderem, a solicitação será considerada suspeita e será rejeitada, protegendo assim contra ataques CSRF.
+
+4. **Customização**:
+   - O Spring Security permite personalizar várias configurações relacionadas ao CSRF Token, como o nome do parâmetro do token, como o token é 
+     armazenado (por exemplo, em um cookie seguro), ou como o token é validado.
+
+Em resumo, o CSRF Token no Spring Security é uma medida fundamental para proteger aplicativos da web contra ataques CSRF, e sua implementação 
+é facilitada pelo framework, permitindo que os desenvolvedores foquem mais em sua lógica de negócios enquanto mantêm a segurança da aplicação.
+
+
+
