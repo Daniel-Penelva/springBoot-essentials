@@ -472,3 +472,259 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 A configuração de autenticação, somente quem tem a função Role "ADMIN" poderá executar a requisição do método 
 HTTP POST, ou seja, para o usuário "Daniel" a sua função definida "ADMIN" permitirá executar tal requisição, ao contrário do usuário "Biana" que a sua função definida é de apenas de usuário (USER), logo ela não está autorizada a utilizar o método HTTP POST para criação de anime.
+
+## Anotação `@AuthenticationPrincipal`
+
+A anotação `@AuthenticationPrincipal` é uma anotação do Spring Security que facilita o acesso ao objeto `Principal` (representando o usuário autenticado) em seus controladores ou serviços Spring. Essa anotação é especialmente útil quando você precisa acessar informações específicas do usuário autenticado em um método de controlador ou serviço.
+
+Detalhes dessa anotação:
+
+1. **Objeto `Principal`**:
+   - O objeto `Principal` é uma parte fundamental do sistema de autenticação do Spring Security. Ele representa o usuário autenticado na sessão atual.
+
+2. **Uso do `@AuthenticationPrincipal`**:
+   - A anotação `@AuthenticationPrincipal` permite injetar diretamente o objeto `Principal` no método de um controlador ou serviço Spring.
+   - Ela simplifica o acesso às informações do usuário autenticado, tornando-as facilmente disponíveis como um parâmetro do método.
+
+Essa anotação é útil quando você precisa acessar informações específicas do usuário autenticado em seus métodos de controlador ou serviço, tornando o código mais limpo e legível.
+
+Além disso, observe que a anotação `@AuthenticationPrincipal` também pode ser usada com classes personalizadas em vez de `Principal`. Por exemplo, se você tiver uma classe `User` representando os detalhes do usuário autenticado, você pode usá-la em vez de `Principal`, desde que a classe implemente a interface `Principal`.
+
+---
+
+## Criando o método `findByIdAuthenticationPrincipal` na Classe `AnimeController`
+
+```java
+package com.daniel.springbootessentials.controller;
+
+imports ...
+
+@RestController
+@RequestMapping("animes")
+
+@AllArgsConstructor // Lombok - Para injeção de dependência (gera construtor)
+public class AnimeController {
+
+    private AnimeService animeService;
+
+   ...
+
+ // Buscar por id o anime utilizando o @AuthenticationPrincipal UserDetails: http://localhost:8080/animes/by-id/{id}
+    @GetMapping(path = "by-id/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Anime> findByIdAuthenticationPrincipal(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        return new ResponseEntity(animeService.findByIdOrThrowBadRequestException(id), HttpStatus.OK);
+    }
+
+    ...
+}
+```
+
+O código acima é um endpoint de controle em um aplicativo Spring que usa o Spring Security para garantir que apenas os usuários com a função (role) "ADMIN" possam acessá-lo. 
+
+Explicando o que cada parte faz:
+
+1. **`@GetMapping(path = "by-id/{id}")`**: Esta anotação marca o método como um manipulador de solicitação HTTP GET. Ele especifica que este método será invocado quando uma solicitação GET for feita para a URL relativa `/animes/by-id/{id}`, onde `{id}` é um valor de variável de caminho (path variable) que pode ser fornecido na URL.
+
+2. **`@PreAuthorize("hasRole('ADMIN')")`**: Esta anotação é parte do mecanismo de autorização do Spring Security. Ela define uma expressão SpEL (Spring Expression Language) que especifica a regra de autorização para este método. A expressão `hasRole('ADMIN')` verifica se o usuário autenticado possui a função (role) "ADMIN". Apenas os usuários com essa função terão acesso a este método. Caso contrário, uma exceção de acesso não autorizado será lançada.
+
+3. **`@PathVariable("id") Long id`**: Isso marca o parâmetro `id` como uma variável de caminho (path variable) na URL. O valor do `{id}` na URL será atribuído a este parâmetro.
+
+4. **`@AuthenticationPrincipal UserDetails userDetails`**: Esta anotação permite injetar o objeto `UserDetails` do usuário autenticado no método. Isso é útil se você precisar acessar informações sobre o usuário autenticado dentro do método.
+
+5. **`return new ResponseEntity(animeService.findByIdOrThrowBadRequestException(id), HttpStatus.OK);`**: Este é o corpo do método. Ele chama um serviço chamado `animeService` para buscar um anime por ID usando o método `findByIdOrThrowBadRequestException(id)`. Se o anime for encontrado, ele é encapsulado em uma instância de `ResponseEntity` com um status HTTP 200 (OK) e retornado como resposta.
+
+No geral, este endpoint de controle é protegido pelo Spring Security com a anotação `@PreAuthorize`, que garante que apenas os usuários com a função "ADMIN" possam acessá-lo. Além disso, ele usa o `@AuthenticationPrincipal` para acessar informações sobre o usuário autenticado, se necessário, e retorna um anime específico com base no ID fornecido na URL. Esse é um exemplo típico de como usar o Spring Security para controlar o acesso a recursos protegidos em um aplicativo Spring.
+
+## Interface `UserDetails`
+
+A Interface `UserDetails` faz parte do Spring Security e é uma parte fundamental do sistema de autenticação e autorização. Ela é uma interface que define um contrato para fornecer informações sobre um usuário autenticado no sistema. Implementar a interface `UserDetails` permite personalizar a forma como o Spring Security lida com os detalhes do usuário durante a autenticação e a autorização.
+
+Principais componentes da interface `UserDetails` e como ela é usada:
+
+1. **getUsername()**: Este método retorna o nome de usuário associado ao objeto UserDetails. O nome de usuário é usado para autenticar o usuário durante o processo de login. Ele é geralmente uma string única que identifica exclusivamente um usuário no sistema. 
+
+2. **getPassword()**: Retorna a senha do usuário. A senha geralmente está criptografada para segurança. Durante o processo de autenticação, o Spring Security compara a senha fornecida pelo usuário com a senha armazenada no `UserDetails`.
+
+3. **getAuthorities()**: Retorna uma coleção de autoridades (papéis ou funções) associadas ao usuário. As autoridades representam as permissões do usuário e são usadas pelo Spring Security para controle de acesso. Uma autoridade pode ser algo como "ROLE_USER" ou "ROLE_ADMIN".
+
+4. **isAccountNonExpired()**: Este método indica se a conta do usuário está ou não expirada. Se a conta estiver expirada, o usuário não poderá efetuar login.
+
+5. **isAccountNonLocked()**: Verifica se a conta do usuário está bloqueada ou não. Se a conta estiver bloqueada, o usuário não poderá efetuar login.
+
+6. **isCredentialsNonExpired()**: Verifica se as credenciais do usuário, geralmente a senha, estão ou não expiradas. Se as credenciais estiverem expiradas, o usuário não poderá efetuar login.
+
+7. **isEnabled()**: Indica se a conta do usuário está habilitada ou não. Se a conta estiver desabilitada, o usuário não poderá efetuar login.
+
+A classe `UserDetails` é uma interface e pode ser implementada de várias maneiras, dependendo das necessidades do seu aplicativo. Além disso, o Spring Security fornece uma implementação padrão chamada `User`, que implementa a interface `UserDetails` e é frequentemente usada para armazenar informações de usuário durante o processo de autenticação e autorização.
+
+Em resumo, a classe `UserDetails` é uma interface do Spring Security que define um contrato para fornecer informações sobre um usuário autenticado, incluindo nome de usuário, senha, autoridades e status de conta. Implementar essa interface permite personalizar como o Spring Security lida com os detalhes do usuário em seu aplicativo.
+
+## Criando a Classe `CustomUserDetails` implementando a Interface `UserDetails`
+
+```java
+package com.daniel.springbootessentials.domain;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Builder
+public class CustomUserDetails implements UserDetails {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotEmpty(message = "The anime name cannot be empty")
+    @NotNull(message = "The anime name cannot be null")
+    @NotBlank
+    private String name;
+
+    private String username;
+    private String password;
+    private String authorities; // ROLE_ADMIN, ROLE_USER
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return Arrays.stream(authorities.split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+
+        return this.username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
+```
+--- 
+
+## Criando a Interface `CustomUserDetailsRepository`
+
+```java
+package com.daniel.springbootessentials.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.daniel.springbootessentials.domain.CustomUserDetails;
+
+public interface CustomUserDetailsRepository extends JpaRepository<CustomUserDetails, Long> {
+
+    CustomUserDetails findByUsername(String username);
+}
+```
+
+Essa interface é usada para interagir com dados relacionados a CustomUserDetails em um banco de dados usando o Spring Data JPA, como buscar um usuário por nome de usuário. 
+
+## Interface `UserDetailsService`
+
+A interface `UserDetailsService` é uma parte fundamental do Spring Security e é usada para carregar detalhes de usuário durante o processo de autenticação. Ela define um contrato que deve ser implementado para recuperar informações de usuário com base no nome de usuário (username). 
+
+Detalhes dessa interface:
+
+1. **`loadUserByUsername(String username)`**: Este é o único método da interface `UserDetailsService` que deve ser implementado. Ele recebe o nome de usuário como argumento e retorna um objeto que implementa a interface `UserDetails`.
+
+   - `String username`: O nome de usuário que está sendo usado para autenticar o usuário.
+   - Retorna um objeto `UserDetails` que representa os detalhes do usuário, incluindo informações como nome de usuário, senha, autoridades (funções ou papéis), e estados de conta, como se a conta está habilitada, bloqueada, etc.
+
+Geralmente, ao implementar a interface `UserDetailsService`, você se conectará a uma fonte de dados, como um banco de dados, para buscar os detalhes do usuário com base no nome de usuário fornecido. Em seguida, você retornará esses detalhes como um objeto que implementa a interface `UserDetails`.
+
+A implementação da interface `UserDetailsService` é uma parte fundamental da configuração do Spring Security e permite que o sistema autentique os usuários com base nas informações armazenadas em uma fonte de dados. Ela permite a personalização do processo de carregamento de detalhes do usuário para atender às necessidades específicas do seu aplicativo.
+
+--- 
+
+## Criando a Classe `CustomUserDetailsService` implementando a Interface `UserDetailsService`
+
+```java
+package com.daniel.springbootessentials.service;
+
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.daniel.springbootessentials.repository.CustomUserDetailsRepository;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class CustomUserDetailsService implements UserDetailsService {
+
+    private final CustomUserDetailsRepository customUserDetailsRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return Optional.ofNullable(customUserDetailsRepository.findByUsername(username))
+                .orElseThrow(() -> new UsernameNotFoundException("Custom user details not found"));
+    }
+}
+```
+
+Essa classe implementa a interface `UserDetailsService` do Spring Security e é responsável por carregar detalhes de usuário com base no nome de usuário durante o processo de autenticação. Vou explicar os principais aspectos desse script:
+
+Explicando o que cada parte faz:
+
+1. **`@Service`**: Esta anotação marca a classe como um componente de serviço gerenciado pelo Spring. Isso significa que você pode injetá-la em outras partes do seu aplicativo Spring.
+
+2. **`@RequiredArgsConstructor`**: Esta anotação é usada para gerar automaticamente um construtor que aceita todos os campos marcados como `final`. No seu caso, ele está sendo usado para injetar automaticamente o `CustomUserDetailsRepository` no serviço.
+
+3. **`private final CustomUserDetailsRepository customUserDetailsRepository;`**: Aqui, você declara uma instância do `CustomUserDetailsRepository` como um campo final. Isso permite que o Spring injete automaticamente uma instância do repositório no serviço quando o serviço é criado.
+
+4. **`return Optional.ofNullable(customUserDetailsRepository.findByUsername(username))`**: Aqui, a classe `CustomUserDetailsRepository` é usada para buscar um objeto `CustomUserDetails` com base no nome de usuário fornecido. A utilização de `Optional.ofNullable` lida com a possibilidade de o usuário não ser encontrado no banco de dados.
+
+8. **`.orElseThrow(() -> new UsernameNotFoundException("Custom user details not found"));`**: Este trecho de código é usado para lançar uma exceção `UsernameNotFoundException` caso o usuário não seja encontrado no banco de dados. Essa exceção é usada para sinalizar que o nome de usuário não existe e pode ser tratada adequadamente no processo de autenticação.
+
+Em resumo, essa classe `CustomUserDetailsService` é responsável por carregar os detalhes do usuário com base no nome de usuário fornecido durante o processo de autenticação. Ela usa o `CustomUserDetailsRepository` para buscar os detalhes do usuário no banco de dados e, se o usuário não for encontrado, lança uma exceção `UsernameNotFoundException`. Isso é uma parte importante do mecanismo de autenticação do Spring Security, permitindo que o sistema autentique os usuários com base nas informações armazenadas no banco de dados.

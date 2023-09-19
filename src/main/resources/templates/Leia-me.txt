@@ -2616,3 +2616,84 @@ OBS. A utilização dessas anotações (@PreAuthorize e @EnableGlobalMethodSecur
 o método HTTP GET, ou seja, na classe "SecurityConfig", o usuario Biana não terá autorização para criar um anime.
 
 
+--------------- // ---------------
+
+Anotação @AuthenticationPrincipal
+
+A anotação `@AuthenticationPrincipal` é uma anotação do Spring Security que facilita o acesso ao objeto `Principal` (representando o usuário 
+autenticado) em seus controladores ou serviços Spring. Essa anotação é especialmente útil quando você precisa acessar informações específicas 
+do usuário autenticado em um método de controlador ou serviço.
+
+Detalhes dessa anotação:
+
+1. **Objeto `Principal`**:
+   - O objeto `Principal` é uma parte fundamental do sistema de autenticação do Spring Security. Ele representa o usuário autenticado na sessão 
+     atual.
+
+2. **Uso do `@AuthenticationPrincipal`**:
+   - A anotação `@AuthenticationPrincipal` permite injetar diretamente o objeto `Principal` no método de um controlador ou serviço Spring.
+   - Ela simplifica o acesso às informações do usuário autenticado, tornando-as facilmente disponíveis como um parâmetro do método.
+
+Essa anotação é útil quando você precisa acessar informações específicas do usuário autenticado em seus métodos de controlador ou serviço, 
+tornando o código mais limpo e legível.
+
+Além disso, observe que a anotação `@AuthenticationPrincipal` também pode ser usada com classes personalizadas em vez de `Principal`. Por 
+exemplo, se você tiver uma classe `User` representando os detalhes do usuário autenticado, você pode usá-la em vez de `Principal`, desde que a 
+classe implemente a interface `Principal`.
+
+--------------- // ---------------
+
+Interface UserDetails
+
+A classe `UserDetails` faz parte do Spring Security e é uma parte fundamental do sistema de autenticação e autorização. Ela é uma interface que 
+define um contrato para fornecer informações sobre um usuário autenticado no sistema. Implementar a interface `UserDetails` permite personalizar 
+a forma como o Spring Security lida com os detalhes do usuário durante a autenticação e a autorização.
+
+Aqui estão os principais componentes da interface `UserDetails` e como ela é usada:
+
+1. **getUsername()**: Este método retorna o nome de usuário do usuário. O nome de usuário é usado para autenticar o usuário durante o processo 
+de login. Ele é geralmente uma string única que identifica exclusivamente um usuário no sistema.
+
+2. **getPassword()**: Retorna a senha do usuário. A senha geralmente está criptografada para segurança. Durante o processo de autenticação, o 
+Spring Security compara a senha fornecida pelo usuário com a senha armazenada no `UserDetails`.
+
+3. **getAuthorities()**: Retorna uma coleção de autoridades (papéis ou funções) associadas ao usuário. As autoridades representam as permissões 
+do usuário e são usadas pelo Spring Security para controle de acesso. Uma autoridade pode ser algo como "ROLE_USER" ou "ROLE_ADMIN".
+
+4. **isAccountNonExpired()**: Este método indica se a conta do usuário está ou não expirada. Se a conta estiver expirada, o usuário não poderá 
+efetuar login.
+
+5. **isAccountNonLocked()**: Verifica se a conta do usuário está bloqueada ou não. Se a conta estiver bloqueada, o usuário não poderá efetuar 
+login.
+
+6. **isCredentialsNonExpired()**: Verifica se as credenciais do usuário, geralmente a senha, estão ou não expiradas. Se as credenciais estiverem 
+expiradas, o usuário não poderá efetuar login.
+
+7. **isEnabled()**: Indica se a conta do usuário está habilitada ou não. Se a conta estiver desabilitada, o usuário não poderá efetuar login.
+
+A classe `UserDetails` é uma interface e pode ser implementada de várias maneiras, dependendo das necessidades do seu aplicativo. Além disso, o 
+Spring Security fornece uma implementação padrão chamada `User`, que implementa a interface `UserDetails` e é frequentemente usada para 
+armazenar informações de usuário durante o processo de autenticação e autorização.
+
+Em resumo, a classe `UserDetails` é uma interface do Spring Security que define um contrato para fornecer informações sobre um usuário 
+autenticado, incluindo nome de usuário, senha, autoridades e status de conta. Implementar essa interface permite personalizar como o Spring 
+Security lida com os detalhes do usuário em seu aplicativo.
+
+--------------- // ---------------
+
+Passo a Passo: 
+
+1 - Vou criar um UserDetails, logo vou criar uma classe "CustomUserDetails" onde vai ser implementada pela Interface UserDetails.
+
+2 - Vou criar uma interface Repository, logo vou criar uma interface "CustomUserDetailsRepository" onde vai ser extendida pela classe JpaRepository.
+
+3 - Vou criar uma classe Service, logo vou criar uma classe "CustomUserDetailsService" onde vai ser implementada pela Interface UserDetailsService.
+
+4 - Implementar a chamada do CustomUserDetails no método configure(AuthenticationManagerBuilder auth) na Classe SecurityConfig.
+
+5 - Ao startizar o servidor (Spring Boot Dashboard) vai ser criado o "Password enconded", logo vamos copiar.
+
+6 - Depois vamos ao banco de dados criar um custom-user-details inserindo nome: Daniel, userName: Daniel, Authorities: ROLE_ADMIN, ROLE_USER e o 
+password que vamos colar o password enconded - por exemplo, {bcrypt}$2a$10$iUVlo4/B9wLSj4JGsAnbeufwKVRrrELzTRuEdHEKMANRijZavapZy
+
+
