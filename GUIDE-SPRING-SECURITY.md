@@ -929,3 +929,888 @@ public class AnimeController {
     }
 }
 ```
+## Anotação `@TestConfiguration`
+
+A anotação `@TestConfiguration` é uma anotação usada em testes de unidade e testes de integração em aplicativos Spring. Ela faz parte do ecossistema Spring Framework e é usada para definir configurações específicas para testes que substituem ou complementam as configurações padrão do aplicativo durante a execução dos testes. 
+
+Pontos importantes sobre a anotação `@TestConfiguration`:
+
+1. **Contexto de Teste Isolado**: Quando executa testes em um aplicativo Spring, é importante manter um ambiente de teste isolado que não afete o ambiente de produção. O `@TestConfiguration` permite configurar beans específicos para testes sem afetar a configuração real do aplicativo.
+
+2. **Substituição de Configurações**: Você pode usar `@TestConfiguration` para substituir ou complementar configurações existentes do Spring, como beans de serviço ou configurações de banco de dados, para criar cenários específicos de teste.
+
+3. **Escopo de Teste**: As classes anotadas com `@TestConfiguration` são consideradas parte do contexto de teste e, portanto, têm um escopo de vida limitado ao escopo de teste em que estão sendo usadas. Isso significa que essas configurações só são aplicadas durante a execução dos testes em que a classe `@TestConfiguration` é utilizada.
+
+4. **Flexibilidade de Configuração**: O uso de `@TestConfiguration` oferece flexibilidade na configuração de dependências específicas para testes, como fontes de dados simuladas, serviços simulados ou qualquer outra configuração necessária para criar cenários de teste controlados.
+
+Em resumo, `@TestConfiguration` é uma anotação poderosa que ajuda a configurar o ambiente de teste de forma flexível e controlada, permitindo a substituição de beans e configurações específicas para testes de unidade e testes de integração em aplicativos Spring. Isso contribui para a criação de testes mais isolados e confiáveis.
+
+## Classe `RestTemplateBuilder`
+
+A classe `RestTemplateBuilder` faz parte do ecossistema Spring Framework e é usada para criar e configurar instâncias da classe `RestTemplate`, que é uma classe fornecida pelo Spring Framework para fazer chamadas HTTP a serviços web RESTful. O `RestTemplate` permite realizar solicitações HTTP GET, POST, PUT, DELETE e outras operações com facilidade.
+
+O `RestTemplateBuilder` é uma ferramenta útil para configurar instâncias personalizadas do `RestTemplate` com várias opções de configuração. Ele fornece um estilo de construção (builder) para criar e personalizar instâncias do `RestTemplate` de acordo com suas necessidades específicas.
+
+Principais funcionalidades e usos comuns da classe `RestTemplateBuilder`:
+
+1. **Configuração de Propriedades**: Você pode usar o `RestTemplateBuilder` para configurar várias propriedades do `RestTemplate`, como timeouts, interceptadores, conversores de mensagem e outros.
+
+2. **Configuração de Autenticação**: É possível configurar autenticação, como autenticação básica (HTTP Basic Authentication) ou autenticação baseada em token, usando o `RestTemplateBuilder`.
+
+3. **Customização de Conversores de Mensagem**: O `RestTemplateBuilder` permite personalizar os conversores de mensagem usados pelo `RestTemplate`, o que é útil quando você precisa lidar com formatos de mensagem específicos, como JSON ou XML.
+
+4. **Personalização de Interceptors**: Você pode adicionar interceptadores personalizados para manipular solicitações e respostas HTTP antes ou depois de serem enviadas e recebidas pelo `RestTemplate`.
+
+5. **Timeouts**: É possível definir timeouts para solicitações HTTP, controlando quanto tempo o `RestTemplate` aguardará por uma resposta antes de considerá-la como falha.
+
+6. **Pool de Conexões**: O `RestTemplateBuilder` permite configurar o pool de conexões HTTP subjacente usado pelo `RestTemplate`, o que pode melhorar o desempenho em cenários de alta concorrência.
+
+7. **Configuração de Proxy**: Você pode configurar um proxy HTTP para as solicitações feitas pelo `RestTemplate` usando o `RestTemplateBuilder`.
+
+Em resumo, o `RestTemplateBuilder` é uma ferramenta poderosa para criar e configurar instâncias personalizadas do `RestTemplate` em aplicativos Spring, facilitando a integração com serviços web RESTful de forma flexível e controlada. Ele permite que você defina várias opções de configuração para atender às necessidades específicas de suas chamadas HTTP.
+
+## Anotação `@Bean`
+
+A anotação `@Bean` é uma anotação do Spring Framework e é amplamente usada na configuração de contêineres de inversão de controle (IoC) e injeção de dependência. Ela é usada para indicar ao Spring que um método em uma classe de configuração (geralmente anotada com `@Configuration`) deve ser tratado como um método de fábrica para criar um bean gerenciado pelo Spring. 
+
+Principais pontos a serem observados sobre a anotação `@Bean`:
+
+1. **Definição de Bean Gerenciado**: Quando você anota um método com `@Bean`, você está dizendo ao Spring que o método deve ser usado para criar um objeto que será gerenciado pelo contêiner de IoC do Spring.
+
+2. **Método de Fábrica**: O método anotado com `@Bean` age como um método de fábrica que cria e configura o bean. O Spring chamará esse método para obter uma instância do bean sempre que for necessário.
+
+3. **Configuração Personalizada**: O método anotado com `@Bean` pode conter código para configurar e personalizar o bean, incluindo a definição de propriedades, a configuração de dependências e qualquer inicialização necessária.
+
+4. **Injeção de Dependência**: Os beans criados com `@Bean` podem ser injetados em outros beans usando injeção de dependência, permitindo a criação de gráficos complexos de objetos gerenciados pelo Spring.
+
+5. **Escopo do Bean**: O escopo do bean criado com `@Bean` pode ser configurado usando outras anotações, como `@Scope`. Isso permite que você especifique se o bean é singleton, protótipo, sessão, etc.
+
+6. **Benefícios**: A anotação `@Bean` permite que você crie beans gerenciados pelo Spring de forma declarativa e flexível. Isso promove a modularidade, a reutilização de código e a separação de preocupações em seu aplicativo.
+
+Em resumo, a anotação `@Bean` é usada para definir métodos de fábrica para criar beans gerenciados pelo Spring. Ela desempenha um papel fundamental na configuração e personalização de beans em aplicativos Spring e é uma parte essencial do modelo de injeção de dependência do Spring.
+
+## anotação `@Qualifier`
+
+A anotação `@Qualifier` é usada em conjunto com a injeção de dependência no Spring Framework para especificar qual bean específico deve ser injetado quando existem várias implementações ou instâncias de uma mesma interface ou classe disponíveis no contexto do Spring. Ela é usada para resolver ambiguidades de injeção quando o Spring não consegue determinar qual bean deve ser injetado com base apenas no tipo da dependência.
+
+Aqui estão os principais pontos a serem observados sobre a anotação `@Qualifier`:
+
+1. **Resolução de Ambiguidade**: Em situações em que existem múltiplas implementações ou instâncias de um mesmo tipo (por exemplo, várias implementações de uma mesma interface), o Spring pode ficar em dúvida sobre qual bean injetar. O `@Qualifier` permite especificar explicitamente o nome ou valor do bean que você deseja injetar.
+
+2. **Valor do `@Qualifier`**: O valor do `@Qualifier` é uma string que corresponde ao nome do bean que você deseja injetar. Você deve fornecer o nome exato do bean que está definido no contexto do Spring.
+
+3. **Outras Alternativas**: Além do `@Qualifier`, o Spring oferece outras formas de resolver ambiguidades de injeção, como a anotação `@Primary` (que define o bean preferencial a ser injetado quando há ambiguidade) e a anotação `@Resource` (que pode ser usada com o atributo `name` para especificar o nome do bean a ser injetado).
+
+5. **Personalização de Beans**: A combinação do `@Qualifier` com a anotação `@Service` (ou outras anotações de componentes) permite que você personalize os nomes dos beans, tornando mais fácil a resolução de ambiguidades por nome.
+
+O `@Qualifier` é uma ferramenta útil para situações em que você precisa especificar explicitamente qual implementação de um tipo deve ser injetada. Ele oferece flexibilidade e controle sobre a injeção de dependência em aplicativos Spring com configurações complexas de beans.
+
+## Anotação `@Lazy`
+
+A anotação `@Lazy` é uma anotação do Spring Framework que pode ser aplicada a componentes gerenciados pelo Spring, como beans. Ela modifica o comportamento padrão de inicialização desses componentes, tornando-os preguiçosos (lazy) em vez de serem inicializados imediatamente durante a inicialização do aplicativo. Isso significa que o bean só será criado quando for acessado pela primeira vez.
+
+Principais pontos a serem observados sobre a anotação `@Lazy`:
+
+1. **Inicialização Preguiçosa**: Quando um bean é marcado com `@Lazy`, ele não será inicializado imediatamente quando o contexto do Spring for criado. Em vez disso, a inicialização do bean é adiada até que ele seja solicitado pela primeira vez em algum lugar do código.
+
+2. **Economia de Recursos**: O uso de `@Lazy` pode economizar recursos, especialmente se você tiver muitos beans e nem todos eles forem necessários no início da execução do aplicativo. Isso evita a criação desnecessária de beans e pode melhorar o desempenho e a eficiência da inicialização do aplicativo.
+
+3. **Método de Configuração**: A anotação `@Lazy` pode ser aplicada a um método de configuração de bean, como um método anotado com `@Bean` em uma classe de configuração, ou pode ser aplicada diretamente a uma classe anotada com `@Component`, `@Service`, `@Repository`, etc.
+
+4. **Considerações**: Use a anotação `@Lazy` com cuidado, pois a inicialização preguiçosa pode ser útil em cenários específicos, mas pode causar problemas se não for usada adequadamente. Certifique-se de entender bem o comportamento de inicialização dos seus beans ao aplicar `@Lazy`.
+
+5. **Outras Abordagens**: Além do uso de `@Lazy`, você também pode configurar a inicialização preguiçosa de beans por meio de XML ou programaticamente usando o método `setLazyInit(true)` em um bean definido em XML.
+
+Em resumo, a anotação `@Lazy` é usada para adiar a inicialização de um bean até que ele seja solicitado, o que pode ser útil para economizar recursos e melhorar o desempenho em aplicativos com muitos beans, especialmente quando nem todos os beans são necessários imediatamente.
+
+--- 
+
+## Classe de Teste de integração `AnimeControllerIT`
+
+```java
+package com.daniel.springbootessentials.integration;
+
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+
+import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.domain.CustomUserDetails;
+import com.daniel.springbootessentials.repository.AnimeRepository;
+import com.daniel.springbootessentials.repository.CustomUserDetailsRepository;
+import com.daniel.springbootessentials.requests.AnimePostRequestBody;
+import com.daniel.springbootessentials.util.AnimeCreator;
+import com.daniel.springbootessentials.util.AnimePostRequestBodyCreator;
+import com.daniel.springbootessentials.wrapper.PageableResponse;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class AnimeControllerIT {
+
+    @Autowired
+    @Qualifier(value = "testRestTemplateRoleAdmin")
+    private TestRestTemplate testRestTemplateRoleAdmin;
+
+    @Autowired
+    @Qualifier(value = "testRestTemplateRoleUser")
+    private TestRestTemplate testRestTemplateRoleUser;
+
+    @Autowired
+    private AnimeRepository animeRepository;
+
+    @Autowired
+    private CustomUserDetailsRepository customUserDetailsRepository;
+
+
+    private static CustomUserDetails ADMIN = CustomUserDetails.builder()
+            .name("Daniel")
+            .password("{bcrypt}$2a$10$0eykM.E9h17yruE6rkjrrezEUysVWasDjekzXto7cCk9wABM0cPLG")
+            .username("daniel")
+            .authorities("ROLE_ADMIN, ROLE_USER")
+            .build();
+
+    private static CustomUserDetails USER = CustomUserDetails.builder()
+            .name("Biana")
+            .password("{bcrypt}$2a$10$0eykM.E9h17yruE6rkjrrezEUysVWasDjekzXto7cCk9wABM0cPLG")
+            .username("biana")
+            .authorities("ROLE_USER")
+            .build();
+
+    @TestConfiguration
+    @Lazy
+    static class Config{
+       
+        @Bean(name = "testRestTemplateRoleAdmin")
+        public TestRestTemplate testRestTemplateRoleAdminCreator(@Value("${local.server.port}") int port){
+            RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("daniel", "admin");
+                    
+            return new TestRestTemplate(restTemplateBuilder);
+        }
+
+        @Bean(name = "testRestTemplateRoleUser")
+        public TestRestTemplate testRestTemplateRoleUserCreator(@Value("${local.server.port}") int port){
+            RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("biana", "admin");
+                    
+            return new TestRestTemplate(restTemplateBuilder);
+        }
+    }
+
+    @Test
+    @DisplayName("List returns list of anime inside page object when successful")
+    void list_ReturnsListOfanimesInsidePageObject_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        String expectedName = savedAnime.getName();
+
+        PageableResponse<Anime> animePage = testRestTemplateRoleUser.exchange("/animes", HttpMethod.GET, null,
+                new ParameterizedTypeReference<PageableResponse<Anime>>() {
+                }).getBody();
+
+        Assertions.assertThat(animePage).isNotNull();
+        Assertions.assertThat(animePage.toList()).isNotEmpty().hasSize(1);
+        Assertions.assertThat(animePage.toList().get(0).getName()).isEqualTo(expectedName);
+    }
+    
+    // Teste para listar anime sem paginação
+    @Test
+    @DisplayName("List returns list of anime when successful")
+    void listAll_ReturnsListOfanimes_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        String expectedName = savedAnime.getName();
+
+        List<Anime> animes = testRestTemplateRoleUser.exchange("/animes/all", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Anime>>() {
+                }).getBody();
+
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }
+
+    // Teste para buscar anime por id não autenticado
+    @Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_whenSuccessful() {
+
+       Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+       customUserDetailsRepository.save(USER);
+       
+       Long expectedId = savedAnime.getId();
+
+       Anime anime = testRestTemplateRoleUser.getForObject("/animes/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
+    // Teste para buscar anime por id com autenticação
+    @Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_whenSuccessfulWithAuthenticated() {
+
+       Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+       customUserDetailsRepository.save(ADMIN);
+       
+       Long expectedId = savedAnime.getId();
+
+       Anime anime = testRestTemplateRoleAdmin.getForObject("/animes/admin/by-id/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+    
+    // Teste para salvar anime 
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_whenSuccessful() {
+
+        customUserDetailsRepository.save(ADMIN);
+
+        AnimePostRequestBody animePostRequestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
+
+        ResponseEntity<Anime> animeResponseEntity = testRestTemplateRoleAdmin.postForEntity("/animes/admin", animePostRequestBody, Anime.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);  
+        Assertions.assertThat(animeResponseEntity.getBody()).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
+    }
+
+    // Teste para buscar anime por nome
+    @Test
+    @DisplayName("findByNome returns a list of anime when successful")
+    void findByNome_ReturnsListOfAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        String expectedName = savedAnime.getName();
+    
+        ResponseEntity<List<Anime>> response = testRestTemplateRoleUser.exchange("/animes/find/{name}", HttpMethod.GET, null, 
+                new ParameterizedTypeReference<List<Anime>>() {}, expectedName);
+    
+        List<Anime> animes = response.getBody();
+    
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }    
+
+    // Teste para buscar anime por nome não encontrado 
+    @Test
+    @DisplayName("findByNome returns an empty list of anime is not found")
+    void findByNome_ReturnsEmptyListOfAnime_whenIsNotFound() {
+
+        customUserDetailsRepository.save(USER);
+
+        String url = String.format("/animes/find/dbz");
+
+        ResponseEntity<List<Anime>> response = testRestTemplateRoleUser.exchange(
+            url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Anime>>() {}
+    );
+
+    // Verificações
+    Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+    Assertions.assertThat(response.getBody()).isNotNull().isEmpty();
+    }
+
+
+    // Teste para atualizar anime 
+    @Test
+    @DisplayName("replace update anime when successful")
+    void replace_UpdatesAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+        
+        customUserDetailsRepository.save(ADMIN);
+
+        savedAnime.setName("Dragon Ball Heroes");
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplateRoleAdmin.exchange("/animes/admin", HttpMethod.PUT, new HttpEntity<>(savedAnime), Void.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+    // Teste bem sucedido para deletar anime por id testado por um admin
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(ADMIN);
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplateRoleAdmin.exchange("/animes/admin/{id}", HttpMethod.DELETE, null, Void.class, savedAnime.getId());
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+
+     
+    // Teste não sucedido para deletar anime por id testado por um user
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_Returns403_whenUserIsNotAdmin() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplateRoleUser.exchange("/animes/admin/{id}", HttpMethod.DELETE, null, Void.class, savedAnime.getId());
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+}
+```
+<hr color="red">
+<br />
+
+Explicando o que cada parte faz:
+
+```java
+package com.daniel.springbootessentials.integration;
+
+imports...
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class AnimeControllerIT {
+    ...
+}
+```
+
+Explicando as anotações declaradas na classe `AnimeControllerIT`:
+
+1. `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)`
+
+   - `@SpringBootTest`: Essa anotação é usada para indicar que a classe é um teste de integração que envolve a inicialização do contexto da aplicação Spring. Em outras palavras, ela carrega a configuração do aplicativo Spring para permitir que teste componentes da aplicação de forma integrada.
+
+   - `webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT`: Esta parte da anotação define o ambiente de execução para o teste de integração. `RANDOM_PORT` indica que o teste será executado em uma porta aleatória, o que é útil para evitar conflitos de porta quando vários testes estão sendo executados simultaneamente. Isso é comumente usado quando você deseja testar interações com seu aplicativo por meio de solicitações HTTP.
+
+2. `@AutoConfigureTestDatabase`
+
+   - `@AutoConfigureTestDatabase`: Esta anotação é usada para configurar automaticamente um banco de dados de teste para o seu teste de integração. O Spring Boot detectará o tipo de banco de dados que está usando em seu aplicativo e configurará um banco de dados de teste correspondente para ser usado durante o teste. Isso permite que você execute testes em um ambiente isolado e controlado.
+
+3. `@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)`
+
+   - `@DirtiesContext`: Esta anotação é usada para indicar ao Spring que o contexto da aplicação deve ser "sujado" ou reiniciado antes de cada método de teste. Isso garante que cada método de teste seja executado em um contexto limpo e isolado, evitando que os efeitos colaterais dos testes afetem uns aos outros.
+
+   - `classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD`: Esta parte da anotação especifica o modo em que o contexto da aplicação será "sujado". Neste caso, o contexto será sujado antes de cada método de teste individual (`BEFORE_EACH_TEST_METHOD`), garantindo um ambiente limpo para cada teste.
+
+Em resumo, essas anotações são usadas para configurar e executar um teste de integração Spring Boot. Elas definem o ambiente de execução, configuram um banco de dados de teste e garantem que o contexto da aplicação seja reiniciado antes de cada método de teste, proporcionando um ambiente controlado e isolado para seus testes de integração.
+
+<hr color="red">
+<br />
+
+```java
+package com.daniel.springbootessentials.integration;
+
+imports...
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class AnimeControllerIT {
+
+    @Autowired
+    @Qualifier(value = "testRestTemplateRoleAdmin")
+    private TestRestTemplate testRestTemplateRoleAdmin;
+
+    @Autowired
+    @Qualifier(value = "testRestTemplateRoleUser")
+    private TestRestTemplate testRestTemplateRoleUser;
+
+    @Autowired
+    private AnimeRepository animeRepository;
+
+    @Autowired
+    private CustomUserDetailsRepository customUserDetailsRepository;
+
+    ...
+}
+```
+
+As declarações acima são anotações `@Autowired` que são usadas para injetar dependências em uma classe de teste Spring. 
+
+Explicação detalhada de cada uma delas:
+
+1. `@Autowired @Qualifier(value = "testRestTemplateRoleAdmin") private TestRestTemplate testRestTemplateRoleAdmin;`
+
+   - `@Autowired`: Esta anotação é usada para injetar uma dependência em uma classe Spring. No contexto de testes, o Spring injetará automaticamente uma instância do tipo apropriado no campo marcado com esta anotação.
+
+   - `@Qualifier(value = "testRestTemplateRoleAdmin")`: O `@Qualifier` é usado para especificar qual bean específico deve ser injetado quando há várias instâncias do mesmo tipo no contexto do Spring. Neste caso, estamos qualificando o bean `testRestTemplateRoleAdmin` usando seu nome "testRestTemplateRoleAdmin". Isso é necessário porque existem dois beans `TestRestTemplate` definidos na classe de configuração de teste.
+
+   - `private TestRestTemplate testRestTemplateRoleAdmin;`: Este é o campo onde a instância do bean `TestRestTemplate` será injetada. Ele será usado nos métodos de teste para fazer solicitações HTTP como um usuário com privilégios de administrador.
+
+2. `@Autowired @Qualifier(value = "testRestTemplateRoleUser") private TestRestTemplate testRestTemplateRoleUser;`
+
+   - Similar ao primeiro, este campo injeta uma instância de `TestRestTemplate`, mas desta vez é configurado para representar um usuário com privilégios de usuário regular.
+
+3. `@Autowired private AnimeRepository animeRepository;`
+
+   - Este campo injeta uma instância de `AnimeRepository`. É usado para interagir com o banco de dados e realizar operações relacionadas aos animes durante os testes.
+
+4. `@Autowired private CustomUserDetailsRepository customUserDetailsRepository;`
+
+   - Este campo injeta uma instância de `CustomUserDetailsRepository`. É usado para interagir com o banco de dados e realizar operações relacionadas aos detalhes dos usuários durante os testes.
+
+No geral, essas declarações de injeção de dependência permitem que acessar e utilizar as instâncias corretas de `TestRestTemplate`, `AnimeRepository` e `CustomUserDetailsRepository` nos métodos de teste para simular interações com o aplicativo e verificar seu comportamento. O uso de `@Qualifier` é necessário para distingui-los quando há várias implementações disponíveis do mesmo tipo de bean no contexto de teste.
+
+<hr color="red">
+<br />
+
+```java
+package com.daniel.springbootessentials.integration;
+
+imports...
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class AnimeControllerIT {
+
+    ...
+
+    private static CustomUserDetails ADMIN = CustomUserDetails.builder()
+            .name("Daniel")
+            .password("{bcrypt}$2a$10$0eykM.E9h17yruE6rkjrrezEUysVWasDjekzXto7cCk9wABM0cPLG")
+            .username("daniel")
+            .authorities("ROLE_ADMIN, ROLE_USER")
+            .build();
+
+    private static CustomUserDetails USER = CustomUserDetails.builder()
+            .name("Biana")
+            .password("{bcrypt}$2a$10$0eykM.E9h17yruE6rkjrrezEUysVWasDjekzXto7cCk9wABM0cPLG")
+            .username("biana")
+            .authorities("ROLE_USER")
+            .build();
+    ...
+}
+```
+
+O código acima cria duas instâncias de `CustomUserDetails`, uma para um usuário com privilégios de administrador (ADMIN) e outra para um usuário com privilégios de usuário regular (USER). 
+
+Explicação detalhada do que está acontecendo:
+
+1. `private static CustomUserDetails ADMIN = CustomUserDetails.builder()`
+   - Este é o início da criação da instância `ADMIN` de `CustomUserDetails` usando o padrão de construção do tipo Builder.
+
+2. `.name("Daniel")`
+   - Define o nome do usuário como "Daniel".
+
+3. `.password("{bcrypt}$2a$10$0eykM.E9h17yruE6rkjrrezEUysVWasDjekzXto7cCk9wABM0cPLG")`
+   - Define a senha do usuário. A senha está usando a codificação bcrypt, o que é comum para armazenamento seguro de senhas. O valor após `{bcrypt}` é a senha criptografada.
+
+4. `.username("daniel")`
+   - Define o nome de usuário como "daniel".
+
+5. `.authorities("ROLE_ADMIN, ROLE_USER")`
+   - Define as autorizações (ou papéis) atribuídas a este usuário. Neste caso, o usuário ADMIN tem as autorizações "ROLE_ADMIN" e "ROLE_USER". As autorizações são usadas para controlar o acesso a recursos e funcionalidades em um aplicativo Spring Security.
+
+6. `.build();`
+   - Este método `build()` finaliza a construção da instância `ADMIN` de `CustomUserDetails` e a armazena na variável `ADMIN`.
+
+Os mesmos passos são seguidos para criar a instância `USER` de `CustomUserDetails`, mas esta tem apenas a autorização "ROLE_USER" e é associada ao nome "Biana" e ao nome de usuário "biana".
+
+Essas instâncias são usadas em testes para simular diferentes tipos de usuários (administrador e usuário regular) ao interagir com o aplicativo durante os testes de integração. Isso permite verificar se o aplicativo responde a diferentes tipos de usuários e suas autorizações.
+
+<hr color="red">
+<br />
+
+```java
+package com.daniel.springbootessentials.integration;
+
+imports...
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+public class AnimeControllerIT {
+
+    ...
+
+    @TestConfiguration
+    @Lazy
+    static class Config{
+       
+        @Bean(name = "testRestTemplateRoleAdmin")
+        public TestRestTemplate testRestTemplateRoleAdminCreator(@Value("${local.server.port}") int port){
+            RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("daniel", "admin");
+                    
+            return new TestRestTemplate(restTemplateBuilder);
+        }
+
+        @Bean(name = "testRestTemplateRoleUser")
+        public TestRestTemplate testRestTemplateRoleUserCreator(@Value("${local.server.port}") int port){
+            RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder()
+                    .rootUri("http://localhost:" + port)
+                    .basicAuthentication("biana", "admin");
+                    
+            return new TestRestTemplate(restTemplateBuilder);
+        }
+    }
+
+    ...
+}
+```
+
+O código acima cria duas instâncias de `TestRestTemplate` configuradas com autenticação básica para serem usadas nos testes. 
+
+Explicação detalhada do que está acontecendo:
+
+1. `@TestConfiguration`
+   - Essa anotação indica que a classe `Config` é uma classe de configuração usada especificamente para configurações de teste. Ela faz parte do sistema de configuração do Spring para testes e permite que você defina configurações específicas para o ambiente de teste.
+
+2. `@Lazy`
+   - Essa anotação marca a classe `Config` como sendo inicializada sob demanda (lazy). Isso significa que a classe `Config` só será criada quando for solicitada, o que pode economizar recursos se não for usada em todos os casos de teste.
+
+3. `@Bean(name = "testRestTemplateRoleAdmin")`
+   - Esta anotação marca o método `testRestTemplateRoleAdminCreator` como um método de criação de bean Spring. O nome `testRestTemplateRoleAdmin` é usado como o nome do bean. Isso significa que pode injetar essa instância de `TestRestTemplate` em outros componentes da aplicação usando o nome `testRestTemplateRoleAdmin`.
+
+5. `public TestRestTemplate testRestTemplateRoleAdminCreator(@Value("${local.server.port}") int port) { ... }`
+   - Este método cria uma instância de `TestRestTemplate` configurada para um usuário com privilégios de administrador (ROLE_ADMIN). O valor da porta é injetado usando a anotação `@Value("${local.server.port}")`, o que permite que o teste se comunique com o servidor local na porta em que a aplicação está sendo executada.
+
+6. `RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder() ...`
+   - Aqui, um `RestTemplateBuilder` é criado para configurar a instância de `TestRestTemplate`. O `RestTemplateBuilder` é uma classe utilizada para configurar e criar instâncias de `RestTemplate`, que são usadas para fazer chamadas HTTP.
+
+7. `.rootUri("http://localhost:" + port)`
+   - Define a raiz URI para todas as chamadas HTTP feitas por esta instância de `TestRestTemplate`. Neste caso, a raiz URI é definida como "http://localhost" seguida pela porta injetada a partir de `${local.server.port}`.
+
+8. `.basicAuthentication("daniel", "admin")`
+   - Configura a autenticação básica para esta instância de `TestRestTemplate`. Isso significa que as solicitações feitas por esta instância serão autenticadas com o nome de usuário "daniel" e a senha "admin".
+
+9. `return new TestRestTemplate(restTemplateBuilder);`
+   - Finalmente, o método cria uma instância de `TestRestTemplate` com as configurações definidas e a retorna como um bean Spring.
+
+O mesmo processo é repetido para o método `testRestTemplateRoleUserCreator`, mas esta instância de `TestRestTemplate` é configurada para um usuário com privilégios de usuário regular (ROLE_USER). As duas instâncias podem ser usadas nos testes para simular diferentes tipos de usuários e suas interações com o aplicativo durante os testes de integração.
+
+<hr color="red">
+<br />
+
+Os métodos de teste que testam várias funcionalidades do controlador `AnimeController` em um ambiente de teste de integração. Cada método de teste é marcado com a anotação `@Test` e fornece uma descrição do que está sendo testado usando a anotação `@DisplayName`. 
+
+Explicação detalhada de cada método de teste:
+
+1. `list_ReturnsListOfanimesInsidePageObject_whenSuccessful()`
+   - Este método testa se a rota `/animes` retorna uma lista de animes dentro de um objeto de página (usando paginação) quando a solicitação é bem-sucedida para um usuário com privilégios de usuário (ROLE_USER).
+   - Um anime é salvo no repositório de animes (`animeRepository`).
+   - Um usuário com privilégios de usuário (ROLE_USER) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação GET para `/animes`.
+   - As respostas são verificadas para garantir que a resposta não seja nula, que a lista de animes não esteja vazia e que o nome do anime na lista corresponda ao nome esperado.
+
+```java
+@Test
+    @DisplayName("List returns list of anime inside page object when successful")
+    void list_ReturnsListOfanimesInsidePageObject_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        String expectedName = savedAnime.getName();
+
+        PageableResponse<Anime> animePage = testRestTemplateRoleUser.exchange("/animes", HttpMethod.GET, null,
+                new ParameterizedTypeReference<PageableResponse<Anime>>() {
+                }).getBody();
+
+        Assertions.assertThat(animePage).isNotNull();
+        Assertions.assertThat(animePage.toList()).isNotEmpty().hasSize(1);
+        Assertions.assertThat(animePage.toList().get(0).getName()).isEqualTo(expectedName);
+    }
+```
+<hr color="red">
+<br />
+
+2. `listAll_ReturnsListOfanimes_whenSuccessful()`
+   - Este método testa se a rota `/animes/all` retorna uma lista de animes quando a solicitação é bem-sucedida para um usuário com privilégios de usuário (ROLE_USER).
+   - Um anime é salvo no repositório de animes (`animeRepository`).
+   - Um usuário com privilégios de usuário (ROLE_USER) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação GET para `/animes/all`.
+   - As respostas são verificadas para garantir que a resposta não seja nula, que a lista de animes não esteja vazia e que o nome do anime na lista corresponda ao nome esperado.
+
+```java
+// Teste para listar anime sem paginação
+    @Test
+    @DisplayName("List returns list of anime when successful")
+    void listAll_ReturnsListOfanimes_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        String expectedName = savedAnime.getName();
+
+        List<Anime> animes = testRestTemplateRoleUser.exchange("/animes/all", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Anime>>() {
+                }).getBody();
+
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }
+```
+<hr color="red">
+<br />
+
+3. `findById_ReturnsAnime_whenSuccessful()`
+   - Este método testa se a rota `/animes/{id}` retorna um anime quando a solicitação é bem-sucedida para um usuário com privilégios de usuário (ROLE_USER).
+   - Um anime é salvo no repositório de animes (`animeRepository`).
+   - Um usuário com privilégios de usuário (ROLE_USER) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O método `getForObject` do `TestRestTemplate` é usado para fazer uma solicitação GET para `/animes/{id}`.
+   - A resposta é verificada para garantir que o anime retornado não seja nulo e que o ID do anime corresponda ao ID esperado.
+
+```java
+// Teste para buscar anime por id não autenticado
+    @Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_whenSuccessful() {
+
+       Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+       customUserDetailsRepository.save(USER);
+       
+       Long expectedId = savedAnime.getId();
+
+       Anime anime = testRestTemplateRoleUser.getForObject("/animes/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+```
+
+<hr color="red">
+<br />
+
+4. `findById_ReturnsAnime_whenSuccessfulWithAuthenticated()`
+   - Este método é semelhante ao método anterior, mas testa a rota `/animes/admin/by-id/{id}` para um usuário autenticado com privilégios de administrador (ROLE_ADMIN).
+   - Um usuário com privilégios de administrador (ROLE_ADMIN) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - A rota `/animes/admin/by-id/{id}` é usada para recuperar um anime por ID.
+
+```java
+// Teste para buscar anime por id com autenticação
+    @Test
+    @DisplayName("findById returns anime when successful")
+    void findById_ReturnsAnime_whenSuccessfulWithAuthenticated() {
+
+       Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+       customUserDetailsRepository.save(ADMIN);
+       
+       Long expectedId = savedAnime.getId();
+
+       Anime anime = testRestTemplateRoleAdmin.getForObject("/animes/admin/by-id/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+```
+
+<hr color="red">
+<br />
+
+5. `save_ReturnsAnime_whenSuccessful()`
+   - Este método testa se a rota `/animes/admin` retorna um anime quando a solicitação de salvamento é bem-sucedida para um usuário com privilégios de administrador (ROLE_ADMIN).
+   - Um usuário com privilégios de administrador (ROLE_ADMIN) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - Um objeto `AnimePostRequestBody` é criado para representar os dados de um anime.
+   - O método `postForEntity` do `TestRestTemplate` é usado para fazer uma solicitação POST para `/animes/admin`.
+   - A resposta é verificada para garantir que o anime retornado não seja nulo e que o código de status HTTP seja 201 (CREATED).
+
+```java
+// Teste para salvar anime 
+    @Test
+    @DisplayName("save returns anime when successful")
+    void save_ReturnsAnime_whenSuccessful() {
+
+        customUserDetailsRepository.save(ADMIN);
+
+        AnimePostRequestBody animePostRequestBody = AnimePostRequestBodyCreator.createAnimePostRequestBody();
+
+        ResponseEntity<Anime> animeResponseEntity = testRestTemplateRoleAdmin.postForEntity("/animes/admin", animePostRequestBody, Anime.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);  
+        Assertions.assertThat(animeResponseEntity.getBody()).isNotNull();
+        Assertions.assertThat(animeResponseEntity.getBody().getId()).isNotNull();
+    }
+```
+
+<hr color="red">
+<br />
+
+6. `findByNome_ReturnsListOfAnime_whenSuccessful()`
+   - Este método testa se a rota `/animes/find/{name}` retorna uma lista de animes quando a solicitação é bem-sucedida para um usuário com privilégios de usuário (ROLE_USER).
+   - Um anime é salvo no repositório de animes (`animeRepository`).
+   - Um usuário com privilégios de usuário (ROLE_USER) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação GET para `/animes/find/{name}` com o nome do anime como parâmetro.
+   - A resposta é verificada para garantir que a resposta não seja nula, que a lista de animes não esteja vazia e que o nome do anime na lista corresponda ao nome esperado.
+
+```java
+// Teste para buscar anime por nome
+    @Test
+    @DisplayName("findByNome returns a list of anime when successful")
+    void findByNome_ReturnsListOfAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        String expectedName = savedAnime.getName();
+    
+        ResponseEntity<List<Anime>> response = testRestTemplateRoleUser.exchange("/animes/find/{name}", HttpMethod.GET, null, 
+                new ParameterizedTypeReference<List<Anime>>() {}, expectedName);
+    
+        List<Anime> animes = response.getBody();
+    
+        Assertions.assertThat(animes).isNotNull().isNotEmpty().hasSize(1);
+        Assertions.assertThat(animes.get(0).getName()).isEqualTo(expectedName);
+    }
+```
+
+<hr color="red">
+<br />
+
+7. `findByNome_ReturnsEmptyListOfAnime_whenIsNotFound()`
+   - Este método testa se a rota `/animes/find/{name}` retorna uma lista vazia de animes quando a solicitação não encontra nenhum anime correspondente para um usuário com privilégios de usuário (ROLE_USER).
+   - Um usuário com privilégios de usuário (ROLE_USER) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação GET para `/animes/find/dbz`, que é improvável que corresponda a nenhum anime existente.
+   - A resposta é verificada para garantir que o código de status HTTP seja 200 (OK) e que a lista de animes seja vazia.
+
+```java
+// Teste para buscar anime por nome não encontrado 
+    @Test
+    @DisplayName("findByNome returns an empty list of anime is not found")
+    void findByNome_ReturnsEmptyListOfAnime_whenIsNotFound() {
+
+        customUserDetailsRepository.save(USER);
+
+        String url = String.format("/animes/find/dbz");
+
+        ResponseEntity<List<Anime>> response = testRestTemplateRoleUser.exchange(
+            url, HttpMethod.GET, null, new ParameterizedTypeReference<List<Anime>>() {}
+    );
+
+    // Verificações
+    Assertions.assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+    Assertions.assertThat(response.getBody()).isNotNull().isEmpty();
+    }
+```
+
+<hr color="red">
+<br />
+
+8. `replace_UpdatesAnime_whenSuccessful()`
+   - Este método testa se a rota `/animes/admin` atualiza um anime com sucesso quando a solicitação é feita por um usuário com privilégios de administrador (ROLE_ADMIN).
+   - Um anime é salvo no repositório de animes (`animeRepository`).
+   - Um usuário com privilégios de administrador (ROLE_ADMIN) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O nome do anime é atualizado para "Dragon Ball Heroes".
+   - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação PUT para `/animes/admin`.
+   - A resposta é verificada para garantir que o código de status HTTP seja 204 (NO CONTENT).
+
+```java
+// Teste para atualizar anime 
+    @Test
+    @DisplayName("replace update anime when successful")
+    void replace_UpdatesAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+        
+        customUserDetailsRepository.save(ADMIN);
+
+        savedAnime.setName("Dragon Ball Heroes");
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplateRoleAdmin.exchange("/animes/admin", HttpMethod.PUT, new HttpEntity<>(savedAnime), Void.class);
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+```
+
+<hr color="red">
+<br />
+
+9. `delete_RemovesAnime_whenSuccessful()`
+   - Este método testa se a rota `/animes/admin/{id}` remove um anime com sucesso quando a solicitação é feita por um usuário com privilégios de administrador (ROLE_ADMIN).
+   - Um anime é salvo no repositório de animes (`animeRepository`).
+   - Um usuário com privilégios de administrador (ROLE_ADMIN) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+   - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação DELETE para `/animes/admin/{id}`.
+   - A resposta é verificada para garantir que o código de status HTTP seja 204 (NO CONTENT).
+
+```java
+@Test
+    @DisplayName("delete removes anime when successful")
+    void delete_RemovesAnime_whenSuccessful() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(ADMIN);
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplateRoleAdmin.exchange("/animes/admin/{id}", HttpMethod.DELETE, null, Void.class, savedAnime.getId());
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+    }
+```
+
+<hr color="red">
+<br />
+
+10. `delete_Returns403_whenUserIsNotAdmin()`
+    - Este método testa se a rota `/animes/admin/{id}` retorna um código de status 403 (FORBIDDEN) quando a solicitação é feita por um usuário com privilégios de usuário regular (ROLE_USER).
+    - Um anime é salvo no repositório de animes (`animeRepository`).
+    - Um usuário com privilégios de usuário (ROLE_USER) é salvo no repositório de detalhes do usuário (`customUserDetailsRepository`).
+    - O método `exchange` do `TestRestTemplate` é usado para fazer uma solicitação DELETE para `/animes/admin/{id}`.
+    - A resposta é verificada para garantir que o código de status HTTP seja 403 (FORBIDDEN).
+
+```java
+// Teste não sucedido para deletar anime por id testado por um user
+    @Test
+    @DisplayName("delete removes anime when successful")
+    void delete_Returns403_whenUserIsNotAdmin() {
+
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        customUserDetailsRepository.save(USER);
+
+        ResponseEntity<Void> animeResponseEntity = testRestTemplateRoleUser.exchange("/animes/admin/{id}", HttpMethod.DELETE, null, Void.class, savedAnime.getId());
+
+        Assertions.assertThat(animeResponseEntity).isNotNull();  
+        Assertions.assertThat(animeResponseEntity.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+```
+
+Esses métodos de teste são executados em um ambiente de teste de integração e verificam o comportamento do controlador `AnimeController` em várias situações, incluindo diferentes tipos de autenticação, recuperação de dados e operações CRUD.
