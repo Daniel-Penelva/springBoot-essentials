@@ -2696,4 +2696,59 @@ Passo a Passo:
 6 - Depois vamos ao banco de dados criar um custom-user-details inserindo nome: Daniel, userName: Daniel, Authorities: ROLE_ADMIN, ROLE_USER e o 
 password que vamos colar o password enconded - por exemplo, {bcrypt}$2a$10$iUVlo4/B9wLSj4JGsAnbeufwKVRrrELzTRuEdHEKMANRijZavapZy
 
+--------------- // ---------------
+
+antMatchers()
+
+A proteção de URL com `antMatchers()` é uma parte essencial da configuração de segurança do Spring Security. O método `antMatchers()` permite 
+especificar padrões de URL e aplicar regras de segurança específicas a essas URLs. Isso é útil para definir quais URLs estão protegidas e quais 
+regras de autorização se aplicam a elas. Aqui está uma explicação mais detalhada:
+
+1. **`antMatchers(String... antPatterns)`**: O método `antMatchers()` é usado para definir padrões de URL que você deseja proteger ou aplicar 
+regras de segurança. Você pode fornecer um ou mais padrões de URL como argumentos para este método. Um padrão de URL é uma string que pode 
+conter wildcards, como `*` e `**`, para corresponder a várias URLs.
+
+2. **Regras de Autorização**:
+   - Após chamar `antMatchers()`, você pode encadear métodos para definir regras de autorização específicas para esses padrões de URL. Alguns 
+     dos métodos comuns incluem:
+
+     - `.permitAll()`: Permite que todas as solicitações correspondentes acessem a URL sem autenticação.
+     - `.authenticated()`: Exige que os usuários estejam autenticados para acessar a URL.
+     - `.hasRole("ROLE_NAME")`: Exige que os usuários tenham uma função específica para acessar a URL.
+     - `.hasAnyRole("ROLE1", "ROLE2")`: Exige que os usuários tenham pelo menos uma das funções especificadas para acessar a URL.
+     - `.hasAuthority("AUTHORITY_NAME")`: Exige que os usuários tenham uma autoridade específica para acessar a URL.
+     - `.hasAnyAuthority("AUTH1", "AUTH2")`: Exige que os usuários tenham pelo menos uma das autoridades especificadas para acessar a URL.
+     - `.hasIpAddress("IP_ADDRESS")`: Exige que as solicitações originem de um endereço IP específico.
+
+3. **Exemplo de Uso**:
+   - Vejamos um exemplo de uso do `antMatchers()` em uma classe de configuração do Spring Security:
+
+   ```java
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+       http
+           .authorizeRequests()
+               .antMatchers("/public/**").permitAll() // URLs públicas acessíveis por todos
+               .antMatchers("/admin/**").hasRole("ADMIN") // URLs restritas ao papel ADMIN
+               .anyRequest().authenticated() // Todas as outras URLs exigem autenticação
+           .and()
+           .formLogin() // Configuração de formulário de login
+               .loginPage("/login") // Página de login personalizada
+               .permitAll()
+           .and()
+           .logout()
+               .permitAll();
+   }
+   ```
+
+Neste exemplo:
+
+- URLs que correspondem a `/public/**` são acessíveis por todos sem autenticação.
+- URLs que correspondem a `/admin/**` exigem que os usuários tenham a função "ADMIN" para acessá-las.
+- Todas as outras URLs exigem autenticação.
+- Além disso, a configuração inclui a página de login personalizada e configurações relacionadas ao logout.
+
+O uso de `antMatchers()` permite uma configuração granular e flexível da segurança com base em padrões de URL. Isso é especialmente útil em 
+aplicativos complexos com várias URLs e requisitos de segurança diferentes para cada uma delas.
+
 

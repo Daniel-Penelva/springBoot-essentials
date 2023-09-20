@@ -728,3 +728,204 @@ Explicando o que cada parte faz:
 8. **`.orElseThrow(() -> new UsernameNotFoundException("Custom user details not found"));`**: Este trecho de código é usado para lançar uma exceção `UsernameNotFoundException` caso o usuário não seja encontrado no banco de dados. Essa exceção é usada para sinalizar que o nome de usuário não existe e pode ser tratada adequadamente no processo de autenticação.
 
 Em resumo, essa classe `CustomUserDetailsService` é responsável por carregar os detalhes do usuário com base no nome de usuário fornecido durante o processo de autenticação. Ela usa o `CustomUserDetailsRepository` para buscar os detalhes do usuário no banco de dados e, se o usuário não for encontrado, lança uma exceção `UsernameNotFoundException`. Isso é uma parte importante do mecanismo de autenticação do Spring Security, permitindo que o sistema autentique os usuários com base nas informações armazenadas no banco de dados.
+
+
+## Proteção de URL com `antMatchers()`
+A proteção de URL com `antMatchers()` é uma parte essencial da configuração de segurança do Spring Security. O método `antMatchers()` permite especificar padrões de URL e aplicar regras de segurança específicas a essas URLs. Isso é útil para definir quais URLs estão protegidas e quais regras de autorização se aplicam a elas. Aqui está uma explicação mais detalhada:
+
+1. **`antMatchers(String... antPatterns)`**: O método `antMatchers()` é usado para definir padrões de URL que você deseja proteger ou aplicar regras de segurança. Você pode fornecer um ou mais padrões de URL como argumentos para este método. Um padrão de URL é uma string que pode conter wildcards, como `*` e `**`, para corresponder a várias URLs.
+
+2. **Regras de Autorização**:
+   - Após chamar `antMatchers()`, você pode encadear métodos para definir regras de autorização específicas para esses padrões de URL. Alguns dos métodos comuns incluem:
+     - `.permitAll()`: Permite que todas as solicitações correspondentes acessem a URL sem autenticação.
+     - `.authenticated()`: Exige que os usuários estejam autenticados para acessar a URL.
+     - `.hasRole("ROLE_NAME")`: Exige que os usuários tenham uma função específica para acessar a URL.
+     - `.hasAnyRole("ROLE1", "ROLE2")`: Exige que os usuários tenham pelo menos uma das funções especificadas para acessar a URL.
+     - `.hasAuthority("AUTHORITY_NAME")`: Exige que os usuários tenham uma autoridade específica para acessar a URL.
+     - `.hasAnyAuthority("AUTH1", "AUTH2")`: Exige que os usuários tenham pelo menos uma das autoridades especificadas para acessar a URL.
+     - `.hasIpAddress("IP_ADDRESS")`: Exige que as solicitações originem de um endereço IP específico.
+
+3. **Exemplo de Uso**:
+   - Vejamos um exemplo de uso do `antMatchers()` em uma classe de configuração do Spring Security:
+
+   ```java
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+       http
+           .authorizeRequests()
+               .antMatchers("/public/**").permitAll() // URLs públicas acessíveis por todos
+               .antMatchers("/admin/**").hasRole("ADMIN") // URLs restritas ao papel ADMIN
+               .anyRequest().authenticated() // Todas as outras URLs exigem autenticação
+           .and()
+           .formLogin() // Configuração de formulário de login
+               .loginPage("/login") // Página de login personalizada
+               .permitAll()
+           .and()
+           .logout()
+               .permitAll();
+   }
+   ```
+
+Neste exemplo:
+
+- URLs que correspondem a `/public/**` são acessíveis por todos sem autenticação.
+- URLs que correspondem a `/admin/**` exigem que os usuários tenham a função "ADMIN" para acessá-las.
+- Todas as outras URLs exigem autenticação.
+- Além disso, a configuração inclui a página de login personalizada e configurações relacionadas ao logout.
+
+O uso de `antMatchers()` permite uma configuração granular e flexível da segurança com base em padrões de URL. Isso é especialmente útil em aplicativos complexos com várias URLs e requisitos de segurança diferentes para cada uma delas.
+
+---
+
+## Alternado o método `configure(HttpSecurity http)` da Classe `SecurityConfig` 
+
+```java
+package com.daniel.springbootessentials.config;
+
+imports ...
+
+@Log4j2
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final CustomUserDetailsService customUserDetailsService;
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+    
+        http.csrf().disable()
+                // .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                .authorizeRequests()
+                .antMatchers("/animes/admin/**").hasRole("ADMIN")
+                .antMatchers("/animes/**").hasAnyRole("ADMIN", "USER")
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .httpBasic();
+    }
+
+    ...
+}
+```
+
+Explicando o que cada parte faz:
+
+1. **`http.csrf().disable()`**: Isso desativa a proteção CSRF (Cross-Site Request Forgery) para o aplicativo. A proteção CSRF é uma medida de segurança que protege contra ataques em que um atacante engana o usuário para realizar ações não intencionadas em um site.
+
+2. **`authorizeRequests()`**: Isso inicia a configuração das regras de autorização para solicitações HTTP.
+
+3. **`.antMatchers("/animes/admin/**").hasRole("ADMIN")`**: Esta linha especifica uma regra de autorização que permite que os usuários com a função (role) "ADMIN" acessem URLs que correspondam ao padrão "/animes/admin/**". Isso significa que apenas os usuários com a função "ADMIN" podem acessar URLs que começam com "/animes/admin/".
+
+4. **`.antMatchers("/animes/**").hasAnyRole("ADMIN", "USER")`**: Esta linha especifica outra regra de autorização que permite que os usuários com as funções "ADMIN" ou "USER" acessem URLs que correspondam ao padrão "/animes/**". Isso significa que tanto os usuários com a função "ADMIN" quanto os usuários com a função "USER" podem acessar URLs que começam com "/animes/".
+
+5. **`.anyRequest().authenticated()`**: Esta linha define que qualquer outra solicitação (aquelas que não correspondem às regras anteriores) requer autenticação. Isso significa que todas as outras solicitações precisam ser realizadas por um usuário autenticado.
+
+6. **`.formLogin()`**: Isso configura o suporte para login baseado em formulário. Isso permite que os usuários forneçam credenciais de autenticação por meio de um formulário da web.
+
+7. **`.httpBasic()`**: Isso também configura a autenticação básica do HTTP. Com isso habilitado, os usuários podem fornecer credenciais de autenticação por meio de pop-ups de autenticação do navegador.
+
+No geral, este método `configure(HttpSecurity http)` está configurando as regras de autorização do aplicativo. Ele permite que os usuários com a função "ADMIN" acessem URLs específicas relacionadas a administração de animes, enquanto permite que os usuários com as funções "ADMIN" ou "USER" acessem outras URLs relacionadas aos animes. Qualquer outra solicitação não permitida pelas regras anteriores exige autenticação. Isso é uma configuração comum para aplicativos web que possuem áreas públicas e áreas restritas para diferentes tipos de usuários.
+
+---
+
+## Alternado as URLs dos métodos HTTP da Classe `AnimeController`
+
+```java
+package com.daniel.springbootessentials.controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.daniel.springbootessentials.domain.Anime;
+import com.daniel.springbootessentials.requests.AnimePostRequestBody;
+import com.daniel.springbootessentials.requests.AnimePutRequestBody;
+import com.daniel.springbootessentials.service.AnimeService;
+
+import lombok.AllArgsConstructor;
+
+@RestController
+@RequestMapping("animes")
+
+@AllArgsConstructor // Lombok - Para injeção de dependência (gera construtor)
+public class AnimeController {
+
+    private AnimeService animeService;
+
+    // Listar todos os animes: http://localhost:8080/animes
+    @GetMapping
+    public ResponseEntity<Page<Anime>>  list(Pageable pageable) {
+        return ResponseEntity.ok(animeService.listAll(pageable));
+    }
+
+    @GetMapping(path = "/all")
+    public ResponseEntity<List<Anime>>  listAll() {
+        return ResponseEntity.ok(animeService.listAllNonPageable());
+    }
+
+    // Buscar por id o anime: http://localhost:8080/animes/{id}
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Anime> findById(@PathVariable("id") Long id) {
+        return new ResponseEntity(animeService.findByIdOrThrowBadRequestException(id), HttpStatus.OK);
+    }
+
+    // Buscar por id o anime utilizando o @AuthenticationPrincipal UserDetails: http://localhost:8080/animes/by-id/{id}
+    //@PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(path = "/admin/by-id/{id}")
+    public ResponseEntity<Anime> findByIdAuthenticationPrincipal(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        return new ResponseEntity(animeService.findByIdOrThrowBadRequestException(id), HttpStatus.OK);
+    }
+
+    // Salvar anime - http://localhost:8080/admin/animes
+    //@PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "/admin")
+    @ResponseBody
+    public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody) {
+        return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
+    }
+
+     // Deletar anime - http://localhost:8080/animes/admin/{id}
+     // Utilizando o Antmatcher para proteção de URL
+    @DeleteMapping(path = "/admin/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        animeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    
+    }
+
+    // Alterar anime - http://localhost:8080/animes/admin
+    @PutMapping(path = "/admin")
+    @ResponseBody
+    public ResponseEntity<Void> replace(@RequestBody AnimePutRequestBody animePutRequestBody) {
+        animeService.replace(animePutRequestBody);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Buscar anime por nome: http://localhost:8080/animes/find/{name}
+    @GetMapping(path = "/find/{name}")
+    public ResponseEntity<List<Anime>> findByName(@PathVariable(value = "name") String name) {
+        return ResponseEntity.ok(animeService.findByName(name));
+    }
+}
+```

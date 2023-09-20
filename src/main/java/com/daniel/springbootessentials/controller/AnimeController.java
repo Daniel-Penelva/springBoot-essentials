@@ -54,35 +54,42 @@ public class AnimeController {
     }
 
     // Buscar por id o anime utilizando o @AuthenticationPrincipal UserDetails: http://localhost:8080/animes/by-id/{id}
-    @GetMapping(path = "by-id/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(path = "/admin/by-id/{id}")
     public ResponseEntity<Anime> findByIdAuthenticationPrincipal(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails userDetails) {
         return new ResponseEntity(animeService.findByIdOrThrowBadRequestException(id), HttpStatus.OK);
     }
 
-    // Salvar anime - http://localhost:8080/animes
-    @PostMapping
+    // Salvar anime - http://localhost:8080/admin/animes
+    //@PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path = "/admin")
     @ResponseBody
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody) {
         return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
     }
 
-    // Deletar anime - http://localhost:8080/animes/{id}
-
-    @DeleteMapping(path = "/{id}")
+    /* Deletar anime - http://localhost:8080/animes/{id}
+    @DeleteMapping(path = "/admin/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         animeService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+       
+         //OBS. HttpStatus.NO_CONTENT - indica que uma solicitação foi processada com
+         //sucesso, mas não há conteúdo para retornar na resposta.
+         
+    }*/
 
-        /*
-         * OBS. HttpStatus.NO_CONTENT - indica que uma solicitação foi processada com
-         * sucesso, mas não há conteúdo para retornar na resposta.
-         */
+     // Deletar anime - http://localhost:8080/animes/admin/{id}
+     // Utilizando o Antmatcher para proteção de URL
+    @DeleteMapping(path = "/admin/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+        animeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    
     }
 
-    // Alterar anime - http://localhost:8080/animes/
-    @PutMapping
+    // Alterar anime - http://localhost:8080/animes/admin
+    @PutMapping(path = "/admin")
     @ResponseBody
     public ResponseEntity<Void> replace(@RequestBody AnimePutRequestBody animePutRequestBody) {
         animeService.replace(animePutRequestBody);
