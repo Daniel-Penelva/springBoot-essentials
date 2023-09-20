@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import com.daniel.springbootessentials.requests.AnimePostRequestBody;
 import com.daniel.springbootessentials.requests.AnimePutRequestBody;
 import com.daniel.springbootessentials.service.AnimeService;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -38,7 +40,7 @@ public class AnimeController {
 
     // Listar todos os animes: http://localhost:8080/animes
     @GetMapping
-    public ResponseEntity<Page<Anime>>  list(Pageable pageable) {
+    public ResponseEntity<Page<Anime>>  list(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
 

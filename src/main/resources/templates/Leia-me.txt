@@ -2751,4 +2751,63 @@ Neste exemplo:
 O uso de `antMatchers()` permite uma configuração granular e flexível da segurança com base em padrões de URL. Isso é especialmente útil em 
 aplicativos complexos com várias URLs e requisitos de segurança diferentes para cada uma delas.
 
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
 
+Documentação com SpringDoc OpenAPI
+Site: https://springdoc.org/
+
+Dependência a ser adicionado no pom.xml - versão compatível:
+
+<!-- Para utilizar o Swagger -->
+<dependency>
+	<groupId>org.springdoc</groupId>
+	<artifactId>springdoc-openapi-ui</artifactId>
+	<version>1.7.0</version>
+</dependency>
+
+<!-- Para Paginação -->
+<dependency>
+	<groupId>org.springdoc</groupId>
+	<artifactId>springdoc-openapi-data-rest</artifactId>
+	<version>1.7.0</version>
+</dependency>
+		
+<!-- Para Spring Security -->
+<dependency>
+	<groupId>org.springdoc</groupId>
+	<artifactId>springdoc-openapi-security</artifactId>
+	<version>1.7.0</version>
+</dependency>
+
+Acessando pelo Swagger:
+http://localhost:8080/swagger-ui.html
+
+--------------- // ---------------
+
+Anotação `@Parameter(hidden = true)`
+A anotação `@Parameter(hidden = true)` faz parte da biblioteca Swagger (anteriormente conhecida como Swagger 2 ou Swagger UI) e é usada para 
+ocultar um parâmetro de uma operação (por exemplo, um endpoint de API) na documentação gerada pelo Swagger. O Swagger é uma ferramenta que ajuda 
+a documentar APIs RESTful de forma automática e também permite que os desenvolvedores interajam com a API por meio de uma interface gráfica.
+
+Quando você anota um parâmetro de operação com `@Parameter(hidden = true)`, você está instruindo o Swagger a não incluir esse parâmetro na 
+documentação gerada. Isso pode ser útil em situações em que você tem parâmetros internos ou não relevantes para a documentação pública da API e 
+deseja ocultá-los para evitar confusão para os usuários da documentação.
+
+Lembre-se de que a exibição ou ocultação de parâmetros na documentação do Swagger é uma consideração importante ao projetar sua API, pois afeta 
+a experiência do usuário final que utiliza a documentação gerada automaticamente para entender como usar sua API. Portanto, use a anotação 
+`@Parameter(hidden = true)` com sabedoria e apenas para ocultar informações que não sejam relevantes ou seguras para divulgar publicamente.
+
+--------------- // ---------------
+
+Anotação @ParameterObject
+
+A anotação `@ParameterObject` é usada na documentação Swagger (anteriormente conhecida como Swagger 2 ou Swagger UI) para descrever um objeto 
+de parâmetro que é usado em uma operação (por exemplo, um endpoint de API). Essa anotação permite documentar objetos complexos que são passados 
+como parâmetros em operações RESTful, como, por exemplo paginação.
+
+Ao usar `@ParameterObject`, você pode especificar informações sobre o objeto de parâmetro, como seu nome, descrição, exemplo e outros detalhes 
+relevantes para a documentação da API.
+
+A anotação `@ParameterObject` é útil quando você tem objetos complexos como parâmetros de operação e deseja fornecer informações detalhadas 
+sobre esses objetos na documentação Swagger. Isso ajuda os desenvolvedores a entender como usar corretamente a API e quais informações precisam 
+fornecer ao fazer chamadas para essa operação.
