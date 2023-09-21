@@ -21,8 +21,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
- 
+        include: info, health, metrics, prometheus
+
 info:
   app: Spring Boot 2 Essentials By Daniel
   github: https://github.com/Daniel-Penelva

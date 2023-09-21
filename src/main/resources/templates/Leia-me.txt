@@ -2957,7 +2957,7 @@ http://localhost:8080/v3/api-docs
 Spring Actuator
 Site: https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
 
-Para acessar: http://localhost:8080/actuator/health
+Acessar o projeto com o prometheus: http://localhost:8080/actuator/health
 
 O Spring Actuator é um subprojeto do Spring Boot que fornece recursos prontos para uso para monitorar e gerenciar aplicativos Spring Boot em 
 produção. Ele oferece uma variedade de endpoints que fornecem informações sobre o estado e o comportamento de um aplicativo Spring Boot, bem 
@@ -3102,3 +3102,128 @@ Se seu aplicativo for um aplicativo Web (Spring MVC, Spring WebFlux ou Jersey), 
 
  -> prometheus - Expõe métricas em um formato que pode ser copiado por um servidor Prometheus. Requer uma dependência do 
                  micrometer-registry-prometheus.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Site: https://prometheus.io/
+
+Temos que criar um arquivo prometheus.yml para configurar prometheus para monitorar em si.
+Site: https://prometheus.io/docs/prometheus/latest/getting_started/ 
+
+Acessar o Prometheus: localhost:9090
+Ao acessar vamos na aba status > targets
+
+--------------- // ---------------
+
+Explicando a imagem do Prometheus no docker-compose.yml:
+
+prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./src/main/resources/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+
+Explicando os dados:
+
+image: prom/prometheus:latest: Usa a imagem oficial do Prometheus disponível no Docker Hub.
+
+container_name: prometheus: Define o nome do contêiner como "prometheus".
+
+volumes: Mapeia o arquivo de configuração do Prometheus (prometheus.yml) do seu host para o diretório /etc/prometheus/ dentro do contêiner.
+
+command: Especifica o comando a ser executado quando o contêiner for iniciado. Neste caso, ele aponta para o arquivo de configuração usando --config.file.
+
+ports: Mapeia a porta 9090 do host para a porta 9090 do contêiner, permitindo que você acesse a interface da web do Prometheus.
+
+--------------- // ---------------
+
+prometheus.yml
+
+Arquivo de configuração do Prometheus (prometheus.yml), onde define como o Prometheus deve coletar métricas de seus alvos (como aplicativos, 
+serviços ou outros sistemas).
+
+Explicação das principais partes desse arquivo de configuração:
+
+```yaml
+global:
+  scrape_interval: 15s # Por padrão, coleta métricas a cada 15 segundos.
+```
+
+- `global`: Essa seção é usada para definir configurações globais para o Prometheus.
+
+- `scrape_interval`: Define o intervalo de coleta de métricas padrão para todos os alvos. Neste caso, o Prometheus coletará métricas a cada 
+   15 segundos, a menos que seja especificado de outra forma posteriormente.
+
+```yaml
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+```
+
+- `scrape_configs`: Esta seção define as configurações de coleta de métricas para alvos específicos.
+
+- `- job_name`: O nome da tarefa ou do trabalho. Isso é usado como um rótulo para identificar as métricas coletadas por essa configuração de 
+   scrape. No exemplo acima, há uma tarefa chamada 'prometheus' que coleta métricas do próprio Prometheus.
+
+- `scrape_interval`: Esta linha permite substituir o `scrape_interval` global definido anteriormente. Para essa tarefa 'prometheus', as métricas 
+   são coletadas a cada 5 segundos.
+
+- `static_configs`: Define alvos específicos a serem raspados.
+
+  - `targets`: Aqui, você especifica os alvos que o Prometheus deve coletar métricas. No exemplo, ele coleta métricas de 'localhost:9090', que 
+     é onde o Prometheus em si está expondo métricas.
+
+```yaml
+  - job_name: 'springboot-essentials-actuator'
+    scrape_interval: 5s
+    metrics_path: "/actuator/prometheus"
+    static_configs:
+      - targets: ['host.docker.internal:8080']
+```
+
+- Aqui, há outra tarefa chamada 'springboot-essentials-actuator' que coleta métricas de uma aplicação Spring Boot que expõe métricas através do 
+  Actuator.
+
+- `metrics_path`: Especifica o caminho para as métricas. No caso de uma aplicação Spring Boot com o Actuator, as métricas geralmente são 
+   expostas em "/actuator/prometheus".
+
+- `static_configs`: Mais uma vez, define os alvos, desta vez apontando para 'host.docker.internal:8080', onde a aplicação Spring Boot está em 
+   execução. O uso de 'host.docker.internal' é específico para ambientes Docker, permitindo que o Prometheus acesse a aplicação em execução no host principal. O número da porta 8080 é a porta na qual a aplicação Spring Boot está expondo as métricas.
+
+Em resumo, esse arquivo de configuração do Prometheus define as tarefas de coleta de métricas, os intervalos de coleta e os alvos para coletar
+métricas de diferentes sistemas, incluindo o próprio Prometheus e uma aplicação Spring Boot com o Actuator. Certifique-se de que a aplicação 
+Spring Boot esteja configurada para expor métricas no caminho "/actuator/prometheus" e que o Prometheus possa acessar a aplicação por meio do 
+endereço e porta especificados nos alvos.
+
+-------------------------------------------------------------------- // -----------------------------------------------------------------------
+
+Grafana
+
+Para fazer gráfico em formato de Dashboard.
+
+Site: https://grafana.com/
+
+Acessar o projeto com o grafana - http://localhost:3000/
+Por padrão: user: admin e senha: admin
+
+Ao acessar o grafana:
+1º Criar uma data source (Add data source)
+1º Vamos escolher a opção prometheus.
+2º HTTP
+    -> Prometheus server URL:  http://localhost:9090
+
+--------------- // ---------------
+
+Grafana no docker-compose.yml:
+
+image: grafana/grafana:latest: Usa a imagem oficial do Grafana disponível no Docker Hub.
+
+container_name: grafana: Define o nome do contêiner como "grafana".
+
+ports: Mapeia a porta 3000 do host para a porta 3000 do contêiner, permitindo que você acesse a interface da web do Grafana.
