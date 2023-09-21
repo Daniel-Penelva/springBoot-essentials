@@ -17,3 +17,12 @@ logging:
       hibernate:
         SQL: DEBUG
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+ 
+info:
+  app: Spring Boot 2 Essentials By Daniel
+  github: https://github.com/Daniel-Penelva

@@ -2951,3 +2951,154 @@ como o Swagger UI.
 
 Cria especificação Json - link: 
 http://localhost:8080/v3/api-docs
+
+--------------- // ---------------
+
+Spring Actuator
+Site: https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html
+
+Para acessar: http://localhost:8080/actuator/health
+
+O Spring Actuator é um subprojeto do Spring Boot que fornece recursos prontos para uso para monitorar e gerenciar aplicativos Spring Boot em 
+produção. Ele oferece uma variedade de endpoints que fornecem informações sobre o estado e o comportamento de um aplicativo Spring Boot, bem 
+como recursos para aprimorar a visibilidade e o gerenciamento do aplicativo em execução.
+
+Alguns dos recursos e funcionalidades fornecidos pelo Spring Actuator:
+
+1. **Endpoints de Saúde (Health Endpoints):** Os endpoints de saúde fornecem informações sobre o estado geral do aplicativo. Eles são úteis para 
+verificar se o aplicativo está em execução e se todos os componentes dependentes, como bancos de dados e serviços externos, também estão em 
+funcionamento. Você pode personalizar esses endpoints para adicionar verificações personalizadas de integridade.
+
+2. **Endpoints de Informações (Info Endpoints):** Os endpoints de informações fornecem informações adicionais sobre o aplicativo, como detalhes 
+da versão, descrição e informações personalizadas. Isso pode ser útil para entender melhor o aplicativo e seus ambientes.
+
+3. **Endpoints de Métricas (Metrics Endpoints):** Os endpoints de métricas expõem métricas operacionais do aplicativo, como contadores, 
+temporizadores e muito mais. Essas métricas podem ser usadas para monitorar o desempenho do aplicativo e identificar problemas de maneira 
+proativa.
+
+4. **Endpoints de Envio de Logs (Logfile Endpoints):** Os endpoints de envio de logs permitem que você acesse os logs do aplicativo em tempo 
+real. Isso pode ser útil para solução de problemas e diagnóstico de problemas em execução.
+
+5. **Endpoints de Threads (Thread Dump Endpoints):** Os endpoints de threads fornecem informações detalhadas sobre as threads em execução no 
+aplicativo. Isso pode ser útil para diagnosticar problemas de concorrência e desempenho.
+
+6. **Endpoints de Environ (Environment Endpoints):** Os endpoints de environ expõem informações sobre as propriedades de ambiente do aplicativo, 
+incluindo as propriedades definidas em arquivos de propriedades, variáveis de ambiente e outras fontes.
+
+7. **Segurança dos Endpoints:** Você pode configurar a segurança dos endpoints do Spring Actuator para controlar quem pode acessá-los. Isso 
+permite restringir o acesso a informações sensíveis, como logs e métricas.
+
+8. **Personalização e Extensibilidade:** Você pode personalizar os endpoints do Spring Actuator e adicionar seus próprios endpoints 
+personalizados, se necessário. Isso permite que você exponha informações específicas do aplicativo de acordo com seus requisitos.
+
+Para habilitar o Spring Actuator em um projeto Spring Boot, você normalmente só precisa adicionar a dependência correta ao seu arquivo `pom.xml` 
+(no caso de projetos Maven) ou ao seu arquivo de configuração de build (no caso de projetos Gradle). Por exemplo, com o Maven:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+Depois de adicionar a dependência, os endpoints do Spring Actuator estarão disponíveis em seu aplicativo e podem ser acessados por meio de URLs 
+específicas.
+
+O Spring Actuator é uma ferramenta poderosa para monitorar e gerenciar aplicativos Spring Boot em produção e pode ser uma parte valiosa de sua 
+caixa de ferramentas de desenvolvimento e operações.
+
+--------------- // ---------------
+
+Habilitar os endpoints (Enabling Endpoints):
+
+  1. Por padrão, todos os endpoints, exceto o encerramento, estão habilitados. Para configurar a ativação de um endpoint, use sua propriedade 
+     management.endpoint.<id>.enabled. O exemplo a seguir ativa o endpoint de desligamento:
+
+       -> Properties: management.endpoint.shutdown.enabled=true
+
+       -> yaml: 
+                management:
+                  endpoint:
+                     shutdown:
+                        enabled: true
+
+  2. Se você preferir que a ativação do endpoint seja aceita em vez de desativada, configure a propriedade 
+     management.endpoints.enabled-by-default como false e use propriedades individuais habilitadas para endpoint para aceitar novamente. O 
+     exemplo a seguir ativa o endpoint info e desabilita todos os outros endpoints:
+
+       -> Properties: management.endpoints.enabled-by-default=false
+                      management.endpoint.info.enabled=true
+
+      -> yaml: 
+               management:
+                  endpoints:
+                     enabled-by-default: false
+                  endpoint:
+                     info:
+                       enabled: true
+
+--------------- // ---------------
+
+Os seguintes endpoints independentes de tecnologia estão disponíveis - Passando os Ids e a descrição:
+
+        IDs                                                  Descrição
+ -> auditevents - Expõe informações de eventos de auditoria para o aplicativo atual. Requer um bean AuditEventRepository.
+
+ -> beans - Exibe uma lista completa de todos os beans Spring em seu aplicativo.
+
+ -> caches - Expõe caches disponíveis.
+
+ -> conditions - Mostra as condições que foram avaliadas nas classes de configuração e autoconfiguração e os motivos pelos quais elas 
+                 corresponderam ou não.
+
+-> configprops - Exibe uma lista agrupada de todas as @ConfigurationProperties.
+
+-> env - Expõe propriedades do ConfigurableEnvironment do Spring.
+
+-> flyway - Mostra todas as migrações de banco de dados Flyway que foram aplicadas. Requer um ou mais beans Flyway.
+
+-> health - Mostra informações de integridade do aplicativo.
+
+-> httpexchanges - Exibe informações de troca HTTP (por padrão, as últimas 100 trocas de solicitação-resposta HTTP). Requer um bean 
+                   HttpExchangeRepository.
+
+-> info - Exibe informações arbitrárias do aplicativo.
+
+-> integrationgraph - Mostra o gráfico de integração do Spring. Requer uma dependência do spring-integration-core.
+
+-> loggers - Mostra e modifica a configuração dos registradores na aplicação.
+
+-> liquibase - Mostra todas as migrações de banco de dados Liquibase que foram aplicadas. Requer um ou mais beans Liquibase.
+
+-> metrics - Mostra informações de “métricas” para o aplicativo atual.
+
+-> mappings - Exibe uma lista agrupada de todos os caminhos @RequestMapping.
+
+-> quartz - Mostra informações sobre trabalhos do Quartz Scheduler.
+
+-> scheduledtasks - Exibe as tarefas agendadas em seu aplicativo.
+
+-> sessions - Permite a recuperação e exclusão de sessões de usuário de um armazenamento de sessões apoiado por Spring Session. Requer um 
+              aplicativo da web baseado em servlet que use Spring Session.
+
+-> shutdow - Permite que o aplicativo seja encerrado normalmente. Funciona apenas ao usar embalagens em frasco. Desativado por padrão.
+
+-> startup - Mostra os dados das etapas de inicialização coletados pelo ApplicationStartup. Requer que o SpringApplication seja configurado com 
+             um BufferingApplicationStartup.
+
+-> threaddump - Executa um despejo de thread.
+ 
+
+Exemplo de como utilizar o endpoints: http://localhost:8080/actuator/health, http://localhost:8080/actuator/info, http://localhost:8080/actuator/loggers
+
+Se seu aplicativo for um aplicativo Web (Spring MVC, Spring WebFlux ou Jersey), você poderá usar os seguintes endpoints adicionais:
+
+    IDs
+ -> heapdump - Retorna um arquivo de despejo de heap. Em uma JVM HotSpot, um arquivo no formato HPROF é retornado. Em uma JVM OpenJ9, um 
+               arquivo no formato PHD é retornado.
+
+ -> logfile - Retorna o conteúdo do arquivo de log (se a propriedade logging.file.name ou logging.file.path tiver sido definida). Suporta o uso 
+              do cabeçalho HTTP Range para recuperar parte do conteúdo do arquivo de log.
+
+ -> prometheus - Expõe métricas em um formato que pode ser copiado por um servidor Prometheus. Requer uma dependência do 
+                 micrometer-registry-prometheus.
