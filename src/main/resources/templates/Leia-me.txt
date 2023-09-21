@@ -2811,3 +2811,143 @@ relevantes para a documentação da API.
 A anotação `@ParameterObject` é útil quando você tem objetos complexos como parâmetros de operação e deseja fornecer informações detalhadas 
 sobre esses objetos na documentação Swagger. Isso ajuda os desenvolvedores a entender como usar corretamente a API e quais informações precisam 
 fornecer ao fazer chamadas para essa operação.
+
+--------------- // ---------------
+
+Anotação @Schema
+
+A anotação `@Schema` faz parte da biblioteca Swagger (anteriormente conhecida como Swagger 2 ou Swagger UI) e é usada para descrever um modelo 
+de dados ou um objeto de esquema em uma API RESTful. Essa anotação é usada para fornecer informações detalhadas sobre como um objeto de dados 
+deve ser serializado e desserializado, além de informações adicionais para a documentação da API.
+
+Alguns dos atributos mais comuns que pode usar com a anotação `@Schema`:
+
+1. `description`: Permite fornecer uma descrição do objeto de esquema, explicando seu propósito e seu conteúdo.
+
+2. `title`: Define o título do esquema, que pode ser útil na documentação Swagger.
+
+3. `name`: Especifica o nome do objeto de esquema, se for diferente do nome da classe Java.
+
+4. `example`: Define um exemplo do objeto de esquema, que pode ser usado para ilustrar como os dados devem ser estruturados.
+
+5. `required`: Define quais campos são obrigatórios no objeto de esquema. Isso é útil para indicar quais campos os clientes da API devem 
+               incluir nas solicitações.
+
+6. `nullable`: Indica se o objeto de esquema pode ser nulo.
+
+7. `accessMode`: Especifica o modo de acesso aos campos do objeto de esquema, como "READ_ONLY", "READ_WRITE", "WRITE_ONLY", etc.
+
+8. `implementation`: Permite especificar a classe Java real que implementa o esquema, se for diferente da classe onde a anotação `@Schema` é usada.
+
+9. `format`: Define o formato dos dados no objeto de esquema. Por exemplo, pode ser usado para especificar que um campo contém uma data no 
+             formato "yyyy-MM-dd".
+
+Aqui está um exemplo de uso da anotação `@Schema`:
+
+```java
+import io.swagger.v3.oas.annotations.media.Schema;
+
+public class Person {
+    @Schema(description = "Nome da pessoa", example = "John Doe", required = true)
+    private String name;
+    
+    @Schema(description = "Idade da pessoa", example = "30")
+    private int age;
+
+    // Getters e setters
+}
+```
+
+Neste exemplo, a classe `Person` representa um objeto de esquema para descrever informações sobre uma pessoa. A anotação `@Schema` é usada para 
+fornecer informações detalhadas sobre os campos `name` e `age` do objeto de esquema, incluindo descrição, exemplo e requisitos de obrigatoriedade.
+
+A anotação `@Schema` é uma parte importante da documentação Swagger, pois ajuda os desenvolvedores a entender como os objetos de dados devem 
+ser usados na API e fornece detalhes sobre sua estrutura e comportamento.
+
+--------------- // ---------------
+
+Anotação @Operation
+
+A anotação `@Operation` faz parte da especificação OpenAPI (anteriormente conhecida como Swagger) e é usada para fornecer informações detalhadas 
+sobre uma operação ou endpoint específico em uma API RESTful. Essa anotação é usada principalmente para documentação e descrição de endpoints, 
+permitindo que os desenvolvedores e usuários da API entendam o propósito e o comportamento de um endpoint específico.
+
+O atributo mais comum da anotação `@Operation` é `summary`, que fornece um resumo conciso e descritivo da operação ou endpoint. O `summary` é 
+geralmente usado para descrever brevemente o que a operação faz, em uma frase ou frase curta.
+
+Exemplo de como a anotação `@Operation` pode ser usada em um endpoint:
+
+```java
+@Operation(summary = "List all animes paginated")
+@GetMapping("/animes")
+public ResponseEntity<List<Anime>> listAll() {
+    // Implementação do método
+}
+```
+
+Neste exemplo, a anotação `@Operation` descreve o endpoint `/animes` como "List all animes paginated", o que indica que este endpoint é usado 
+para listar todos os animes de forma paginada.
+
+Além do `summary`, a anotação `@Operation` também oferece outros atributos para fornecer informações adicionais sobre a operação, como descrição 
+mais detalhada (`description`), tags associadas (`tags`), parâmetros (`parameters`), respostas (`responses`), entre outros. Esses atributos 
+podem ser usados para criar uma documentação completa e precisa da API, facilitando o entendimento e o uso por parte dos desenvolvedores e 
+consumidores da API.
+
+--------------- // ---------------
+
+Anotação @ApiResponses
+
+A anotação `@ApiResponses` faz parte da especificação OpenAPI (anteriormente conhecida como Swagger) e é usada para fornecer informações 
+detalhadas sobre as respostas possíveis de uma operação ou endpoint específico em uma API RESTful. Essa anotação é usada principalmente para 
+documentar as respostas que um endpoint pode retornar, permitindo que os desenvolvedores e usuários da API compreendam as possíveis saídas e 
+estados da operação.
+
+A anotação `@ApiResponses` pode ser usada em conjunto com a anotação `@ApiOperation` para fornecer informações detalhadas sobre uma operação 
+específica. Ela inclui uma ou mais instâncias da anotação `@ApiResponse`, cada uma delas representando uma resposta possível que a operação 
+pode retornar.
+
+Exemplo de como a anotação `@ApiResponses` pode ser usada:
+
+```java
+@ApiOperation(
+    value = "Get anime by ID",
+    notes = "Retrieves an anime by its unique ID."
+)
+@ApiResponses(value = {
+    @ApiResponse(
+        responseCode = "200",
+        description = "Anime found",
+        content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Anime.class)) }
+    ),
+    @ApiResponse(
+        responseCode = "404",
+        description = "Anime not found",
+        content = { @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)) }
+    )
+})
+@GetMapping("/animes/{id}")
+public ResponseEntity<Anime> findById(@PathVariable("id") Long id) {
+    // Implementação do método
+}
+```
+
+Neste exemplo, a anotação `@ApiResponses` é usada para documentar as respostas possíveis do endpoint `GET /animes/{id}`, que busca um anime por 
+seu ID. As respostas incluem:
+
+- Uma resposta com o código "200" (OK), indicando que o anime foi encontrado. A descrição "Anime found" é fornecida, e o tipo de mídia da 
+  resposta é JSON, com um esquema especificado para o tipo `Anime`.
+
+- Uma resposta com o código "404" (Not Found), indicando que o anime não foi encontrado. A descrição "Anime not found" é fornecida, e o tipo de 
+  mídia da resposta também é JSON, com um esquema especificado para o tipo `ErrorResponse`.
+
+Além do `responseCode` e `description`, a anotação `@ApiResponse` permite que você especifique detalhes adicionais, como o conteúdo da resposta, 
+incluindo o tipo de mídia e o esquema correspondente (usando `@Content` e `@Schema`, respectivamente).
+
+Essa documentação detalhada ajuda os desenvolvedores a entenderem as respostas esperadas de um endpoint e a escreverem clientes ou scripts que 
+interajam corretamente com a API. Além disso, facilita a geração automática de documentação da API usando ferramentas compatíveis com OpenAPI, 
+como o Swagger UI.
+
+--------------- // ---------------
+
+Cria especificação Json - link: 
+http://localhost:8080/v3/api-docs

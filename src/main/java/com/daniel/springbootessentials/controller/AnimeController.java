@@ -27,7 +27,10 @@ import com.daniel.springbootessentials.requests.AnimePostRequestBody;
 import com.daniel.springbootessentials.requests.AnimePutRequestBody;
 import com.daniel.springbootessentials.service.AnimeService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -40,6 +43,8 @@ public class AnimeController {
 
     // Listar todos os animes: http://localhost:8080/animes
     @GetMapping
+    @Operation(summary = "List all animes paginated", description = "The default size is 20, use the parameter size to change the default value",
+    tags = {"anime"})
     public ResponseEntity<Page<Anime>>  list(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(animeService.listAll(pageable));
     }
@@ -84,6 +89,10 @@ public class AnimeController {
      // Deletar anime - http://localhost:8080/animes/admin/{id}
      // Utilizando o Antmatcher para proteção de URL
     @DeleteMapping(path = "/admin/{id}")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "204", description = "Successful Operation"),
+        @ApiResponse(responseCode = "400", description = "When Anime Does Not Exist in The Database")
+    })
     public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
         animeService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
